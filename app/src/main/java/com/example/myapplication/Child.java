@@ -1,0 +1,17 @@
+package com.example.myapplication;
+
+public class Child extends User{
+    private final int parentID;
+
+    public Child(int id, int parentID, String name, String role) {
+        super(id, name, role);
+        this.parentID = parentID;
+    }
+
+    // --- Getter ---
+    public int getParentID() {
+        return parentID;
+    }
+
+    // Setter is omitted as parentID shouldn't change after creation.
+}

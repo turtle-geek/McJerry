@@ -14,7 +14,6 @@ public class Parent extends User{
         this.children = new ArrayList<>(); // Using diamond operator for cleaner code
     }
 
-    // --- Business Logic Methods ---
     public void createChild(int idChild, int idParent, String name) {
         Child child = new Child(idChild, idParent, name, "child");
         children.add(child);
@@ -24,7 +23,7 @@ public class Parent extends User{
         this.providerID = providerID; // setter logic
     }
 
-    // --- Getters and Setters ---
+    // Public Getters and Setters
     public String getEmail() {
         return email;
     }

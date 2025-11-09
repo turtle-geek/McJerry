@@ -8,7 +8,7 @@ public class Child extends User{
         this.parentID = parentID;
     }
 
-    // --- Getter ---
+    // Public Getters
     public int getParentID() {
         return parentID;
     }

@@ -13,7 +13,6 @@ public class Provider extends User{
         patients = new ArrayList<>(); // Using diamond operator
     }
 
-    // --- Business Logic Method (Cleaned up redundant casting) ---
     /** This method adds an existing patient into the list of the provider's patients.
      * @param id of the patient
      */
@@ -21,7 +20,7 @@ public class Provider extends User{
         patients.add(id); // Java autoboxing handles the conversion from int to Integer
     }
 
-    // --- Getters and Setters ---
+    // Public Getters and Setters
     public String getEmail() {
         return email;
     }

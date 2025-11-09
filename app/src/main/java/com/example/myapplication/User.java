@@ -1,9 +1,9 @@
 package com.example.myapplication;
 
 public abstract class User {
-    private int id;
-    private String name;
-    private String role;
+    private final int id;
+    private final String name;
+    private final String role;
 
     public User(int id, String name, String role) {
         this.id = id;

@@ -30,4 +30,8 @@ public abstract class User {
 
     // Setters are omitted to prevent outside modification of ID/Role/Name after creation
     // If modification is needed, you would add public setters here.
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

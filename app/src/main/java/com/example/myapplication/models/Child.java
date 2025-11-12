@@ -1,8 +1,7 @@
 package com.example.myapplication.models;
 
 import android.util.Log;
-
-import androidx.annotation.NonNull;
+import java.time.LocalDate;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,34 +11,53 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.example.myapplication.HealthProfile;
+import com.example.myapplication.Chart;
+import com.example.myapplication.HealthInfo;
+import com.example.myapplication.SharedAccessInvite;
+
+import static com.example.myapplication.auth.AuthMan.addToDatabase;
+
+
 import java.util.Map;
 
 public class Child extends User{
 
-    String parentID;
+    final String parentID;
+    private LocalDate dateOfBirth;
+    private String notes;
+    private HealthProfile healthProfile;
 
     // Constructor to create child profile under a parent
-    public Child(String id, String name, String parentID) {
+    // Package private
+    Child(String id, String parentID, String name, String email, String nestedStatus) {
         super(id, name);
+        if (!nestedStatus.equals("nested")) {
+            // is this ok
+            throw new IllegalArgumentException("nestedStatus must be 'nested'");
+        }
         this.parentID = parentID;
-        getParentEmail(parentID, email -> {
-            if (email != null) {
-                this.email = email;
-            } else {
-                Log.d("Firestore", "Parent not found");
-            }
-        });
+        this.email = email;
+        // Add to firebase firestore
+        addToDatabase(this);
     }
 
     // Overloaded constructor for child to create their own profile
     public Child(String id, String parentID, String name, String email){
         super(id, name);
-        this.parentID = parentID; // might turn this into a setter instead but that wouldn't work with the overloading
-        this.email = email;
+        this.parentID = parentID;
+        if (email != null)
+            this.email = email;
+
+
     }
     // Public Setters
-    public void setParentID(String parentID) {
-        this.parentID = parentID;
+    public void setDOB(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setHealthProfile(HealthProfile profile){
+        this.healthProfile = profile;
     }
 
     // Public Getters
@@ -65,5 +83,11 @@ public class Child extends User{
                 });
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     // Setter is omitted as parentID shouldn't change after creation.
+    // For reference, LocalDate.of(int year, int month, int day) may be used for changing if needed
+
 }

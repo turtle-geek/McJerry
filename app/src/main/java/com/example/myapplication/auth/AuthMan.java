@@ -37,7 +37,7 @@ public class AuthMan {
 
     }
 
-    public static void signUp(String email, String password, String role) {
+    public static void signUp(String email, String password, String name, String role) {
         if (!validateInput(email, password)) {
             //TO-DO add an explicit error message?
             return;
@@ -52,12 +52,13 @@ public class AuthMan {
                     if (fbUser != null) {
                         Log.d("AuthMan", "User created with ID: " + fbUser.getUid());
                         String id = fbUser.getUid();
-                        String name = fbUser.getDisplayName();
                         // Create a user profile to add to Firebase Firestore
                         User user = createUserProfile(id, name, email, role);
                         // Add to firebase firestore
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("users").document(id).set(user);
+                        addToDatabase(user);
+                        Log.d("AuthMan", "User profile created successfully");
+                    } else {
+                        Log.w("AuthMan", "fbUser created unsuccessfully.");
                     }
                 } else {
                     // Error creating user
@@ -66,6 +67,16 @@ public class AuthMan {
                 }
         });
 
+    }
+
+    /**
+     * Adds a user to the database (Firestore, subject to change)
+     * @param user too add to the database
+     */
+    public static void addToDatabase(User user){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getId()).set(user);
+        // For later development: Check whether user existed before adding new entry
     }
 
     public static boolean validateInput(@NonNull String email, String password) {
@@ -107,14 +118,12 @@ public class AuthMan {
         return true;
     }
 
+    // Method to create a Parent or Provider profile
     public static User createUserProfile(String id, String name, String email, String role) {
         // Create user with email and password
         switch (role) {
             case "Parent":
                 return new Parent(id, name, email); // does this affect the compiling
-            case "Child":
-                // Major issues here, need to figure out Child profile configuration
-                return new Child(id, name, email);
             case "Provider":
                 return new Provider(id, name, email);
             default:
@@ -123,9 +132,12 @@ public class AuthMan {
 
     }
 
-    // Overloaded method for creating an independent child profile to link with a parentID
-    public static User createUserProfile(String id, String name, String email, String role, String parentID){
-        return new Child(id, parentID, name, email);
+    // Overloaded method for creating an independent child profile
+    public static User createUserProfile(String id, String name, String email, String parentID, String role){
+        if (!role.equals("Child")) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
+        return new Child(id, parentID, name, email); // front end might have to pull ID from database using a different field, like email
     }
 
     public static void signOut() {

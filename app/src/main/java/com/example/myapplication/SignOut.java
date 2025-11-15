@@ -29,5 +29,7 @@ public class SignOut extends AppCompatActivity {
         Intent intent = new Intent(this, LoginPage.class);
         startActivity(intent);
         finish();
+
+        it is a beautiful day
     }
 }

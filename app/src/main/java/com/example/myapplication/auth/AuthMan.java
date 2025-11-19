@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.auth.SessionManager;
 
 import android.util.Log;
 
@@ -21,10 +22,13 @@ public class AuthMan {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // User signed in successfully
-                        FirebaseUser user = auth.getCurrentUser();
-                        if (user != null) {
+                        FirebaseUser FBUser = auth.getCurrentUser();
+                        if (FBUser != null) {
+                            String id = FBUser.getUid();
+                            User user =; //tk: fetch the user id somehow
+                            SessionMangager.getInstance().setCurrentUser(user);
                             // what is this
-                            Log.d("AuthMan", "User signed in with ID: " + user.getUid());
+                            Log.d("AuthMan", "User signed in with ID: " + id);
                         }
                     } else {
                         // Error signing in

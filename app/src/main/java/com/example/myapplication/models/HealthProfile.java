@@ -1,4 +1,6 @@
-package com.example.myapplication;
+package com.example.myapplication.models;
+
+import com.example.myapplication.Chart;
 
 import java.util.ArrayList;
 
@@ -7,7 +9,8 @@ public class HealthProfile {
     private ArrayList<String> controllerAdherence;
     private ArrayList<String> symptoms;
     private ArrayList<String> triggers;
-    private double PEF;
+    private ArrayList<PeakFlow> PEF_LOG;
+    private int PEF_PB;
     private ArrayList<String> triageIncidents;
     private ArrayList<Chart> charts;
 
@@ -17,7 +20,7 @@ public class HealthProfile {
         controllerAdherence = new ArrayList<String>();
         symptoms = new ArrayList<String>();
         triggers = new ArrayList<String>();
-        PEF = 0;
+        PEF_LOG = new ArrayList<PeakFlow>();
         triageIncidents = new ArrayList<String>();
         charts = new ArrayList<Chart>();
     }
@@ -56,12 +59,20 @@ public class HealthProfile {
         triggers.add(trigger);
     }
 
-    public double getPEF() {
-        return PEF;
+    public ArrayList<PeakFlow> getPEFLog() {
+        return PEF_LOG;
     }
 
-    public void setPEF(double PEF) {
-        this.PEF = PEF;
+    public void addPEFToLog(PeakFlow pef) {
+        PEF_LOG.add(pef);
+    }
+
+    public int getPEF_PB() {
+        return PEF_PB;
+    }
+
+    public void setPEF_PB(int pb) {
+        PEF_PB = pb;
     }
 
     public ArrayList<String> getTriageIncidents() {

@@ -1,9 +1,7 @@
 package com.example.myapplication.models;
 import java.util.ArrayList;
 
-import com.example.myapplication.Chart;
 import com.example.myapplication.HealthInfo;
-import com.example.myapplication.HealthProfile;
 import com.example.myapplication.SharedAccessInvite;
 
 public class Provider extends User{
@@ -48,7 +46,7 @@ public class Provider extends User{
                 case CONTROLLER_ADHERENCE -> shared.addControllerAdherence(full.getControllerAdherence());
                 case SYMPTOMS -> shared.addSymptom(full.getSymptoms());
                 case TRIGGERS -> shared.addTrigger(full.getTriggers());
-                case PEF -> shared.setPEF(full.getPEF());
+                case PEF_LOG -> shared.setPEF(full.getPEF());
                 case TRIAGE_INCIDENTS -> shared.addTriageIncident(full.getTriageIncidents());
                 case CHARTS -> shared.addChart(full.getCharts());
             }

@@ -3,23 +3,11 @@ package com.example.myapplication.models;
 import android.util.Log;
 import java.time.LocalDate;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import com.example.myapplication.HealthProfile;
-import com.example.myapplication.Chart;
-import com.example.myapplication.HealthInfo;
-import com.example.myapplication.SharedAccessInvite;
-
 import static com.example.myapplication.auth.AuthMan.addToDatabase;
-
-
-import java.util.Map;
 
 public class Child extends User{
 
@@ -69,6 +57,10 @@ public class Child extends User{
 
     public void setHealthProfile(HealthProfile profile){
         this.healthProfile = profile;
+    }
+
+    public void getHealthProfile(){
+        return healthProfile;
     }
 
     // Public Getters

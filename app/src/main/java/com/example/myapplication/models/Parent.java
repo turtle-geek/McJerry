@@ -1,10 +1,8 @@
 package com.example.myapplication.models;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import com.example.myapplication.Chart;
+
 import com.example.myapplication.HealthInfo;
-import com.example.myapplication.HealthProfile;
 import com.example.myapplication.SharedAccessInvite;
 
 public class Parent extends User{

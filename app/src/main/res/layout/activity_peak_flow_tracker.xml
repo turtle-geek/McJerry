@@ -7,4 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".peakflow.PeakFlowTracker">
 
+    <ImageButton
+        android:id="@+id/sosButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/sos"
+        tools:layout_editor_absoluteX="310dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="254dp"
+        android:layout_height="25dp"
+        android:text="HOW FAST IS YOUR AIR BLOW TODAY?"
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="269dp" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="381dp" />
+
+    <EditText
+        android:id="@+id/peakFlowInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="324dp"
+        android:hint="Enter peak flow"/>
+
+    <TextView
+        android:id="@+id/pbDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Personal Best: "
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="514dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,9 @@
 package com.example.myapplication.models;
-
-import com.example.myapplication.health.HealthInfo;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import com.example.myapplication.health.SharedAccessInvite;
+import com.example.myapplication.HealthInfo;
+import com.example.myapplication.SharedAccessInvite;
 
 public class Parent extends User{
     private final ArrayList<Child> children;

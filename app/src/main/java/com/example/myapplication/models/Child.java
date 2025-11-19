@@ -59,7 +59,7 @@ public class Child extends User{
         this.healthProfile = profile;
     }
 
-    public HealthProfile getHealthProfile(){
+    public void getHealthProfile(){
         return healthProfile;
     }
 
@@ -89,8 +89,6 @@ public class Child extends User{
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
-
-
 
     // Setter is omitted as parentID shouldn't change after creation.
     // For reference, LocalDate.of(int year, int month, int day) may be used for changing if needed

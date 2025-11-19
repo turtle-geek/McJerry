@@ -5,7 +5,8 @@ public enum HealthInfo {
     CONTROLLER_ADHERENCE,
     SYMPTOMS,
     TRIGGERS,
-    PEF,
+    PEF_LOG,
+    PEF_PB,
     TRIAGE_INCIDENTS,
     CHARTS;
 }

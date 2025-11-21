@@ -39,14 +39,6 @@ public class Parent extends User{
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public ArrayList<Child> getChildren() {
         // Return a copy or an unmodifiable list for better encapsulation if needed,
         // but for now, returning the reference allows access to the list contents.

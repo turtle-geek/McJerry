@@ -16,7 +16,7 @@
             android:name=".ui.PeakFlowInput"
             android:exported="false" />
         <activity
-            android:name=".peakflow.PeakFlowTracker"
+            android:name=".peakflow.PeakFlowInput"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

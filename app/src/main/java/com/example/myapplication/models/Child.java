@@ -59,7 +59,7 @@ public class Child extends User{
         this.healthProfile = profile;
     }
 
-    public void getHealthProfile(){
+    public HealthProfile getHealthProfile(){
         return healthProfile;
     }
 

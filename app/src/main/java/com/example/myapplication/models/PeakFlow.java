@@ -24,23 +24,12 @@ public class PeakFlow {
         return peakFlow;
     }
 
-    public void setPersonalBest(int personalBest){
-        PeakFlow.personalBest = personalBest;
-    }
-
-    public static int getPersonalBest(){
-        return personalBest;
-    }
-
-
-
     /**
      * Setter for zone
      * @return zone of green, yellow, or red
      */
-    public String computeZone(){
-        int personalBest = HealthProfile.getPEF_PB(); // might have to pass in a child profile?
-
+    public String computeZone(Child child){
+        int personalBest = child.getHealthProfile().getPEF_PB();
         if (peakFlow >= 0.8*personalBest){
             zone = "green";
         } else if (peakFlow >= 0.5*personalBest){

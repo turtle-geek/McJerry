@@ -4,5 +4,5 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        app:font="@font/quicksand" />
+        app:font="@font/quicksand1" />
 </font-family>

@@ -37,4 +37,6 @@
     <string name="notifications">Notifications</string>
     <string name="comfirmPassword">Comfirm Password</string>
     <string name="Provider">Provider</string>
+    <string name="today">Today</string>
+    <string name="mcjerry">McJerry</string>
 </resources>

@@ -33,14 +33,14 @@
             android:src="@drawable/pfp_logo"
             android:background="@drawable/circle_background"
             android:scaleType="centerCrop"
-            android:contentDescription="Profile"
+            android:contentDescription="@string/profile"
             app:tint="@null"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="McJerry"
+            android:text="@string/mcjerry"
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -82,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Today"
+            android:text="@string/today"
             android:textSize="24sp"
             android:textColor="@color/black"/>
 
@@ -236,35 +236,14 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Scrollable Details View -->
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/statusScrollView"
-        app:layout_constraintBottom_toTopOf="@id/menuBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:id="@+id/detailsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:visibility="gone">
-
-            <!-- Details will be populated dynamically when a card is clicked -->
-
-        </LinearLayout>
-    </ScrollView>
-
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menuBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#064200"
-        app:itemIconBackground="@drawable/circle_background"
+        app:itemBackground="@drawable/circle_background"
         app:itemIconTint="#8A90A5"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

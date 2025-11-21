@@ -210,7 +210,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#064200"
-        app:itemIconBackground="@drawable/circle_background"
+        app:itemBackground="@drawable/circle_background"
         app:itemIconTint="#8A90A5"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

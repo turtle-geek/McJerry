@@ -4,10 +4,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.loginapp"
-    compileSdk {
-        version = release(36)
-    }
+    namespace = "com.example.myapplication"
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.myapplication"
@@ -42,8 +40,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("jp.wasabeef:blurry:4.0.1")
 }

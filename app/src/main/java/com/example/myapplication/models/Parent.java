@@ -1,7 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.models;
+
 import java.util.ArrayList;
 
-public class Parent extends User{
+public class Parent extends User {
     private String email;
     private String password;
     private final ArrayList<Child> children;

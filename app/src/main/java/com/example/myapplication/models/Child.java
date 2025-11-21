@@ -1,6 +1,6 @@
-package com.example.myapplication;
+package com.example.myapplication.models;
 
-public class Child extends User{
+public class Child extends User {
     private final int parentID;
 
     public Child(int id, int parentID, String name, String role) {

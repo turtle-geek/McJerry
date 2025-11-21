@@ -1,7 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.models;
+
 import java.util.ArrayList;
 
-public class Provider extends User{
+public class Provider extends User {
     private String email;
     private String password;
     private final ArrayList<Integer> patients;

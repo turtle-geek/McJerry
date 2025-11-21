@@ -1,11 +1,11 @@
-package com.example.myapplication;
+package com.example.myapplication.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 public class SignOut extends AppCompatActivity {
     private Button btnSignOut;
     private AuthManager authManager;

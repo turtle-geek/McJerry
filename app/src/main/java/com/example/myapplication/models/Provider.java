@@ -1,11 +1,6 @@
 package com.example.myapplication.models;
 import java.util.ArrayList;
 
-import com.example.myapplication.Chart;
-import com.example.myapplication.HealthInfo;
-import com.example.myapplication.HealthProfile;
-import com.example.myapplication.SharedAccessInvite;
-
 public class Provider extends User{
     private final ArrayList<String> patients;
 

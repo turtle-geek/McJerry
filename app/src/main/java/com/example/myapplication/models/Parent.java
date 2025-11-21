@@ -1,13 +1,11 @@
 package com.example.myapplication.models;
 
-import com.example.myapplication.HealthInfo;
-import java.time.LocalDate;
+import com.example.myapplication.health.HealthInfo;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
-import com.example.myapplication.Chart;
-import com.example.myapplication.HealthInfo;
-import com.example.myapplication.HealthProfile;
-import com.example.myapplication.SharedAccessInvite;
+
+import com.example.myapplication.health.SharedAccessInvite;
 
 public class Parent extends User{
     private final ArrayList<Child> children;
@@ -54,17 +52,17 @@ public class Parent extends User{
 
     // ----- Sharing invitation -----
 
-    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
-        SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
-        invites.add(invite);
-        return invite;
-    }
-
-    public SharedAccessInvite getInviteByCode(String code) {
-        for (SharedAccessInvite invite : invites) {
-            if (invite.getInviteCode().equals(code))
-                return invite;
-        }
-        return null;
-    }
+//    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
+//        SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
+//        invites.add(invite);
+//        return invite;
+//    }
+//
+//    public SharedAccessInvite getInviteByCode(String code) {
+//        for (SharedAccessInvite invite : invites) {
+//            if (invite.getInviteCode().equals(code))
+//                return invite;
+//        }
+//        return null;
+//    }
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.health;
 
 public enum HealthInfo {
     RESCUE_LOGS,

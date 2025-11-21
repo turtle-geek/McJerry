@@ -1,6 +1,6 @@
 package com.example.myapplication.models;
 
-import com.example.myapplication.Chart;
+import com.example.myapplication.health.Chart;
 
 import java.util.ArrayList;
 

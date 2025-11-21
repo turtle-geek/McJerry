@@ -17,29 +17,29 @@ import androidx.annotation.NonNull;
 public class AuthMan {
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    public static void signIn(String email, String password) {
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // User signed in successfully
-                        FirebaseUser FBUser = auth.getCurrentUser();
-                        if (FBUser != null) {
-                            String id = FBUser.getUid();
-                            User user =; //tk: fetch the user id somehow
-                            SessionMangager.getInstance().setCurrentUser(user);
-                            // what is this
-                            Log.d("AuthMan", "User signed in with ID: " + id);
-                        }
-                    } else {
-                        // Error signing in
-                        Log.w("AuthMan", "Sign in failed", task.getException());
-
-                    }
-                });
-
-
-
-    }
+//    public static void signIn(String email, String password) {
+//        auth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        // User signed in successfully
+//                        FirebaseUser FBUser = auth.getCurrentUser();
+//                        if (FBUser != null) {
+//                            String id = FBUser.getUid();
+//                            User user =; //tk: fetch the user id somehow
+//                            SessionMangager.getInstance().setCurrentUser(user);
+//                            // what is this
+//                            Log.d("AuthMan", "User signed in with ID: " + id);
+//                        }
+//                    } else {
+//                        // Error signing in
+//                        Log.w("AuthMan", "Sign in failed", task.getException());
+//
+//                    }
+//                });
+//
+//
+//
+//    }
 
     public static void signUp(String email, String password, String name, String role) {
         if (!validateInput(email, password)) {

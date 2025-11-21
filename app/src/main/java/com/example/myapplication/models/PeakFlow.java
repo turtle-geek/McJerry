@@ -28,15 +28,15 @@ public class PeakFlow {
      * Setter for zone
      * @return zone of green, yellow, or red
      */
-    public String computeZone(Child child){
-        int personalBest = child.getHealthProfile().getPEF_PB();
-        if (peakFlow >= 0.8*personalBest){
-            zone = "green";
-        } else if (peakFlow >= 0.5*personalBest){
-            zone = "yellow";
-        } else {
-            zone = "red";
-        }
-        return zone;
-    }
+//    public String computeZone(Child child){
+//        int personalBest = child.getHealthProfile().getPEF_PB();
+//        if (peakFlow >= 0.8*personalBest){
+//            zone = "green";
+//        } else if (peakFlow >= 0.5*personalBest){
+//            zone = "yellow";
+//        } else {
+//            zone = "red";
+//        }
+//        return zone;
+//    }
 }

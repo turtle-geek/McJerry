@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".peakflow.ZoneDisplay">
+
+    <TextView
+        android:id="@+id/pefVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[PEF Value]"
+        tools:layout_editor_absoluteX="170dp"
+        tools:layout_editor_absoluteY="291dp" />
+
+    <TextView
+        android:id="@+id/dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[DATE TIME HERE]"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="377dp" />
+
+    <TextView
+        android:id="@+id/pbDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[PB Display]"
+        tools:layout_editor_absoluteX="168dp"
+        tools:layout_editor_absoluteY="466dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

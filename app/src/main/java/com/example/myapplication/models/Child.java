@@ -3,6 +3,12 @@ package com.example.myapplication.models;
 import android.util.Log;
 import java.time.LocalDate;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import static com.example.myapplication.auth.AuthMan.addToDatabase;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
@@ -69,6 +75,10 @@ public class Child extends User{
 
     public void setHealthProfile(HealthProfile profile){
         this.healthProfile = profile;
+    }
+
+    public HealthProfile getHealthProfile(){
+        return healthProfile;
     }
 
     // Public Getters

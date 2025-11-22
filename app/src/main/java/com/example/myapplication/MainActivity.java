@@ -5,6 +5,7 @@ import android.widget.Toast;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.auth.LoginPage;
 import com.example.myapplication.ui.ChildHomeActivity;
 import com.example.myapplication.ui.ParentHomeActivity;
 import com.example.myapplication.ui.ProviderHomeActivity;
@@ -24,16 +25,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.login_page);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-        checkRole();
+
+        // Check if user is logged in
+        FirebaseUser currentUser = fAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            // No user logged in, redirect to LoginPage
+            Intent intent = new Intent(this, LoginPage.class);
+            startActivity(intent);
+            finish();
+        } else {
+            // User is logged in, check their role and redirect to appropriate page
+            checkRole();
+        }
     }
     private void checkRole(){
         FirebaseUser user = fAuth.getCurrentUser();

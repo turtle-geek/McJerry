@@ -5,20 +5,20 @@
     android:id="@+id/registerPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/testbg1"
+    android:background="@drawable/testbg3"
     tools:context=".auth.LoginPage">
 
     <ImageView
         android:id="@+id/backgroundImageRegister"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/testbg1"
+        android:src="@drawable/testbg3"
         android:scaleType="centerCrop"
         android:contentDescription="@null"
         android:importantForAccessibility="no"/>
 
     <LinearLayout
-        android:id="@+id/loginContainerRegister"
+        android:id="@+id/registerContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
@@ -40,153 +40,136 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Register"
+                android:text="@string/register"
                 android:textColor="#000000"
-                android:fontFamily="times"
+                android:fontFamily="@font/quicksand"
                 android:textStyle="bold"
                 android:textSize="26sp">
             </TextView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="#000000"
-                android:fontFamily="times"
-                android:textStyle="bold"
-                android:textSize="16sp">
-            </TextView>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/nameLayoutRegister"
+                android:hint="@string/name"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
                 app:hintTextColor="@color/white"
-                android:layout_marginBottom="10dp"
                 app:boxStrokeColor="#ffff"
-                android:id="@+id/nameID"
-                android:hint="Name ID"
-                style="@style/CardView.Dark">
+                app:startIconDrawable="@drawable/pfp_logo2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nameIDET"
-                    android:inputType="textEmailAddress" />
+                    android:id="@+id/nameETRegister"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="#000000"
-                android:fontFamily="times"
-                android:textStyle="bold"
-                android:textSize="16sp">
-            </TextView>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/mailLayoutRegister"
+                android:hint="@string/email_address_name"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
                 app:hintTextColor="@color/white"
-                android:layout_marginBottom="10dp"
                 app:boxStrokeColor="#ffff"
-                android:id="@+id/mailLayout"
-                android:hint="Email Address"
-                style="@style/CardView.Dark">
+                app:startIconDrawable="@drawable/pfp_logo2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/mailET"
-                    android:inputType="textEmailAddress" />
+                    android:id="@+id/mailETRegister"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:id="@+id/passwordLayoutRegister"
+                android:hint="@string/password"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:hintTextColor="@color/white"
+                app:boxStrokeColor="#ffff"
+                app:startIconDrawable="@drawable/lock_logo">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/passwordETRegister"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password"
-                android:textColor="#000000"
-                android:fontFamily="times"
-                android:textStyle="bold"
-                android:textSize="16sp">
-            </TextView>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:hintTextColor="@color/white"
                 android:layout_marginBottom="10dp"
+                android:id="@+id/confirmPasswordLayoutRegister"
+                android:hint="@string/confirmPassword"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:hintTextColor="@color/white"
                 app:boxStrokeColor="#ffff"
-                android:id="@+id/passwordLayout"
-                android:hint="Password"
-                style="@style/CardView.Dark">
+                app:startIconDrawable="@drawable/lock_logo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/passwordET"
-                    android:inputType="textPassword" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirm Password"
-                android:textColor="#000000"
-                android:fontFamily="times"
-                android:textStyle="bold"
-                android:textSize="16sp">
-            </TextView>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:hintTextColor="@color/white"
-                android:layout_marginBottom="10dp"
-                app:boxStrokeColor="#ffff"
-                android:id="@+id/confirmPasswordLayout"
-                android:hint="Password"
-                style="@style/CardView.Dark">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/confirmPasswordET"
-                    android:inputType="textPassword" />
+                    android:id="@+id/confirmPasswordETRegister"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/loginBotton"
                 android:layout_width="280dp"
                 android:layout_height="52dp"
-                android:layout_marginTop="19dp"
-                android:text="Login"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/login"
                 android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="times"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
+                android:backgroundTint="#064200"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.496"

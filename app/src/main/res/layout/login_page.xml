@@ -2,34 +2,32 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/testbg1"
+    android:background="@drawable/testbg3"
     tools:context=".auth.LoginPage">
 
     <ImageView
         android:id="@+id/backgroundImageLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:importantForAccessibility="no"
+        android:src="@drawable/testbg3"
         android:scaleType="centerCrop"
-        android:src="@drawable/testbg1" />
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"/>
 
     <LinearLayout
-        android:id="@+id/loginContainerLogin"
+        android:id="@+id/loginContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
         android:background="@drawable/blur_bg"
         android:elevation="10dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UselessParent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,135 +36,166 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/logo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:id="@+id/logo"
                 android:src="@drawable/logo"
-                android:contentDescription="@null"/>
+                android:contentDescription="@string/logo"
+                android:layout_gravity="center_horizontal"/>
+
 
 
             <TextView
+                android:id="@+id/loginLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="times"
-                android:text="Welcome to McJerry!"
+                android:layout_marginBottom="20dp"
+                android:text="@string/welcome_to_mcjerry"
                 android:textColor="#000000"
-                android:textSize="26sp"
-                android:textStyle="bold">
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
+                android:textSize="26sp">
             </TextView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="times"
-                android:text="Name"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold">
-            </TextView>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:id="@+id/mailLayoutLogin"
-                style="@style/CardView.Dark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="Email Address / Name"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
+                android:hint="@string/email_address_name"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:hintTextColor="@color/white"
                 app:boxStrokeColor="#ffff"
-                app:hintTextColor="@color/white">
+                app:startIconDrawable="@drawable/pfp_logo2">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/mailET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:id="@+id/mailET"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="times"
-                android:text="Password"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold">
-            </TextView>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordLayoutLogin"
-                style="@style/CardView.Dark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:hint="Password"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
+                android:id="@+id/passwordLayoutLogin"
+                android:hint="@string/password"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:hintTextColor="@color/white"
                 app:boxStrokeColor="#ffff"
-                app:hintTextColor="@color/white">
+                app:startIconDrawable="@drawable/lock_logo"
+                app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:id="@+id/passwordET"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Replace the CheckBox and TextView section with this: -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
+                android:layout_marginBottom="10dp">
 
                 <CheckBox
                     android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Remember me"
+                    android:layout_weight="1"
+                    android:text="@string/remember_me"
+                    android:fontFamily="@font/quicksand"
                     android:textSize="16sp" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" /> <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Forget Password?"
-                android:textColor="#1A1A1A"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forget_password"
+                    android:fontFamily="@font/quicksand"
+                    android:textSize="16sp"
+                    android:textColor="#1A1A1A"
+                    android:clickable="true"
+                    android:focusable="true" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Don't have an account? Register"
-                android:textColor="#1A1A1A" />
-
             <Button
-                android:id="@+id/loginBotton"
+                android:id="@+id/loginButton"
                 android:layout_width="280dp"
                 android:layout_height="52dp"
+                android:text="@string/login"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="19dp"
-                android:fontFamily="times"
-                android:text="Login"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:backgroundTint="#064200"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.672" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/registerTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/don_t_have_an_account_register"
+                    android:fontFamily="@font/quicksand"
+                    android:textColor="#1A1A1A"
+                    android:textSize="16sp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.754" />
+
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

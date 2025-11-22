@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="email_address_name">Email Address</string>
+    <string name="welcome_to_mcjerry">Welcome to McJerry</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account?</string>
+    <string name="login">Login</string>
+    <string name="home">Home</string>
+    <string name="file">File</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="more">More</string>
+    <string name="mcjerry">McJerry</string>
+    <string name="today">Today</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="logo">logo</string>
 </resources>

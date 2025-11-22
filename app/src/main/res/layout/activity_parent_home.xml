@@ -5,25 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/testbg1"
-    tools:context=".auth.LoginPage">
-
-    <ImageView
-        android:id="@+id/backgroundImageMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/testbg1"
-        android:scaleType="centerCrop"
-        android:contentDescription="@null"
-        android:importantForAccessibility="no"/>
+    tools:context="com.example.loginapp.com.example.myapplication.ParentHomeActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello, Child!"
+        android:gravity="center"
+        android:text="Welcome, Parent!"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

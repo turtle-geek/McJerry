@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MyApplication">
 
         <activity
-            android:name=".peakflow.PeakFlowInput"
+            android:name=".ui.PeakFlowInput"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

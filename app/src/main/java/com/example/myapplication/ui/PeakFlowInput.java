@@ -1,26 +1,15 @@
-package com.example.myapplication.peakflow;
+package com.example.myapplication.ui;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplication.R;
 import com.example.myapplication.auth.SessionManager;
-import com.example.myapplication.models.Child;
-import com.example.myapplication.models.HealthProfile;
-import com.example.myapplication.models.PeakFlow;
 import com.example.myapplication.models.User;
-
-import java.time.LocalDateTime;
 
 public class PeakFlowInput extends AppCompatActivity {
     ImageButton sosButton;

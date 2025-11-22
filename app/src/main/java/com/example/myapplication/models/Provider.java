@@ -34,7 +34,7 @@ public class Provider extends User{
 //         }
 //         return null;
 //     }
-
+//
 //     private HealthProfile filterProfileByInvite(HealthProfile full, SharedAccessInvite invite) {
 //         HealthProfile shared = new HealthProfile();
 //         for (HealthInfo field : invite.getSharedFields()) {

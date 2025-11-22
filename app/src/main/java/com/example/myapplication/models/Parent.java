@@ -52,17 +52,17 @@ public class Parent extends User{
 
     // ----- Sharing invitation -----
 
-//    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
-//        SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
-//        invites.add(invite);
-//        return invite;
-//    }
-//
-//    public SharedAccessInvite getInviteByCode(String code) {
-//        for (SharedAccessInvite invite : invites) {
-//            if (invite.getInviteCode().equals(code))
-//                return invite;
-//        }
-//        return null;
-//    }
+    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
+        SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
+        invites.add(invite);
+        return invite;
+    }
+
+    public SharedAccessInvite getInviteByCode(String code) {
+        for (SharedAccessInvite invite : invites) {
+            if (invite.getInviteCode().equals(code))
+                return invite;
+        }
+        return null;
+    }
 }

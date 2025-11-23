@@ -39,6 +39,9 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
 
+        FirebaseAuth.getInstance().signOut();
+
+
         // Initialize Firebase Auth
         fAuth = FirebaseAuth.getInstance();
 
@@ -53,7 +56,7 @@ public class LoginPage extends AppCompatActivity {
         passwordET = findViewById(R.id.passwordET);
         loginButton = findViewById(R.id.loginButton);
         rememberMeCheckBox = findViewById(R.id.checkBox);
-        registerTextView = findViewById(R.id.loginLayout);
+        registerTextView = findViewById(R.id.registerTextView);
 
         // Load saved credentials if "Remember Me" was checked
         loadSavedCredentials();
@@ -75,6 +78,7 @@ public class LoginPage extends AppCompatActivity {
             Intent intent = new Intent(LoginPage.this, Register.class);
             startActivity(intent);
         });
+
     }
 
     private void loadSavedCredentials() {

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -47,7 +48,7 @@ public class Register extends AppCompatActivity {
         mailET = findViewById(R.id.mailETRegister);
         passwordET = findViewById(R.id.passwordETRegister);
         confirmPasswordET = findViewById(R.id.confirmPasswordETRegister);
-        registerButton = findViewById(R.id.loginBotton); // Note: XML has typo "loginBotton"
+        registerButton = findViewById(R.id.loginBotton);
 
         // Apply blur effect to the register container
         ViewGroup registerContainer = findViewById(R.id.registerContainer);
@@ -61,6 +62,8 @@ public class Register extends AppCompatActivity {
         // Register button click listener
         registerButton.setOnClickListener(v -> registerUser());
     }
+
+
 
     private void registerUser() {
         String name = nameET.getText().toString().trim();
@@ -99,38 +102,21 @@ public class Register extends AppCompatActivity {
             return;
         }
 
-        // Create user with Firebase Auth
+        // Create user with Firebase Auth ONLY
         fAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, task -> {
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Registration successful
-                        String userId = fAuth.getCurrentUser().getUid();
+                        Toast.makeText(Register.this, "Account created! Please select your role.", Toast.LENGTH_SHORT).show();
 
-                        // Store user info in Firestore
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("name", name);
-                        user.put("email", email);
-                        user.put("role", "child"); // Default role, you can change this based on your needs
-
-                        fStore.collection("users").document(userId)
-                                .set(user)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(Register.this, "Registration successful!",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    // Navigate to LoginPage
-                                    Intent intent = new Intent(Register.this, LoginPage.class);
-                                    startActivity(intent);
-                                    finish();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(Register.this, "Failed to save user data: " +
-                                            e.getMessage(), Toast.LENGTH_LONG).show();
-                                });
+                        // Navigate to IdentityChoosingActivity to select role
+                        Intent intent = new Intent(Register.this, UserRole.class);
+                        intent.putExtra("userName", name);  // Pass name to save later
+                        intent.putExtra("userEmail", email);  // Pass email to save later
+                        startActivity(intent);
+                        finish();
                     } else {
                         // Registration failed
-                        Toast.makeText(Register.this, "Registration failed: " +
-                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(Register.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

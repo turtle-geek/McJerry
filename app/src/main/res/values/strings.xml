@@ -5,7 +5,7 @@
     <string name="password">Password</string>
     <string name="remember_me">Remember me</string>
     <string name="forget_password">Forget Password?</string>
-    <string name="don_t_have_an_account_register">Don\'t have an account?</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
     <string name="login">Login</string>
     <string name="home">Home</string>
     <string name="file">File</string>
@@ -17,4 +17,8 @@
     <string name="name">Name</string>
     <string name="confirmPassword">Confirm Password</string>
     <string name="logo">logo</string>
+    <string name="doctor">Doctor</string>
+    <string name="what_is_your_role">What is Your Role?</string>
+    <string name="parent">Parent</string>
+    <string name="children">Children</string>
 </resources>

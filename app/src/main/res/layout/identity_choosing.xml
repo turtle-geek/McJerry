@@ -5,14 +5,14 @@
     android:id="@+id/identity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/testbg1"
+    android:background="@drawable/testbg3"
     tools:context=".auth.LoginPage">
 
     <ImageView
         android:id="@+id/backgroundImageIdentity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/testbg1"
+        android:src="@drawable/testbg3"
         android:scaleType="centerCrop"
         android:contentDescription="@null"
         android:importantForAccessibility="no"/>
@@ -32,6 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -40,9 +41,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="What is Your Role?"
+                android:text="@string/what_is_your_role"
                 android:textColor="#000000"
-                android:fontFamily="times"
+                android:fontFamily="@font/quicksand"
                 android:textStyle="bold"
                 android:textSize="26sp">
             </TextView>
@@ -50,53 +51,39 @@
             <Button
                 android:id="@+id/parentButton"
                 android:layout_width="280dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="19dp"
-                android:text="Parent"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="times"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.672" />
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/parent"
+                android:textSize="26sp"
+                android:textColor="@color/white"
+                android:backgroundTint="#064200"
+                android:fontFamily="@font/quicksand"
+                android:layout_gravity="center_horizontal" />
 
             <Button
-                android:id="@+id/childernButton"
+                android:id="@+id/childrenButton"
                 android:layout_width="280dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="19dp"
-                android:text="Childern"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="times"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.672" />
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/children"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:backgroundTint="#064200"
+                android:fontFamily="@font/quicksand"
+                android:layout_gravity="center_horizontal" />
 
             <Button
-                android:id="@+id/DoctorButton"
+                android:id="@+id/doctorButton"
                 android:layout_width="280dp"
-                android:layout_height="52dp"
-                android:layout_marginTop="19dp"
-                android:text="Doctor"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="times"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.672" />
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/doctor"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:backgroundTint="#064200"
+                android:fontFamily="@font/quicksand"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
 

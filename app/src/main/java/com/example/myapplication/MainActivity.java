@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
             return;
         }
+
         String userId = user.getUid();
 
         // use users' id to find their own documents

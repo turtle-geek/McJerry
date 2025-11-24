@@ -33,8 +33,8 @@
             android:layout_height="40dp"
             android:src="@drawable/pfp_logo"
             android:background="@drawable/circle_background"
-            app:tint="@color/gray"
             android:scaleType="centerCrop"
+            app:tint="@color/gray"
             android:contentDescription="@string/profile_picture_button"/>
 
         <TextView

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/quizRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/testbg2"
+    tools:context=".ui.DailyCheckInActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/testbg2"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"/>
+
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#064200"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/pfp_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/pfp_logo"
+            android:background="@drawable/circle_background"
+            android:scaleType="centerCrop"
+            app:tint="@color/gray"
+            android:contentDescription="@string/profile_picture_button"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/mcjerry"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="times"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <ImageButton
+            android:id="@+id/bell"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/bell_logo"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="1dp"
+            app:tint="@color/white"
+            android:contentDescription="@string/reminder_button"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/quizContentScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/quizHeaderContainer"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/transparent" >
+
+            <LinearLayout
+                android:id="@+id/quizContentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="#ABFFFFFF">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1. Entry Author"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroupAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbParentEntered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Parent-entered"
+                        android:layout_marginEnd="20dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rbChildEntered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Child-entered"/>
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2. Night Waking"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroupNightWaking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbWakingNone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="None" />
+
+                    <RadioButton
+                        android:id="@+id/rbWaking1Time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 Time"
+                        android:layout_marginEnd="20dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rbWaking2Plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2+ Times"/>
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3. Activity Limits (Scale 0-2)"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="No Limits"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:gravity="start"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupActivityLimits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="0">
+                        <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
+                        <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
+                        <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Very Limited"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:gravity="end"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4. Cough/Wheeze (Scale 1-5)"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="None"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_weight="0"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupCoughWheeze"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="10dp">
+
+                        <RadioButton android:id="@+id/rbCough1" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                        <RadioButton android:id="@+id/rbCough2" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                        <RadioButton android:id="@+id/rbCough3" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                        <RadioButton android:id="@+id/rbCough4" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                        <RadioButton android:id="@+id/rbCough5" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Severe"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_weight="0"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5. Potential Triggers"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="8dp"/>
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="3">
+
+                    <CheckBox android:id="@+id/cbExercise" android:text="Exercise"/>
+                    <CheckBox android:id="@+id/cbColdAir" android:text="Cold Air / Weather Change"/>
+                    <CheckBox android:id="@+id/cbDustPets" android:text="Dust / Pollen / Pets"/>
+                    <CheckBox android:id="@+id/cbSmoke" android:text="Smoke"/>
+                    <CheckBox android:id="@+id/cbIllness" android:text="Illness (Cold/Flu)"/>
+                    <CheckBox android:id="@+id/cbStrongOdors" android:text="Strong Odors / Cleaners"/>
+                </GridLayout>
+
+                <Button
+                    android:id="@+id/btnSubmitCheckIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="SUBMIT DAILY CHECK-IN"
+                    android:backgroundTint="#064200"
+                    android:textColor="@color/white"
+                    android:padding="15dp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/quizHeaderContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#ABFFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily Asthma Check-in"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/quicksand"
+            android:textColor="@color/black"
+            android:paddingBottom="5dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please complete this entry for today."
+            android:textSize="16sp"
+            android:textColor="#555555"
+            android:paddingBottom="5dp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#064200"
+        app:itemBackground="@drawable/circle_background"
+        app:itemIconTint="#8A90A5"
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/menu"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

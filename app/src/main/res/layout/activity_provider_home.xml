@@ -37,7 +37,7 @@
             android:src="@drawable/pfp_logo"
             android:background="@drawable/circle_background"
             android:scaleType="centerCrop"
-            app:tint="@null"/>
+            app:tint="@color/gray"/>
 
         <TextView
             android:layout_width="0dp"

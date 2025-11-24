@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homePage"
+    android:id="@+id/morePage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/testbg2"
@@ -17,10 +17,47 @@
         android:contentDescription="@null"
         android:importantForAccessibility="no"/>
 
+    <!-- Top Bar with Profile -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#064200"
+        android:padding="24dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/pfp_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/pfp_logo"
+            android:background="@drawable/circle_background"
+            android:scaleType="centerCrop"
+            app:tint="@color/gray"/>
+
+        <TextView
+            android:id="@+id/userNameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Rachel Wong"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/quicksand"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"/>
+
+    </LinearLayout>
+
+    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintBottom_toTopOf="@id/menuBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -28,59 +65,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <LinearLayout
-                android:id="@+id/topBar"
+            <!-- Medication History Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/medicationHistoryCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="#064200"
-                android:padding="30dp"
-                android:gravity="center_vertical">
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#ABFFFFFF">
 
-                <ImageButton
-                    android:id="@+id/pfp_logo"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/pfp_logo"
-                    android:background="@drawable/circle_background"
-                    android:scaleType="centerCrop"
-                    app:tint="#8A90A5"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Rachel Wong"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:fontFamily="times"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"/>
-
-            </LinearLayout>
-
-            <!-- Menu List Items -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <!-- Medication History Item -->
                 <LinearLayout
-                    android:id="@+id/medicationHistoryItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:padding="20dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="10dp">
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -94,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Medication History"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="#064200"
                         android:fontFamily="@font/quicksand"
                         android:textStyle="bold"
@@ -110,19 +116,27 @@
                         android:rotation="270"/>
 
                 </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <!-- Invite Item -->
+            <!-- Invite Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/inviteCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#ABFFFFFF">
+
                 <LinearLayout
-                    android:id="@+id/inviteItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:padding="20dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="10dp">
+                    android:gravity="center_vertical">
 
                     <ImageView
                         android:layout_width="40dp"
@@ -136,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Invite"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textColor="#064200"
                         android:fontFamily="@font/quicksand"
                         android:textStyle="bold"
@@ -152,16 +166,25 @@
                         android:rotation="270"/>
 
                 </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                <!-- Report Item -->
+            <!-- Report Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/reportCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#ABFFFFFF">
+
                 <LinearLayout
-                    android:id="@+id/reportItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:padding="20dp"
                     android:gravity="center_vertical">
 
@@ -176,8 +199,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Report"
-                        android:textSize="20sp"
+                        android:text="Print History"
+                        android:textSize="18sp"
                         android:textColor="#064200"
                         android:fontFamily="@font/quicksand"
                         android:textStyle="bold"
@@ -193,17 +216,16 @@
                         android:rotation="270"/>
 
                 </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
-
+            <!-- Logout Button -->
             <Button
                 android:id="@+id/LogoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/log_out"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
                 android:textStyle="bold"

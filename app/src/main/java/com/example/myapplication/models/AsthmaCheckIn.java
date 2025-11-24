@@ -11,7 +11,7 @@ public class AsthmaCheckIn {
     private List<String> selectedTriggers;
 
     public AsthmaCheckIn(long checkInTimestamp, String entryAuthor, boolean nightWaking,
-                         int activityLimits, int coughWheeze, List<String> selectedTriggers){
+                         int activityLimits, int coughWheeze, List<String> selectedTriggers) {
         this.checkInTimestamp = checkInTimestamp;
         this.entryAuthor = entryAuthor;
         this.nightWaking = nightWaking;

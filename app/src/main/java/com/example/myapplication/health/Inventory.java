@@ -8,11 +8,14 @@ public class Inventory {
     private ArrayList<String> controllerLog;
     private ArrayList<String> rescueLog;
 
-
     public Inventory() {
         inventory = new ArrayList<>();
         controllerLog = new ArrayList<>();
         rescueLog = new ArrayList<>();
+    }
+
+    public ArrayList<InventoryItem> getInventory() {
+        return inventory;
     }
 
     public void addItem(InventoryItem medicine) {
@@ -42,5 +45,5 @@ public class Inventory {
         }
     }
 
-    
+
 }

@@ -142,7 +142,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today Status"
+                        android:text="@string/today_status"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
@@ -181,7 +181,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Last Rescue Time"
+                        android:text="@string/last_rescue_time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
@@ -219,7 +219,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Weekly Rescue Time"
+                        android:text="@string/weekly_rescue_time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
@@ -276,7 +276,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="30 days Trends"
+                        android:text="Daily Checkin"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>

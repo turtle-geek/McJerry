@@ -23,4 +23,10 @@
     <string name="children">Children</string>
     <string name="log_out">Log out</string>
     <string name="legalName">Legal Name</string>
+    <string name="children_management">Children Management</string>
+    <string name="today_status">Today Status</string>
+    <string name="last_rescue_time">Last Rescue Time</string>
+    <string name="weekly_rescue_time">Weekly Rescue Time</string>
+    <string name="daily_checkin">Daily Checkin</string>
+    <string name="birthday">Birthday</string>
 </resources>

@@ -52,7 +52,7 @@ public class Parent extends User{
 
     // ----- Sharing invitation -----
 
-    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
+    public SharedAccessInvite generateInvite(String providerID, String childID, EnumSet<HealthInfo> sharedFields) {
         SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
         invites.add(invite);
         return invite;

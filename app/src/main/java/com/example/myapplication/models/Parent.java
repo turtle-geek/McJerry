@@ -1,13 +1,14 @@
 package com.example.myapplication.models;
+
+import com.example.myapplication.health.HealthInfo;
 import java.util.ArrayList;
 import java.util.EnumSet;
-
-import com.example.myapplication.HealthInfo;
 import com.example.myapplication.SharedAccessInvite;
+
 
 public class Parent extends User{
     private final ArrayList<Child> children;
-    private int providerID;
+    private String providerID;
     private ArrayList<SharedAccessInvite> invites;
     static int idChildModifier;
 
@@ -24,7 +25,7 @@ public class Parent extends User{
         children.add(child);
     }
 
-    public void addProvider(int providerID) {
+    public void addProvider(String providerID) {
         this.providerID = providerID; // setter logic
     }
 
@@ -43,7 +44,7 @@ public class Parent extends User{
         return children;
     }
 
-    public int getProviderID() {
+    public String getProviderID() {
         return providerID;
     }
     // Note: addProvider(int) serves as the setter for providerID

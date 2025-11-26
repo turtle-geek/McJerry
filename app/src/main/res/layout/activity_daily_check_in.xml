@@ -133,7 +133,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1. Who filled out this form?"
+                    android:text="1. Who is filling out this form?"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="8dp"
@@ -147,17 +147,18 @@
                     android:layout_marginBottom="8dp">
 
                     <RadioButton
-                        android:id="@+id/rbParentEntered"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Parent-entered"
-                        android:layout_marginEnd="20dp"/>
-
-                    <RadioButton
                         android:id="@+id/rbChildEntered"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Child-entered"/>
+                        android:text="Child"
+                        android:layout_marginEnd="20dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rbParentEntered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Parent"/>
+
                 </RadioGroup>
 
                 <TextView
@@ -194,7 +195,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="3. Did asthma limit your activity today?"
+                    android:text="3. Activity limits due to asthma?"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="8dp"
@@ -261,7 +262,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="None"
+                        android:text="Minimal"
                         android:textSize="14sp"
                         android:textColor="@color/black"
                         android:layout_weight="0"/>

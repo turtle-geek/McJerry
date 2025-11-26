@@ -162,11 +162,11 @@ public class DailyCheckInActivity extends AppCompatActivity {
         int selectedAuthorId = authorGroup.getCheckedRadioButtonId();
         String entryAuthor;
 
-        if (selectedAuthorId == R.id.rbParentEntered) {
-            entryAuthor = "Parent-entered";
+        if (selectedAuthorId == R.id.rbChildEntered) {
+            entryAuthor = "Child";
         } else {
             // validation handles case where nothing is selected so this is safe
-            entryAuthor = "Child-entered";
+            entryAuthor = "Parent";
         }
 
         RadioGroup wakingGroup = findViewById(R.id.radioGroupNightWaking);

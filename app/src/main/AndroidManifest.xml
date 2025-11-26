@@ -52,8 +52,7 @@
         </activity>
 
         <activity
-            android:name=".ui.DailyCheckInActivity"
-            android:exported="true">
+            android:name=".ui.DailyCheckInActivity"  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

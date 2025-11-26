@@ -163,7 +163,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="2. How many asthma night wakings?"
+                    android:text="2. Did you have asthma night wakings?"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="8dp"
@@ -177,24 +177,18 @@
                     android:layout_marginBottom="8dp">
 
                     <RadioButton
-                        android:id="@+id/rbWakingNone"
+                        android:id="@+id/rbWakingYes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:text="None" />
+                        android:text="Yes" />
 
                     <RadioButton
-                        android:id="@+id/rbWaking1Time"
+                        android:id="@+id/rbWakingNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1 Time"
+                        android:text="No"
                         android:layout_marginEnd="20dp"/>
-
-                    <RadioButton
-                        android:id="@+id/rbWaking2Plus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2+ Times"/>
                 </RadioGroup>
 
                 <TextView

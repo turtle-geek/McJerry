@@ -73,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Filter by Doctor"
+                android:text="Share with Provider"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#064200"/>

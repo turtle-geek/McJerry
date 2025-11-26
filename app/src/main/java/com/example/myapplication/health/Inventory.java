@@ -6,48 +6,18 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class Inventory {
-    private InventoryItem controller;
-    private InventoryItem rescue;
+    private ArrayList<InventoryItem> inventory;
     private ArrayList<MedicineUsageLog> controllerLog;
     private ArrayList<MedicineUsageLog> rescueLog;
 
     public Inventory() {
-        controller = new InventoryItem(0, 0, LocalDateTime.now(), LocalDateTime.now());
-        rescue = new InventoryItem(0, 0, LocalDateTime.now(), LocalDateTime.now());
+        inventory = new ArrayList<>();
         controllerLog = new ArrayList<>();
         rescueLog = new ArrayList<>();
     }
 
-    public InventoryItem getController() {
-        return controller;
-    }
-
-    public void setController(InventoryItem controller) {
-        this.controller = controller;
-    }
-
-    public InventoryItem getRescue() {
-        return rescue;
-    }
-
-    public void setRescue(InventoryItem rescue) {
-        this.rescue = rescue;
-    }
-
-    public InventoryItem getMedicine(MedicineLabel label) {
-        if (label == MedicineLabel.CONTROLLER)
-            return controller;
-        else if (label == MedicineLabel.RESCUE)
-            return rescue;
-        else
-            return null;
-    }
-
-    public void setMedicine(MedicineLabel label, InventoryItem medicine) {
-        if (label == MedicineLabel.CONTROLLER)
-            controller = medicine;
-        else if (label == MedicineLabel.RESCUE)
-            rescue = medicine;
+    public ArrayList<InventoryItem> getInventory() {
+        return inventory;
     }
 
     public ArrayList<MedicineUsageLog> getControllerLog() {
@@ -58,19 +28,25 @@ public class Inventory {
         return rescueLog;
     }
 
-    public boolean useMedicine(MedicineLabel label, double amount, LocalDateTime timestamp) {
-        InventoryItem medicine = getMedicine(label);
+    public void addItem(InventoryItem medicine) {
+        inventory.add(medicine);
+    }
+
+    public boolean useMedicine(int index, double amount, LocalDateTime timestamp, TechniqueQuality techniqueQuality) {
+        if (index < 0 || index >= inventory.size())
+            return false;
+        InventoryItem medicine = inventory.get(index);
         if (amount > medicine.getAmount())
             return false;
         else {
             medicine.setAmount(medicine.getAmount() - amount);
-            if (label == MedicineLabel.CONTROLLER) {
-                // TODO: move to technique session
-                TechniqueQuality techniqueQuality = TechniqueQuality.HIGH; // Placeholder
-                controllerLog.add(new MedicineUsageLog(medicine, amount, timestamp, techniqueQuality));
-            } else {
-                rescueLog.add(new MedicineUsageLog(medicine, amount, timestamp, TechniqueQuality.NA));
+            if (medicine.getAmount() == 0) {
+                inventory.remove(medicine);
             }
+            if (medicine.getLabel() == MedicineLabel.CONTROLLER)
+                controllerLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
+            else
+                rescueLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
             return true;
         }
     }

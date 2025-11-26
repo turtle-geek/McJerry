@@ -33,18 +33,8 @@
             android:layout_height="40dp"
             android:src="@drawable/pfp_logo"
             android:background="@drawable/circle_background"
-<<<<<<< HEAD
-<<<<<<< HEAD
             app:tint="@color/gray"
             android:scaleType="centerCrop"
-=======
-            android:scaleType="centerCrop"
-            app:tint="@color/gray"
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-            app:tint="@color/gray"
-            android:scaleType="centerCrop"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
             android:contentDescription="@string/profile_picture_button"/>
 
         <TextView
@@ -73,6 +63,42 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/quizHeaderContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="#ABFFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Daily Asthma Check-in"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/quicksand"
+            android:textColor="@color/black"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"/>
+
+        <TextView
+            android:id="@+id/headerDateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please complete this entry for today."
+            android:textSize="16sp"
+            android:textColor="#555555"
+            android:paddingBottom="5dp"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"/>
+    </LinearLayout>
+
     <ScrollView
         android:id="@+id/quizContentScrollView"
         android:layout_width="0dp"
@@ -98,60 +124,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="4dp"
-<<<<<<< HEAD
-                android:background="#D0FFFFFF">
-=======
-                android:padding="20dp"
-=======
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                 android:background="#ABFFFFFF">
->>>>>>> 1c30fa8 (add activity daily check in ui)
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
                     android:text="1. Who filled out this form?"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="8dp"
                     android:paddingBottom="4dp"/>
-=======
-                    android:text="1. Entry Author"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-<<<<<<< HEAD
-                    android:paddingTop="15dp"
-                    android:paddingBottom="8dp"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                 <RadioGroup
                     android:id="@+id/radioGroupAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp">
-=======
-                    android:orientation="horizontal">
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                     <RadioButton
                         android:id="@+id/rbParentEntered"
@@ -170,40 +163,18 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
                     android:text="2. How many asthma night wakings?"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="8dp"
                     android:paddingBottom="4dp"/>
-=======
-                    android:text="2. Night Waking"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-<<<<<<< HEAD
-                    android:paddingTop="15dp"
-                    android:paddingBottom="8dp"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                 <RadioGroup
                     android:id="@+id/radioGroupNightWaking"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp">
-=======
-                    android:orientation="horizontal">
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                     <RadioButton
                         android:id="@+id/rbWakingNone"
@@ -223,22 +194,12 @@
                         android:id="@+id/rbWaking2Plus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    android:text="2+ Times"/>
-=======
                         android:text="2+ Times"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:text="2+ Times"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                 </RadioGroup>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:text="3. Did asthma limit your activity today?"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -247,37 +208,12 @@
 
                 <LinearLayout
                     android:id="@+id/activityLimitsContainer"
-=======
-                    android:text="3. Activity Limits (Scale 0-2)"
-=======
-                    android:text="3. Activity Limits (Scale 1-3)"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
-
-                <LinearLayout
-<<<<<<< HEAD
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:id="@+id/activityLimitsContainer"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:paddingHorizontal="4dp"
                     android:layout_marginBottom="0dp">
-=======
-                    android:paddingHorizontal="4dp">
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:paddingHorizontal="4dp"
-                    android:layout_marginBottom="0dp">
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                     <TextView
                         android:layout_width="0dp"
@@ -295,21 +231,9 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:layout_weight="0">
-<<<<<<< HEAD
-<<<<<<< HEAD
                         <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
                         <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
                         <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
-=======
-                        <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
-                        <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
-                        <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="6dp"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                        <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
-                        <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
-                        <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                     </RadioGroup>
 
                     <TextView
@@ -325,40 +249,20 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
                     android:text="4. How bad was your coughing today?"
-=======
-                    android:text="4. Cough/Wheeze (Scale 1-5)"
->>>>>>> 1c30fa8 (add activity daily check in ui)
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:paddingTop="15dp"
                     android:paddingBottom="8dp"/>
 
                 <LinearLayout
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:id="@+id/coughWheezeContainer"
-=======
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:id="@+id/coughWheezeContainer"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:paddingHorizontal="4dp"
                     android:layout_marginBottom="0dp">
-=======
-                    android:paddingHorizontal="4dp">
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:paddingHorizontal="4dp"
-                    android:layout_marginBottom="0dp">
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -387,29 +291,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-                    android:text="Severe"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_weight="0"/>
-<<<<<<< HEAD
-=======
                         android:text="Severe"
                         android:textSize="14sp"
                         android:textColor="@color/black"
                         android:layout_weight="0"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
                     android:text="5. What caused your symptoms today?"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -456,71 +346,12 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="0dp"
                         android:layout_marginBottom="0dp"/>
-=======
-                    android:text="5. Potential Triggers"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
-
-                <GridLayout
-                    android:id="@+id/triggerGridLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="3"
-                    android:layout_marginHorizontal="8dp"
-                    android:useDefaultMargins="false"
-                    android:layout_marginBottom="0dp">
-
-<<<<<<< HEAD
-                    <CheckBox android:id="@+id/cbExercise" android:text="Exercise"/>
-                    <CheckBox android:id="@+id/cbColdAir" android:text="Cold Air / Weather Change"/>
-                    <CheckBox android:id="@+id/cbDustPets" android:text="Dust / Pollen / Pets"/>
-                    <CheckBox android:id="@+id/cbSmoke" android:text="Smoke"/>
-                    <CheckBox android:id="@+id/cbIllness" android:text="Illness (Cold/Flu)"/>
-                    <CheckBox android:id="@+id/cbStrongOdors" android:text="Strong Odors / Cleaners"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    <CheckBox android:id="@+id/cbExercise" android:text="Exercise"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="4dp"/>
-                    <CheckBox android:id="@+id/cbColdAir" android:text="Cold Air"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="4dp"/>
-                    <CheckBox android:id="@+id/cbDustPets" android:text="Dust/Pets"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="4dp"/>
-                    <CheckBox android:id="@+id/cbSmoke" android:text="Smoke"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="4dp"/>
-                    <CheckBox android:id="@+id/cbIllness" android:text="Illness"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="0dp"/>
-                    <CheckBox android:id="@+id/cbStrongOdors" android:text="Strong Odors/Perfumes"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="0dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
                 </GridLayout>
 
                 <Button
                     android:id="@+id/btnSubmitCheckIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
                     android:layout_marginTop="4dp"
                     android:text="SUBMIT DAILY CHECK-IN"
                     android:backgroundTint="#064200"
@@ -529,99 +360,10 @@
                     android:paddingBottom="4dp"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"/>
-=======
-                    android:layout_marginTop="30dp"
-                    android:text="SUBMIT DAILY CHECK-IN"
-                    android:backgroundTint="#064200"
-                    android:textColor="@color/white"
-                    android:padding="15dp"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-                    android:layout_marginTop="4dp"
-                    android:text="SUBMIT DAILY CHECK-IN"
-                    android:backgroundTint="#064200"
-                    android:textColor="@color/white"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/quizHeaderContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-<<<<<<< HEAD
-<<<<<<< HEAD
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="#D0FFFFFF"
-=======
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-=======
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-        android:background="#ABFFFFFF"
->>>>>>> 1c30fa8 (add activity daily check in ui)
-        app:layout_constraintTop_toBottomOf="@id/topBar">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Daily Asthma Check-in"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/quicksand"
-            android:textColor="@color/black"
-            android:paddingBottom="5dp"
-<<<<<<< HEAD
-<<<<<<< HEAD
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
-
-        <TextView
-            android:id="@+id/headerDateText"
-=======
-            android:gravity="center"/>
-
-        <TextView
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
-
-        <TextView
-            android:id="@+id/headerDateText"
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please complete this entry for today."
-            android:textSize="16sp"
-            android:textColor="#555555"
-            android:paddingBottom="5dp"
-<<<<<<< HEAD
-<<<<<<< HEAD
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
-=======
-            android:gravity="center"/>
->>>>>>> 1c30fa8 (add activity daily check in ui)
-=======
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menuBar"

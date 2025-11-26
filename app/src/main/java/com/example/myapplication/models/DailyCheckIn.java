@@ -2,7 +2,7 @@ package com.example.myapplication.models;
 
 import java.util.List;
 
-public class AsthmaCheckIn {
+public class DailyCheckIn {
     private long checkInTimestamp;
     private String entryAuthor;
     private boolean nightWaking;
@@ -10,8 +10,8 @@ public class AsthmaCheckIn {
     private int coughWheeze; // scale from 1-5
     private List<String> selectedTriggers;
 
-    public AsthmaCheckIn(long checkInTimestamp, String entryAuthor, boolean nightWaking,
-                         int activityLimits, int coughWheeze, List<String> selectedTriggers) {
+    public DailyCheckIn(long checkInTimestamp, String entryAuthor, boolean nightWaking,
+                        int activityLimits, int coughWheeze, List<String> selectedTriggers) {
         this.checkInTimestamp = checkInTimestamp;
         this.entryAuthor = entryAuthor;
         this.nightWaking = nightWaking;

@@ -66,6 +66,14 @@
             android:name=".ui.ParentChildEdit"  android:exported="false">
         </activity>
 
+        <activity
+            android:name=".ui.ProviderChildDetails"  android:exported="false">
+        </activity>
+
+        <activity
+            android:name=".ui.ProviderManagement"  android:exported="false">
+        </activity>
+
     </application>
 
 </manifest>

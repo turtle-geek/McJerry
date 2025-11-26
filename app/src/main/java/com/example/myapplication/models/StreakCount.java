@@ -6,12 +6,14 @@ import java.util.Comparator;
 
 public class StreakCount {
     private ArrayList<StreakDay> streakDays;
+    private PlannedControllerSchedule schedule;
     private int controllerStreak;
     private int techniqueStreak;
     private int rescueCount;
 
     public StreakCount() {
         streakDays = new ArrayList<>();
+        schedule = new PlannedControllerSchedule();
         controllerStreak = 0;
         techniqueStreak = 0;
         rescueCount = 0;
@@ -20,6 +22,8 @@ public class StreakCount {
     public void addStreakDay(StreakDay day) {
         streakDays.add(day);
     }
+
+    public void setSchedule(PlannedControllerSchedule schedule) { this.schedule = schedule; }
     
     public int getControllerStreak() {
         return controllerStreak;
@@ -52,25 +56,42 @@ public class StreakCount {
     }
 
     private int getCurrentControllerStreak() {
-        // Calculate the current streak of days where controllerUsage is true
-        int currentControllerStreak = 0;
-        LocalDate expectedControllerDate = streakDays.get(streakDays.size() - 1).getDate();
 
-        for (int i = streakDays.size() - 1; i >= 0; i--) {
-            StreakDay day = streakDays.get(i);
+        // Sort scheduled dates to find the most recent ones in order
+        ArrayList<LocalDate> scheduledDates = new ArrayList<>(schedule.getScheduledDates());
+        scheduledDates.sort(Comparator.naturalOrder());
 
-            if (!day.getDate().equals(expectedControllerDate)) {
-                break;
-            }
-
-            if (day.isControllerUsage()) {
-                currentControllerStreak++;
-                expectedControllerDate = expectedControllerDate.minusDays(1);
-            } else {
-                break;
-            }
+        if (scheduledDates.isEmpty() || streakDays.isEmpty()) {
+            return 0;
         }
-        return currentControllerStreak;
+
+        // Start from the last scheduled date that appears in streakDays
+        LocalDate lastLoggedDate = streakDays.get(streakDays.size() - 1).getDate();
+        int lastIndex = scheduledDates.lastIndexOf(lastLoggedDate);
+        if (lastIndex == -1) {
+            return 0;
+        }
+
+        int streak = 0;
+
+        // Walk backwards through scheduled dates
+        for (int i = lastIndex; i >= 0; i--) {
+            LocalDate scheduledDate = scheduledDates.get(i);
+
+            // Find matching StreakDay
+            StreakDay day = streakDays.stream()
+                    .filter(d -> d.getDate().equals(scheduledDate))
+                    .findFirst()
+                    .orElse(null);
+
+            if (day == null || !day.isControllerUsage()) {
+                break;
+            }
+
+            streak++;
+        }
+
+        return streak;
     }
 
     private int getCurrentTechniqueStreak() {

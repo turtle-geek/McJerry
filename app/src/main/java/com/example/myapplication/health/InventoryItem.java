@@ -52,6 +52,6 @@ public class InventoryItem {
     }
 
     public boolean expiryAlert() {
-        return LocalDateTime.now().compareTo(expiryDate.minusWeeks(4)) > 0; // 4 weeks before expiry
+        return LocalDateTime.now().isAfter(expiryDate.minusWeeks(4)); // 4 weeks before expiry
     }
 }

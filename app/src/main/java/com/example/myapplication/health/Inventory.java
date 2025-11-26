@@ -1,5 +1,7 @@
 package com.example.myapplication.health;
 
+import com.example.myapplication.models.TechniqueQuality;
+
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
@@ -30,7 +32,7 @@ public class Inventory {
         inventory.add(medicine);
     }
 
-    public boolean useMedicine(int index, double amount, LocalDateTime timestamp) {
+    public boolean useMedicine(int index, double amount, LocalDateTime timestamp, TechniqueQuality techniqueQuality) {
         if (index < 0 || index >= inventory.size())
             return false;
         InventoryItem medicine = inventory.get(index);
@@ -42,9 +44,9 @@ public class Inventory {
                 inventory.remove(medicine);
             }
             if (medicine.getLabel() == MedicineLabel.CONTROLLER)
-                controllerLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp));
+                controllerLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
             else
-                rescueLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp));
+                rescueLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
             return true;
         }
     }

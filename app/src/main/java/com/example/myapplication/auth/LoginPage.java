@@ -26,7 +26,7 @@ public class LoginPage extends AppCompatActivity {
     private TextInputEditText mailET, passwordET;
     private Button loginButton;
     private CheckBox rememberMeCheckBox;
-    private TextView registerTextView;
+    private TextView registerTextView, forgotPasswordTextView;
     private FirebaseAuth fAuth;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "LoginPrefs";
@@ -55,6 +55,7 @@ public class LoginPage extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         rememberMeCheckBox = findViewById(R.id.checkBox);
         registerTextView = findViewById(R.id.registerTextView);
+        forgotPasswordTextView = findViewById(R.id.textView2);
 
         // Load saved credentials if "Remember Me" was checked
         loadSavedCredentials();
@@ -74,6 +75,12 @@ public class LoginPage extends AppCompatActivity {
         // Register text click listener
         registerTextView.setOnClickListener(v -> {
             Intent intent = new Intent(LoginPage.this, Register.class);
+            startActivity(intent);
+        });
+
+        // Forgot password text click listener
+        forgotPasswordTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginPage.this, ForgotPassword.class);
             startActivity(intent);
         });
 

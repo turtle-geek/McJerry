@@ -3,6 +3,7 @@ package com.example.myapplication.health;
 import com.example.myapplication.models.TechniqueQuality;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Inventory {
@@ -12,8 +13,8 @@ public class Inventory {
     private ArrayList<MedicineUsageLog> rescueLog;
 
     public Inventory() {
-        controller = new InventoryItem(0, 0, LocalDateTime.now(), LocalDateTime.now());
-        rescue = new InventoryItem(0, 0, LocalDateTime.now(), LocalDateTime.now());
+        controller = new InventoryItem(0, 0, LocalDate.now(), LocalDate.now());
+        rescue = new InventoryItem(0, 0, LocalDate.now(), LocalDate.now());
         controllerLog = new ArrayList<>();
         rescueLog = new ArrayList<>();
     }

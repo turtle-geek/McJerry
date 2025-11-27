@@ -40,6 +40,9 @@ public class MedicineUsageLog {
 
     @Override
     public String toString() {
-        return "Medicine: " + medicine.toString() + ", Dosage: " + dosageAmount + ", Timestamp: " + timestamp;
+        if (techniqueQuality != TechniqueQuality.NA)
+            return "Medicine: " + medicine.toString() + ", Dosage: " + dosageAmount + ", Timestamp: " + timestamp;
+        else
+            return "Medicine: " + medicine.toString() + ", Dosage: " + dosageAmount + ", Timestamp: " + timestamp + ", Controller Quality: " + techniqueQuality;
     }
 }

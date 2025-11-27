@@ -103,7 +103,6 @@
                 android:layout_height="wrap_content"
                 android:text="All Providers"
                 android:checked="true"
-                android:visibility="gone"
                 app:chipBackgroundColor="#064200"
                 app:chipStrokeWidth="0dp"/>
 

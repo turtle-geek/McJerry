@@ -36,14 +36,6 @@
             android:textColor="@color/white"
             android:gravity="center"/>
 
-        <ImageButton
-            android:id="@+id/btnEdit"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_edit"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Edit"
-            tools:tint="@color/white"/>
 
     </LinearLayout>
 

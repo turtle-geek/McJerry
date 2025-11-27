@@ -29,4 +29,6 @@
     <string name="weekly_rescue_time">Weekly Rescue Time</string>
     <string name="daily_checkin">Daily Checkin</string>
     <string name="birthday">Birthday</string>
+    <string name="provider">Provider</string>
+    <string name="next">Next</string>
 </resources>

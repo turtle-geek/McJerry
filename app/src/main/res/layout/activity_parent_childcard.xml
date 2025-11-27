@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/childCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -40,8 +41,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@android:drawable/ic_menu_today"
-                android:tint="#757575"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                tools:tint="#757575" />
 
             <TextView
                 android:id="@+id/tvBirthday"
@@ -63,8 +64,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@android:drawable/ic_menu_info_details"
-                android:tint="#757575"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                tools:tint="#757575" />
 
             <TextView
                 android:id="@+id/tvSpecialNote"

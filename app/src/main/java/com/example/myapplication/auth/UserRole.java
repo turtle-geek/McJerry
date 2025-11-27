@@ -22,7 +22,7 @@ import jp.wasabeef.blurry.Blurry;
 
 public class UserRole extends AppCompatActivity {
 
-    private Button parentButton, childButton, doctorButton;
+    private Button parentButton, doctorButton;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private String userName, userEmail;
@@ -43,7 +43,6 @@ public class UserRole extends AppCompatActivity {
 
         // Initialize buttons
         parentButton = findViewById(R.id.parentButton);
-        childButton = findViewById(R.id.childrenButton);
         doctorButton = findViewById(R.id.doctorButton);
 
         // Apply blur effect
@@ -57,7 +56,6 @@ public class UserRole extends AppCompatActivity {
 
         // Set click listeners
         parentButton.setOnClickListener(v -> saveUserRole("parent"));
-        childButton.setOnClickListener(v -> saveUserRole("child"));
         doctorButton.setOnClickListener(v -> saveUserRole("provider"));
     }
 

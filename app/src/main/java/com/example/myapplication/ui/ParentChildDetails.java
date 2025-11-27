@@ -1,30 +1,23 @@
 package com.example.myapplication.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 public class ParentChildDetails extends AppCompatActivity {
 
-    private TextView tvDetailName, tvDetailBirthday, tvDetailSpecialNote, tvAge;
-    private ImageButton btnBack, btnEdit;
-    private Button btnViewMedicalRecords;
-
-    private String childId;
-    private String childName;
-    private String childBirthday;
-    private String childNote;
+    private TextView tvDetailName;
+    private TextView tvDetailBirthday;
+    private TextView tvAge;
+    private TextView tvDetailSpecialNote;
+    private TextView tvEmailInfo;
+    private ImageButton btnBack;
+    private ImageButton btnEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,102 +27,92 @@ public class ParentChildDetails extends AppCompatActivity {
         // Initialize views
         tvDetailName = findViewById(R.id.tvDetailName);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
-        tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
         tvAge = findViewById(R.id.tvAge);
+        tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
-        btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
 
         // Get data from intent
-        childId = getIntent().getStringExtra("childId");
-        childName = getIntent().getStringExtra("childName");
-        childBirthday = getIntent().getStringExtra("childBirthday");
-        childNote = getIntent().getStringExtra("childNote");
+        String childId = getIntent().getStringExtra("childId");
+        String childName = getIntent().getStringExtra("childName");
+        String childEmail = getIntent().getStringExtra("childEmail");
+        String childBirthday = getIntent().getStringExtra("childBirthday");
+        String childNote = getIntent().getStringExtra("childNote");
 
         // Display data
-        displayChildDetails();
-
-        // Back button
-        btnBack.setOnClickListener(v -> finish());
-
-        // Edit button - goes to edit page
-        btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(ParentChildDetails.this, ParentChildEdit.class);
-            intent.putExtra("childId", childId);
-            intent.putExtra("childName", childName);
-            intent.putExtra("childBirthday", childBirthday);
-            intent.putExtra("childNote", childNote);
-            startActivityForResult(intent, 101);
-        });
-
-        // Medical records button (for future expansion)
-        btnViewMedicalRecords.setOnClickListener(v -> {
-            // TODO: Navigate to medical records page
-        });
-    }
-
-    private void displayChildDetails() {
-        tvDetailName.setText(childName);
-        tvDetailBirthday.setText(childBirthday);
-
-        if (childNote == null || childNote.isEmpty()) {
-            tvDetailSpecialNote.setText("None");
-        } else {
-            tvDetailSpecialNote.setText(childNote);
+        if (tvDetailName != null) {
+            tvDetailName.setText(childName != null ? childName : "Unknown");
         }
 
-        // Calculate and display age
-        calculateAge(childBirthday);
+        if (tvDetailBirthday != null) {
+            tvDetailBirthday.setText(childBirthday != null ? childBirthday : "Not provided");
+        }
+
+        if (tvAge != null) {
+            // Calculate age from birthday if needed
+            // For now, just show a placeholder
+            tvAge.setText("Age: Calculating...");
+            calculateAge(childBirthday);
+        }
+
+        if (tvDetailSpecialNote != null) {
+            tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
+        }
+
+        // Back button
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+
+        // Edit button
+        if (btnEdit != null) {
+            btnEdit.setOnClickListener(v -> {
+                Toast.makeText(this, "Edit functionality coming soon", Toast.LENGTH_SHORT).show();
+                // TODO: Navigate to edit activity
+            });
+        }
     }
 
     private void calculateAge(String birthday) {
+        if (tvAge == null || birthday == null || birthday.isEmpty()) {
+            if (tvAge != null) {
+                tvAge.setText("Age: Unknown");
+            }
+            return;
+        }
+
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-            Date birthDate = sdf.parse(birthday);
+            // Parse birthday (format: MM/dd/yyyy)
+            String[] parts = birthday.split("/");
+            if (parts.length == 3) {
+                int month = Integer.parseInt(parts[0]);
+                int day = Integer.parseInt(parts[1]);
+                int year = Integer.parseInt(parts[2]);
 
-            if (birthDate != null) {
-                Calendar birthCalendar = Calendar.getInstance();
-                birthCalendar.setTime(birthDate);
+                // Get current date
+                java.util.Calendar today = java.util.Calendar.getInstance();
+                int currentYear = today.get(java.util.Calendar.YEAR);
+                int currentMonth = today.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH is 0-based
+                int currentDay = today.get(java.util.Calendar.DAY_OF_MONTH);
 
-                Calendar today = Calendar.getInstance();
+                // Calculate age
+                int age = currentYear - year;
 
-                int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
-
-                // Check if birthday hasn't occurred yet this year
-                if (today.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
+                // Adjust if birthday hasn't occurred this year
+                if (currentMonth < month || (currentMonth == month && currentDay < day)) {
                     age--;
                 }
 
-                // Calculate months for children under 2 years
-                if (age < 2) {
-                    int months = (today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)) * 12
-                            + today.get(Calendar.MONTH) - birthCalendar.get(Calendar.MONTH);
-
-                    if (months < 12) {
-                        tvAge.setText("Age: " + months + " months old");
-                    } else {
-                        tvAge.setText("Age: " + age + " year" + (age == 1 ? "" : "s") + " old");
-                    }
-                } else {
+                if (age >= 0) {
                     tvAge.setText("Age: " + age + " years old");
+                } else {
+                    tvAge.setText("Age: Invalid date");
                 }
+            } else {
+                tvAge.setText("Age: Invalid format");
             }
-        } catch (ParseException e) {
-            tvAge.setText("Age: Unknown");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 101 && resultCode == RESULT_OK) {
-            // Child was edited, refresh the details
-            // You might want to reload data from database here
-            // For now, just finish this activity to go back to list
-            setResult(RESULT_OK);
-            finish();
+        } catch (Exception e) {
+            tvAge.setText("Age: Unable to calculate");
         }
     }
 }

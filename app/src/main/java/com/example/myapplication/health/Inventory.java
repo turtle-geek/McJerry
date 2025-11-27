@@ -44,9 +44,9 @@ public class Inventory {
                 inventory.remove(medicine);
             }
             if (medicine.getLabel() == MedicineLabel.CONTROLLER)
-                controllerLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
+                controllerLog.add(new MedicineUsageLog(medicine, amount, timestamp, techniqueQuality));
             else
-                rescueLog.add(new MedicineUsageLog(medicine.getName(), amount, timestamp, techniqueQuality));
+                rescueLog.add(new MedicineUsageLog(medicine, amount, timestamp, techniqueQuality));
             return true;
         }
     }

@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add Medicine"
+            android:text="Refill Medicine"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -57,26 +57,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
-
-            <!-- Medicine Name -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Medicine Name"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxBackgroundColor="@color/white">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMedicineName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Purchase Date -->
             <com.google.android.material.textfield.TextInputLayout
@@ -159,27 +139,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Label Dropdown -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Medicine Label"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxBackgroundColor="@color/white">
-
-                <AutoCompleteTextView
-                    android:id="@+id/etMedicineLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textSize="14sp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

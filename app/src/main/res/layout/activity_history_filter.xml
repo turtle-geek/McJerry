@@ -90,7 +90,7 @@
             android:id="@+id/filterDescriptionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select criteria to view historical logs."
+            android:text="Select criteria to print historical logs."
             android:textSize="16sp"
             android:textColor="#555555"
             android:paddingBottom="5dp"
@@ -290,8 +290,7 @@
                         <CheckBox android:id="@+id/cwCbOption1" android:text="1 (Minimal)" android:layout_width="match_parent" android:layout_height="wrap_content" />
                         <CheckBox android:id="@+id/cwCbOption2" android:text="2 (Slight)" android:layout_width="match_parent" android:layout_height="wrap_content" />
                         <CheckBox android:id="@+id/cwCbOption3" android:text="3 (Moderate)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption4" android:text="4 (High)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption5" android:text="5 (Severe)" android:layout_width="match_parent" android:layout_height="wrap_content" />
+                        <CheckBox android:id="@+id/cwCbOption4" android:text="4 (Severe)" android:layout_width="match_parent" android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -306,7 +305,7 @@
                     android:paddingBottom="10dp"/>
 
                 <GridLayout
-                    android:id="@+id/triggerFilterGridLayout"
+                    android:id="@+id/triggerFilterOptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:columnCount="2"
@@ -407,7 +406,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="APPLY FILTER"
+                    android:text="PRINT PDF"
                     android:backgroundTint="#064200"
                     android:textColor="@color/white"
                     android:paddingTop="8dp"

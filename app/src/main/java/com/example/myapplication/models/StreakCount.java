@@ -4,15 +4,20 @@ import java.time.LocalDate;
 import java.util.*;
 import com.example.myapplication.health.Inventory;
 import com.example.myapplication.health.MedicineUsageLog;
+import com.example.myapplication.health.TechniqueSessionCount;
+import com.example.myapplication.health.TechniqueSession;
 
 public class StreakCount {
     private Inventory inventory;
+    private TechniqueSessionCount techniqueSessionCount;
     private PlannedControllerSchedule schedule;
     private int controllerStreak;
     private int techniqueStreak;
     private int rescueCount;
 
     public StreakCount() {
+        inventory = new Inventory();
+        techniqueSessionCount = new TechniqueSessionCount();
         schedule = new PlannedControllerSchedule();
         controllerStreak = 0;
         techniqueStreak = 0;
@@ -106,23 +111,37 @@ public class StreakCount {
         }
 
         // Calculate techniqueStreak
-        if (lastIndex >= 0) {
+        if (techniqueSessionCount != null && !techniqueSessionCount.getTechniqueSessions().isEmpty()) {
+            ArrayList<TechniqueSession> sessions = new ArrayList<>(techniqueSessionCount.getTechniqueSessions());
+
+            // Sort descending by date
+            sessions.sort((s1, s2) -> s2.getDate().compareTo(s1.getDate()));
+
             int streak = 0;
-            for (int i = lastIndex; i >= 0; i--) {
-                LocalDate scheduledDate = scheduledDates.get(i);
-                boolean isHighQuality = false;
-                for (MedicineUsageLog log : controllerLogs) {
-                    if (log.getDate().equals(scheduledDate) && log.getControllerQuality() == TechniqueQuality.HIGH) {
-                        isHighQuality = true;
+            LocalDate lastCheckedDay = null;
+            boolean currentDayHasHigh = false;
+
+            for (TechniqueSession session : sessions) {
+                LocalDate day = session.getDate();
+
+                if (lastCheckedDay == null || !day.isEqual(lastCheckedDay)) {
+                    if (lastCheckedDay != null && !currentDayHasHigh) {
                         break;
                     }
-                }
-                if (isHighQuality) {
-                    streak++;
+
+                    lastCheckedDay = day;
+                    currentDayHasHigh = (session.getTechniqueQuality() == TechniqueQuality.HIGH);
                 } else {
-                    break;
+                    if (session.getTechniqueQuality() == TechniqueQuality.HIGH) {
+                        currentDayHasHigh = true;
+                    }
+                }
+
+                if (streak == 0 && currentDayHasHigh) {
+                    streak = 1;
                 }
             }
+
             techniqueStreak = streak;
         }
     }

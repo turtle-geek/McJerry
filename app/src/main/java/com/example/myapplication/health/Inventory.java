@@ -32,7 +32,7 @@ public class Inventory {
         inventory.add(medicine);
     }
 
-    public boolean useMedicine(int index, double amount, LocalDateTime timestamp, TechniqueQuality techniqueQuality) {
+    public boolean useMedicine(int index, double amount, LocalDateTime timestamp) {
         if (index < 0 || index >= inventory.size())
             return false;
         InventoryItem medicine = inventory.get(index);
@@ -43,10 +43,13 @@ public class Inventory {
             if (medicine.getAmount() == 0) {
                 inventory.remove(medicine);
             }
-            if (medicine.getLabel() == MedicineLabel.CONTROLLER)
+            if (medicine.getLabel() == MedicineLabel.CONTROLLER) {
+                // TODO: move to technique session
+                TechniqueQuality techniqueQuality = TechniqueQuality.HIGH; // Placeholder
                 controllerLog.add(new MedicineUsageLog(medicine, amount, timestamp, techniqueQuality));
-            else
-                rescueLog.add(new MedicineUsageLog(medicine, amount, timestamp, techniqueQuality));
+            } else {
+                rescueLog.add(new MedicineUsageLog(medicine, amount, timestamp, TechniqueQuality.NA));
+            }
             return true;
         }
     }

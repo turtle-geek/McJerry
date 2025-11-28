@@ -20,10 +20,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 
 import com.example.myapplication.R;
+import com.example.myapplication.callbacks.HistoryDataCallback; // Corrected Import
 import com.example.myapplication.models.DailyCheckIn;
+import com.example.myapplication.models.HistoryRepository; // Corrected Import
 import com.example.myapplication.models.MasterFilterParams;
+import com.example.myapplication.models.DailyCheckInHistory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,13 +35,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Date; // Added for drawPageContent date formatting
+import java.util.Date;
+
 
 public class HistoryFilterActivity extends AppCompatActivity {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
     private List<DailyCheckIn> resultsToExport;
     private ActivityResultLauncher<Intent> createPdfFileLauncher;
+
+    // INSTANTIATE NECESSARY SERVICES
+    private final DailyCheckInHistory historyManager = new DailyCheckInHistory();
+    private final HistoryRepository historyRepository = new HistoryRepository(historyManager);
+
 
     private final int margin = 72;
     private final int cellHeight = 30;
@@ -107,7 +117,6 @@ public class HistoryFilterActivity extends AppCompatActivity {
 
     /**
      * Handles setting children checked status when the main filter checkbox is toggled.
-     * Assumes Cough/Wheeze is a LinearLayout containing CheckBoxes (based on XML fix).
      */
     private void toggleChildCheckboxes(LinearLayout parentLayout, boolean isChecked) {
         // Iterate through all children of the parent layout
@@ -122,7 +131,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
             else if (child instanceof RadioButton) {
                 ((RadioButton) child).setChecked(isChecked);
             }
-            // If the structure retains RadioGroup (e.g., if XML fix was incomplete for cw), handle that.
+            // If the structure retains RadioGroup, handle that case explicitly.
             else if (child instanceof RadioGroup) {
                 RadioGroup radioGroup = (RadioGroup) child;
                 for (int j = 0; j < radioGroup.getChildCount(); j++) {
@@ -159,26 +168,39 @@ public class HistoryFilterActivity extends AppCompatActivity {
     private void applyFiltersAndSave() {
         MasterFilterParams params = gatherFilterParams();
 
-        // 1. EXECUTE MASTER FILTER (Placeholder)
-        // Note: Replace this placeholder with your actual Firestore retrieval and filtering logic.
-        List<DailyCheckIn> finalResults = createSampleData();
+        // ASYNCHRONOUS FETCH CALL
+        historyRepository.fetchAndFilterDataAsync(params, new HistoryDataCallback() {
+            @Override
+            public void onDataReceived(List<DailyCheckIn> results) {
+                onDataReady(results);
+            }
 
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("HistoryFilter", "Data fetch failed: " + e.getMessage(), e);
+                Toast.makeText(HistoryFilterActivity.this, "Error fetching history data.", Toast.LENGTH_LONG).show();
+                onDataReady(new ArrayList<>()); // Proceed with empty results on failure
+            }
+        });
+    }
+
+    /**
+     * Handles the successful completion of the asynchronous data fetch and proceeds to printing.
+     */
+    private void onDataReady(List<DailyCheckIn> finalResults) {
         if (finalResults.isEmpty()) {
             Toast.makeText(this, "No records match your selected filters.", Toast.LENGTH_LONG).show();
-            return;
         }
 
         resultsToExport = finalResults;
         startSaveIntent();
     }
 
-    /**
-     * MODIFIED: Rewritten Cough/Wheeze gathering logic for multi-select checkboxes (0-4 scale).
-     */
+
     private MasterFilterParams gatherFilterParams() {
         MasterFilterParams params = new MasterFilterParams();
 
-        // 1. Gather Trigger Filters (Multi-select CheckBoxes)
+        // 1. Gather Trigger Filters
         gatherTriggerFilters(params, R.id.triggerFilterOptions);
 
         // 2. Gather Symptom Filters (ON/OFF)
@@ -211,7 +233,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
     }
 
     /**
-     * NEW HELPER: Gathers minimum and maximum selected Cough/Wheeze scores from checkboxes (0-4 scale).
+     * Gathers minimum and maximum selected Cough/Wheeze scores from checkboxes (0-4 scale).
      */
     private void gatherCoughWheezeFilters(MasterFilterParams params, int dropdownLayoutId) {
         LinearLayout dropdownLayout = findViewById(dropdownLayoutId);
@@ -219,19 +241,32 @@ public class HistoryFilterActivity extends AppCompatActivity {
         int maxScore = Integer.MIN_VALUE;
         boolean anyChecked = false;
 
-        // Find the inner container holding the checkboxes
-        // Based on the XML fix, this is the cwFilterDropdownOptions LinearLayout
-
         // Iterate through all children of the dropdownLayout
         for (int i = 0; i < dropdownLayout.getChildCount(); i++) {
             View child = dropdownLayout.getChildAt(i);
 
-            // Handle RadioGroup container if the previous fix wasn't applied correctly
-            if (child instanceof RadioGroup) {
+            // Handle CheckBox children (preferred structure)
+            if (child instanceof CheckBox) {
+                CheckBox cb = (CheckBox) child;
+                if (cb.isChecked()) {
+                    try {
+                        String resourceName = getResources().getResourceEntryName(cb.getId());
+                        int score = Integer.parseInt(resourceName.substring(resourceName.length() - 1));
+
+                        minScore = Math.min(minScore, score);
+                        maxScore = Math.max(maxScore, score);
+                        anyChecked = true;
+                    } catch (Exception e) {
+                        Log.e("HistoryFilter", "Error parsing score from CheckBox ID.", e);
+                    }
+                }
+            }
+            // Handle RadioGroup/RadioButton children (in case XML is not flat)
+            else if (child instanceof RadioGroup) {
                 RadioGroup radioGroup = (RadioGroup) child;
                 for (int j = 0; j < radioGroup.getChildCount(); j++) {
                     View radioChild = radioGroup.getChildAt(j);
-                    if (radioChild instanceof RadioButton) { // Check for RadioButtons
+                    if (radioChild instanceof RadioButton) {
                         RadioButton rb = (RadioButton) radioChild;
                         if (rb.isChecked()) {
                             try {
@@ -242,7 +277,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
                                 anyChecked = true;
                             } catch (Exception e) { /* Ignore parsing errors */ }
                         }
-                    } else if (radioChild instanceof CheckBox) { // Check for CheckBoxes inside RadioGroup
+                    } else if (radioChild instanceof CheckBox) {
                         CheckBox cb = (CheckBox) radioChild;
                         if (cb.isChecked()) {
                             try {
@@ -254,19 +289,6 @@ public class HistoryFilterActivity extends AppCompatActivity {
                             } catch (Exception e) { /* Ignore parsing errors */ }
                         }
                     }
-                }
-            }
-            // Handle direct CheckBoxes (preferred structure)
-            else if (child instanceof CheckBox) {
-                CheckBox cb = (CheckBox) child;
-                if (cb.isChecked()) {
-                    try {
-                        String resourceName = getResources().getResourceEntryName(cb.getId());
-                        int score = Integer.parseInt(resourceName.substring(resourceName.length() - 1));
-                        minScore = Math.min(minScore, score);
-                        maxScore = Math.max(maxScore, score);
-                        anyChecked = true;
-                    } catch (Exception e) { /* Ignore parsing errors */ }
                 }
             }
         }
@@ -370,7 +392,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
             int rowY = y + (i - startItem) * cellHeight;
 
             // 1. Date
-            canvas.drawText(dateFormat.format(new Date(entry.getCheckInTimestamp())), x + (columnWidth * 0) + 5, rowY + cellHeight - 5, paint); // Use new Date(timestamp)
+            canvas.drawText(dateFormat.format(new Date(entry.getCheckInTimestamp())), x + (columnWidth * 0) + 5, rowY + cellHeight - 5, paint);
 
             // 2. Waking
             canvas.drawText(entry.getNightWaking() ? "Yes" : "No", x + (columnWidth * 1) + 5, rowY + cellHeight - 5, paint);

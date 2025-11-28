@@ -135,7 +135,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Today Header - FIXED: Now constrained below childSelectorCard -->
+    <!-- Today Header  -->
     <LinearLayout
         android:id="@+id/todayHeader"
         android:layout_width="match_parent"

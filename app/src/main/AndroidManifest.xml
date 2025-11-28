@@ -69,18 +69,22 @@
             android:name=".ui.ParentManagement"  android:exported="false">
         </activity>
 
+        <activity
+            android:name=".ui.ParentChildDetails"  android:exported="false">
+        </activity>
 
         <activity
             android:name=".ui.ParentChildEdit"  android:exported="false">
         </activity>
 
         <activity
-            android:name=".ui.ProviderChildDetails"  android:exported="false">
+            android:name=".ui.ParentRegisterChild"  android:exported="true">
         </activity>
 
         <activity
-            android:name=".ui.ProviderManagement"  android:exported="false">
+            android:name=".ui.ParentRegisterLogin"  android:exported="true">
         </activity>
+
 
     </application>
 

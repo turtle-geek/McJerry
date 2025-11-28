@@ -15,7 +15,8 @@ public class ParentChildDetails extends AppCompatActivity {
     private TextView tvDetailBirthday;
     private TextView tvAge;
     private TextView tvDetailSpecialNote;
-    private TextView tvEmailInfo;
+    private TextView tvUserId;
+    private TextView tvPassword;
     private ImageButton btnBack;
     private ImageButton btnEdit;
 
@@ -29,15 +30,19 @@ public class ParentChildDetails extends AppCompatActivity {
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
         tvAge = findViewById(R.id.tvAge);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
+        tvUserId = findViewById(R.id.tvIDName);
+        tvPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
 
         // Get data from intent
         String childId = getIntent().getStringExtra("childId");
         String childName = getIntent().getStringExtra("childName");
+        String childUserId = getIntent().getStringExtra("childUserId");
         String childEmail = getIntent().getStringExtra("childEmail");
         String childBirthday = getIntent().getStringExtra("childBirthday");
         String childNote = getIntent().getStringExtra("childNote");
+        String childPassword = getIntent().getStringExtra("childPassword");
 
         // Display data
         if (tvDetailName != null) {
@@ -59,6 +64,19 @@ public class ParentChildDetails extends AppCompatActivity {
             tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
         }
 
+        if (tvUserId != null) {
+            tvUserId.setText(childUserId != null ? childUserId : "Not set");
+        }
+
+        if (tvPassword != null) {
+            // Display masked password or a placeholder
+            if (childPassword != null && !childPassword.isEmpty()) {
+                tvPassword.setText(maskPassword(childPassword));
+            } else {
+                tvPassword.setText("••••••••");
+            }
+        }
+
         // Back button
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
@@ -71,6 +89,19 @@ public class ParentChildDetails extends AppCompatActivity {
                 // TODO: Navigate to edit activity
             });
         }
+    }
+
+    private String maskPassword(String password) {
+        // Create a masked version of the password (show first 2 chars, rest as dots)
+        if (password.length() <= 2) {
+            return "••••••";
+        }
+        StringBuilder masked = new StringBuilder();
+        masked.append(password.substring(0, 2));
+        for (int i = 2; i < password.length(); i++) {
+            masked.append("•");
+        }
+        return masked.toString();
     }
 
     private void calculateAge(String birthday) {

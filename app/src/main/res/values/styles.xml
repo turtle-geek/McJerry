@@ -1,16 +1,38 @@
 <resources>
+    <color name="green_primary">#4CAF50</color>
     <style name="FilterCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_columnWeight">1</item>
+    </style>
 
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginEnd">12dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
+    <style name="GreenButtonTextStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/green_primary</item>
+    </style>
 
-        <item name="android:textSize">14sp</item>
-        <item name="android:paddingEnd">8dp</item>
+    <style name="GreenButtonAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/green_primary</item>
+    </style>
 
-        <item name="buttonTint">@color/check_box_selector_color</item>
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/green_primary</item>
+        <item name="colorPrimary">@color/green_primary</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/GreenButtonTextStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/GreenButtonTextStyle</item>
+
+        <item name="buttonStyle">@style/GreenButtonAppearance</item>
+
+        <item name="android:textColorAlertDialogListItem">@color/green_primary</item>
+
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+
+        <item name="android:datePickerDialogTheme">@style/GreenDatePickerDialogStyle</item>
+    </style>
+
+    <style name="GreenDatePickerDialogStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:headerBackground">@color/green_primary</item>
+        <item name="colorAccent">@color/green_primary</item>
+
+        <item name="android:textColorPrimary">@color/green_primary</item>
+
     </style>
 </resources>

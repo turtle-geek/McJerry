@@ -151,13 +151,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Child"
-                        android:layout_marginEnd="20dp"/>
+                        android:layout_marginEnd="20dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
 
                     <RadioButton
                         android:id="@+id/rbParentEntered"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Parent"/>
+                        android:text="Parent"
+                        app:buttonTint="@color/check_box_selector_color"/>
 
                 </RadioGroup>
 
@@ -182,14 +184,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:text="Yes" />
+                        android:text="Yes"
+                        app:buttonTint="@color/check_box_selector_color"/>
 
                     <RadioButton
                         android:id="@+id/rbWakingNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="No"
-                        android:layout_marginEnd="20dp"/>
+                        android:layout_marginEnd="20dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                 </RadioGroup>
 
                 <TextView
@@ -226,9 +230,9 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:layout_weight="0">
-                        <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
-                        <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
-                        <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp"/>
+                        <RadioButton android:id="@+id/rbLimit0" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbLimit1" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbLimit2" android:text="" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="3dp" app:buttonTint="@color/check_box_selector_color"/>
                     </RadioGroup>
 
                     <TextView
@@ -276,11 +280,11 @@
                         android:layout_weight="1"
                         android:layout_marginHorizontal="10dp">
 
-                        <RadioButton android:id="@+id/rbCough1" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
-                        <RadioButton android:id="@+id/rbCough2" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
-                        <RadioButton android:id="@+id/rbCough3" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
-                        <RadioButton android:id="@+id/rbCough4" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
-                        <RadioButton android:id="@+id/rbCough5" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center"/>
+                        <RadioButton android:id="@+id/rbCough1" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbCough2" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbCough3" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbCough4" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" app:buttonTint="@color/check_box_selector_color"/>
+                        <RadioButton android:id="@+id/rbCough5" android:text="" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" app:buttonTint="@color/check_box_selector_color"/>
                     </RadioGroup>
 
                     <TextView
@@ -315,32 +319,38 @@
                         android:layout_columnWeight="1"
                         android:layout_marginStart="0dp"
                         android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <CheckBox android:id="@+id/cbColdAir" android:text="Cold Air"
                         android:layout_columnWeight="1"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <CheckBox android:id="@+id/cbDustPets" android:text="Dust/Pets"
                         android:layout_columnWeight="1"
                         android:layout_marginStart="0dp"
                         android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <CheckBox android:id="@+id/cbSmoke" android:text="Smoke"
                         android:layout_columnWeight="1"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="4dp"/>
+                        android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <CheckBox android:id="@+id/cbIllness" android:text="Illness"
                         android:layout_columnWeight="1"
                         android:layout_marginStart="0dp"
                         android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="0dp"/>
+                        android:layout_marginBottom="0dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <CheckBox android:id="@+id/cbStrongOdors" android:text="Strong Odors/Perfumes"
                         android:layout_columnWeight="1"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="0dp"
-                        android:layout_marginBottom="0dp"/>
+                        android:layout_marginBottom="0dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                 </GridLayout>
 
                 <Button
@@ -359,42 +369,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/quizHeaderContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="#D0FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Daily Asthma Check-in"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/quicksand"
-            android:textColor="@color/black"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
-
-        <TextView
-            android:id="@+id/headerDateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please complete this entry for today."
-            android:textSize="16sp"
-            android:textColor="#555555"
-            android:paddingBottom="5dp"
-            android:gravity="center"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"/>
-    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menuBar"

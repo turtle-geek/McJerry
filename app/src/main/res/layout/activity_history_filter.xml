@@ -169,8 +169,8 @@
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:padding="0dp"
-                            android:layout_margin="0dp" />
-                        <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
+                            android:layout_margin="0dp"
+                            app:buttonTint="@color/check_box_selector_color" /> <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/nwFilterDropdownOptions"
@@ -181,9 +181,7 @@
                         android:paddingTop="3dp"
                         android:visibility="gone"
                         android:background="#FFFFFF">
-                        <CheckBox android:id="@+id/nwCbOptionYes" android:text="Yes" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/nwCbOptionNo" android:text="No" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                    </LinearLayout>
+                        <CheckBox android:id="@+id/nwCbOptionYes" android:text="Yes" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/nwCbOptionNo" android:text="No" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -221,8 +219,8 @@
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:padding="0dp"
-                            android:layout_margin="0dp" />
-                        <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
+                            android:layout_margin="0dp"
+                            app:buttonTint="@color/check_box_selector_color" /> <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/alFilterDropdownOptions"
@@ -233,10 +231,7 @@
                         android:paddingTop="3dp"
                         android:visibility="gone"
                         android:background="#FFFFFF">
-                        <CheckBox android:id="@+id/alCbOption0" android:text="0 (No Limits)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/alCbOption1" android:text="1 (A Bit Limited)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/alCbOption2" android:text="2 (Very Limited)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                    </LinearLayout>
+                        <CheckBox android:id="@+id/alCbOption0" android:text="0 (No Limits)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/alCbOption1" android:text="1 (A Bit Limited)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/alCbOption2" android:text="2 (Very Limited)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -274,8 +269,8 @@
                             android:minHeight="0dp"
                             android:minWidth="0dp"
                             android:padding="0dp"
-                            android:layout_margin="0dp" />
-                        <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
+                            android:layout_margin="0dp"
+                            app:buttonTint="@color/check_box_selector_color" /> <Space android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/cwFilterDropdownOptions"
@@ -286,12 +281,7 @@
                         android:paddingTop="3dp"
                         android:visibility="gone"
                         android:background="#FFFFFF">
-                        <CheckBox android:id="@+id/cwCbOption0" android:text="0 (None)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption1" android:text="1 (Minimal)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption2" android:text="2 (Slight)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption3" android:text="3 (Moderate)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                        <CheckBox android:id="@+id/cwCbOption4" android:text="4 (Severe)" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                    </LinearLayout>
+                        <CheckBox android:id="@+id/cwCbOption0" android:text="0 (None)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/cwCbOption1" android:text="1 (Minimal)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/cwCbOption2" android:text="2 (Slight)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/cwCbOption3" android:text="3 (Moderate)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> <CheckBox android:id="@+id/cwCbOption4" android:text="4 (Severe)" android:layout_width="match_parent" android:layout_height="wrap_content" app:buttonTint="@color/check_box_selector_color"/> </LinearLayout>
                 </LinearLayout>
 
 
@@ -341,27 +331,32 @@
                         android:id="@+id/rbLast7Days"
                         android:text="Last 7 Days"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <RadioButton
                         android:id="@+id/rbLast30Days"
                         android:text="Last 30 Days"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <RadioButton
                         android:id="@+id/rbLast3Months"
                         android:text="Last 3 Months"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <RadioButton
                         android:id="@+id/rbLast6Months"
                         android:text="Last 6 Months"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:buttonTint="@color/check_box_selector_color"/>
                     <RadioButton
                         android:id="@+id/rbCustomRange"
                         android:text="Custom Range"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:buttonTint="@color/check_box_selector_color"/>
                 </RadioGroup>
 
                 <LinearLayout

@@ -1,6 +1,6 @@
 package com.example.myapplication.ui;
 
-import android.content.Context;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -23,9 +25,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.R;
-import com.example.myapplication.callbacks.HistoryDataCallback; // Corrected Import
+import com.example.myapplication.callbacks.HistoryDataCallback;
 import com.example.myapplication.models.DailyCheckIn;
-import com.example.myapplication.models.HistoryRepository; // Corrected Import
+import com.example.myapplication.models.HistoryRepository;
 import com.example.myapplication.models.MasterFilterParams;
 import com.example.myapplication.models.DailyCheckInHistory;
 
@@ -33,16 +35,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 public class HistoryFilterActivity extends AppCompatActivity {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+    private SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()); // For TextViews
+
     private List<DailyCheckIn> resultsToExport;
     private ActivityResultLauncher<Intent> createPdfFileLauncher;
+
+    // View references for Date Range
+    private TextView tvStartDate;
+    private TextView tvEndDate;
+    private LinearLayout customRangeLayout;
+    private RadioGroup radioGroupDateRange;
+
+    // Date storage
+    private Calendar startDateCalendar;
+    private Calendar endDateCalendar;
 
     // INSTANTIATE NECESSARY SERVICES
     private final DailyCheckInHistory historyManager = new DailyCheckInHistory();
@@ -60,15 +76,154 @@ public class HistoryFilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_filter);
 
+        // Initialize Date objects
+        startDateCalendar = Calendar.getInstance();
+        endDateCalendar = Calendar.getInstance();
+        // Ensure endDate is set to the end of the day for accurate filtering
+        endDateCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endDateCalendar.set(Calendar.MINUTE, 59);
+        endDateCalendar.set(Calendar.SECOND, 59);
+
+        // Initialize Date Range Views
+        tvStartDate = findViewById(R.id.tvStartDate);
+        tvEndDate = findViewById(R.id.tvEndDate);
+        customRangeLayout = findViewById(R.id.customRangeLayout);
+        radioGroupDateRange = findViewById(R.id.radioGroupDateRange);
+
         setupPdfLauncher();
 
         setupSymptomFilter("nw", R.id.filterNightWaking, R.id.nwFilterHeader, R.id.nwFilterDropdownOptions, R.id.nwBtnToggleDropdown, R.id.nwCbFilterMain);
         setupSymptomFilter("al", R.id.filterActivityLimits, R.id.alFilterHeader, R.id.alFilterDropdownOptions, R.id.alBtnToggleDropdown, R.id.alCbFilterMain);
         setupSymptomFilter("cw", R.id.filterCoughWheeze, R.id.cwFilterHeader, R.id.cwFilterDropdownOptions, R.id.cwBtnToggleDropdown, R.id.cwCbFilterMain);
+
         setupDateRangeToggle();
 
         findViewById(R.id.btnApplyFilter).setOnClickListener(v -> applyFiltersAndSave());
     }
+
+    // --- Date Picker and Range Logic ---
+
+    private void setupDateRangeToggle() {
+        radioGroupDateRange.setOnCheckedChangeListener((group, checkedId) -> {
+            // Hide/Show custom range layout
+            if (checkedId == R.id.rbCustomRange) {
+                customRangeLayout.setVisibility(View.VISIBLE);
+                // Set default dates if Custom Range is selected
+                if (tvStartDate.getText().equals(getString(R.string.default_start_date))) {
+                    updateDateRange(30); // Default custom range to last 30 days
+                }
+            } else {
+                customRangeLayout.setVisibility(View.GONE);
+                // Calculate and set automatic ranges
+                if (checkedId == R.id.rbLast7Days) {
+                    updateDateRange(7);
+                } else if (checkedId == R.id.rbLast30Days) {
+                    updateDateRange(30);
+                } else if (checkedId == R.id.rbLast3Months) {
+                    updateDateRange(3 * 30); // Approx 90 days
+                } else if (checkedId == R.id.rbLast6Months) {
+                    updateDateRange(6 * 30); // Approx 180 days
+                }
+            }
+        });
+
+        // Set up click listeners for the custom date TextViews
+        tvStartDate.setOnClickListener(v -> showDatePicker(tvStartDate, startDateCalendar, true));
+        tvEndDate.setOnClickListener(v -> showDatePicker(tvEndDate, endDateCalendar, false));
+
+        // Ensure a range is selected by default (e.g., Last 7 Days)
+        radioGroupDateRange.check(R.id.rbLast7Days);
+    }
+
+    /**
+     * Updates the date range for pre-defined selections (Last N days).
+     */
+    private void updateDateRange(int daysBack) {
+        endDateCalendar.setTimeInMillis(System.currentTimeMillis());
+        // Set end date to the very end of today
+        endDateCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endDateCalendar.set(Calendar.MINUTE, 59);
+        endDateCalendar.set(Calendar.SECOND, 59);
+
+        // Set start date back N days, setting time to midnight
+        startDateCalendar.setTimeInMillis(System.currentTimeMillis());
+        startDateCalendar.add(Calendar.DAY_OF_YEAR, -daysBack);
+        startDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        startDateCalendar.set(Calendar.MINUTE, 0);
+        startDateCalendar.set(Calendar.SECOND, 0);
+
+        tvStartDate.setText(displayDateFormat.format(startDateCalendar.getTime()));
+        tvEndDate.setText(displayDateFormat.format(endDateCalendar.getTime()));
+    }
+
+    /**
+     * Shows a DatePickerDialog for the selected TextView.
+     * @param textView The TextView to update.
+     * @param calendar The Calendar object to store the selection.
+     * @param isStartDate True if setting the start date, false for end date.
+     */
+    private void showDatePicker(TextView textView, Calendar calendar, boolean isStartDate) {
+        // Use the date currently in the calendar for the dialog's default selection
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                R.style.DatePickerTheme, // Keep the theme for green header/calendar
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Update the Calendar object with the selected date
+                    calendar.set(selectedYear, selectedMonth, selectedDay);
+
+                    if (isStartDate) {
+                        // Set Start Date to the beginning of the day (00:00:00)
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                    } else {
+                        // Set End Date to the end of the day (23:59:59)
+                        calendar.set(Calendar.HOUR_OF_DAY, 23);
+                        calendar.set(Calendar.MINUTE, 59);
+                        calendar.set(Calendar.SECOND, 59);
+                    }
+
+                    // Update the TextView
+                    textView.setText(displayDateFormat.format(calendar.getTime()));
+                },
+                year, month, day);
+
+        // Restrict end date selection to today or earlier
+        if (!isStartDate) {
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        }
+
+        // CRITICAL FIX: Show the dialog first, then manually set the button text color.
+        datePickerDialog.show();
+
+        // --- MANUAL BUTTON COLOR OVERRIDE ---
+        try {
+            // Find the Positive Button (OK) and set its text color to green
+            Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
+            if (positiveButton != null) {
+                // Get the color resource for green_primary
+                int greenColor = getResources().getColor(R.color.green_primary, getTheme());
+                positiveButton.setTextColor(greenColor);
+            }
+
+            // Find the Negative Button (Cancel) and set its text color to green
+            Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+            if (negativeButton != null) {
+                int greenColor = getResources().getColor(R.color.green_primary, getTheme());
+                negativeButton.setTextColor(greenColor);
+            }
+        } catch (Exception e) {
+            Log.e("DatePickerFix", "Failed to manually set button color: " + e.getMessage());
+        }
+        // ------------------------------------
+    }
+
+
+    // --- PDF Launcher, Data Fetch, and Filtering ---
 
     private void setupPdfLauncher() {
         createPdfFileLauncher = registerForActivityResult(
@@ -87,6 +242,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
     }
 
     private void setupSymptomFilter(String prefix, int containerId, int headerId, int dropdownId, int toggleBtnId, int mainCbId) {
+        // ... (existing code for setupSymptomFilter remains the same)
         LinearLayout dropdownLayout = findViewById(dropdownId);
         ImageButton toggleButton = findViewById(toggleBtnId);
         CheckBox mainCheckbox = findViewById(mainCbId);
@@ -106,9 +262,6 @@ public class HistoryFilterActivity extends AppCompatActivity {
         mainCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             toggleChildCheckboxes(dropdownLayout, isChecked);
         });
-
-        // *** REMOVED THE LINE BELOW TO FIX THE ISSUE ***
-        // mainCheckbox.setOnClickListener(toggleListener);
     }
 
     private void toggleVisibility(LinearLayout layout) {
@@ -150,27 +303,14 @@ public class HistoryFilterActivity extends AppCompatActivity {
         }
     }
 
-    private void setupDateRangeToggle() {
-        ((RadioGroup)findViewById(R.id.radioGroupDateRange)).setOnCheckedChangeListener((group, checkedId) -> {
-            LinearLayout customRangeLayout = findViewById(R.id.customRangeLayout);
-            if (checkedId == R.id.rbCustomRange) {
-                customRangeLayout.setVisibility(View.VISIBLE);
-            } else {
-                customRangeLayout.setVisibility(View.GONE);
-            }
-        });
-
-        findViewById(R.id.tvStartDate).setOnClickListener(v -> showDatePicker(R.id.tvStartDate));
-        findViewById(R.id.tvEndDate).setOnClickListener(v -> showDatePicker(R.id.tvEndDate));
-    }
-
-    private void showDatePicker(int textViewId) {
-        Toast.makeText(this, "Opening Date Picker...", Toast.LENGTH_SHORT).show();
-    }
-
-
     private void applyFiltersAndSave() {
         MasterFilterParams params = gatherFilterParams();
+
+        // Check if custom dates are valid before proceeding
+        if (params.startTimestamp > params.endTimestamp) {
+            Toast.makeText(this, "Error: Start Date cannot be after End Date.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         // ASYNCHRONOUS FETCH CALL
         historyRepository.fetchAndFilterDataAsync(params, new HistoryDataCallback() {
@@ -194,6 +334,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
     private void onDataReady(List<DailyCheckIn> finalResults) {
         if (finalResults.isEmpty()) {
             Toast.makeText(this, "No records match your selected filters.", Toast.LENGTH_LONG).show();
+            return; // Exit if no results
         }
 
         resultsToExport = finalResults;
@@ -214,8 +355,16 @@ public class HistoryFilterActivity extends AppCompatActivity {
         // 3. Gather Cough/Wheeze Score Filter
         gatherCoughWheezeFilters(params, R.id.cwFilterDropdownOptions);
 
-        // 4. Gather Date Range (Implementation needed)
-        // ...
+        // 4. Gather Date Range
+        // The dates are already set in startDateCalendar and endDateCalendar by the selection logic.
+
+        // Ensure the end date is never in the future and handles the full day.
+        endDateCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        endDateCalendar.set(Calendar.MINUTE, 59);
+        endDateCalendar.set(Calendar.SECOND, 59);
+
+        params.startTimestamp = startDateCalendar.getTimeInMillis();
+        params.endTimestamp = endDateCalendar.getTimeInMillis();
 
         return params;
     }
@@ -322,14 +471,6 @@ public class HistoryFilterActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Select save location for PDF...", Toast.LENGTH_SHORT).show();
         createPdfFileLauncher.launch(intent);
-    }
-
-    private List<DailyCheckIn> createSampleData() {
-        List<DailyCheckIn> list = new ArrayList<>();
-        list.add(new DailyCheckIn(System.currentTimeMillis() - 86400000L * 2, "Parent", true, 2, 4, List.of("Cold Air")));
-        list.add(new DailyCheckIn(System.currentTimeMillis() - 86400000L * 5, "Child", false, 0, 1, List.of("None")));
-        list.add(new DailyCheckIn(System.currentTimeMillis(), "Parent", true, 1, 3, List.of("Exercise", "Dust/Pets")));
-        return list;
     }
 
     private void writePdfDocument(Uri uri, List<DailyCheckIn> entries) {

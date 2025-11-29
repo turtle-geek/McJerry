@@ -33,4 +33,5 @@
     <string name="reminder_button">Reminder Bell Button</string>
     <string name="provider">Provider</string>
     <string name="next">Next</string>
+    <string name="default_start_date">Start Date: (Tap to select)</string>
 </resources>

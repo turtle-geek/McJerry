@@ -1,77 +1,76 @@
 package com.example.myapplication.ui;
 
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.auth.SignOut;
+import com.example.myapplication.models.PeakFlow;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import jp.wasabeef.blurry.Blurry;
-
 public class ParentHomeActivity extends AppCompatActivity {
+
+    private static final String TAG = "ParentHomeActivity";
+
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
-    private ImageButton profileButton;
     private ImageButton bellButton;
-    private TextView todayDate;
+    private TextView todayDate, selectedChildName;
     private CardView statusCard1, statusCard2, statusCard3, graphCard;
+    private LinearLayout childSelectorLayout;
+
+    // Trend Snippet
+    private LinearLayout trendContainer;
+    private TrendSnippet trendSnippet;
+
+    // Child data
+    private List<ChildInfo> childrenList;
+    private String selectedChildId = null;
+    private String selectedChildNameStr = "Select a child";
+    private int selectedChildPersonalBest = 400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_parent_home);
 
-        try {
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.homePage), (v, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                return insets;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        childrenList = new ArrayList<>();
 
         // Initialize views
-        profileButton = findViewById(R.id.pfp_logo);
-        bellButton = findViewById(R.id.bell);
-        todayDate = findViewById(R.id.todayDate);
-        statusCard1 = findViewById(R.id.statusCard1);
-        statusCard2 = findViewById(R.id.statusCard2);
-        statusCard3 = findViewById(R.id.statusCard3);
-        graphCard = findViewById(R.id.graphCard);
-        bottomNavigationView = findViewById(R.id.menuBar);
+        initializeViews();
 
-        // Set up bottom navigation - ONLY if it exists
+        // Set up bottom navigation
         if (bottomNavigationView != null) {
             setupBottomNavigation();
         }
 
-        // Set current date - ONLY if view exists
+        // Set current date
         if (todayDate != null) {
             setCurrentDate();
         }
@@ -81,11 +80,248 @@ public class ParentHomeActivity extends AppCompatActivity {
 
         // Set up card listeners
         setupCardListeners();
+
+        // Setup child selector
+        setupChildSelector();
+
+        // Setup trend snippet
+        setupTrendSnippet();
+
+        // Load children list
+        loadChildrenList();
+    }
+
+    private void initializeViews() {
+        bellButton = findViewById(R.id.bell);
+        todayDate = findViewById(R.id.todayDate);
+        selectedChildName = findViewById(R.id.selectedChildName);
+        childSelectorLayout = findViewById(R.id.childSelectorLayout);
+        statusCard1 = findViewById(R.id.statusCard1);
+        statusCard2 = findViewById(R.id.statusCard2);
+        statusCard3 = findViewById(R.id.statusCard3);
+        graphCard = findViewById(R.id.graphCard);
+        bottomNavigationView = findViewById(R.id.menuBar);
+        trendContainer = findViewById(R.id.trendContainer);
+    }
+
+    private void setupChildSelector() {
+        if (childSelectorLayout != null) {
+            childSelectorLayout.setOnClickListener(v -> showChildSelectionDialog());
+        }
+    }
+
+    private void loadChildrenList() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Log.w(TAG, "No user logged in");
+            return;
+        }
+
+        String parentId = currentUser.getUid();
+
+        // Query all children of this parent
+        db.collection("users")
+                .whereEqualTo("role", "child")
+                .whereEqualTo("parentID", parentId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    childrenList.clear();
+
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        String childId = doc.getId();
+                        String childName = doc.getString("name");
+                        Integer personalBest = doc.getLong("PEF_PB") != null ?
+                                doc.getLong("PEF_PB").intValue() : 400;
+
+                        childrenList.add(new ChildInfo(childId, childName, personalBest));
+                    }
+
+                    Log.d(TAG, "Loaded " + childrenList.size() + " children");
+
+                    // If only one child, auto-select them
+                    if (childrenList.size() == 1) {
+                        ChildInfo child = childrenList.get(0);
+                        selectedChildId = child.id;
+                        selectedChildNameStr = child.name;
+                        selectedChildPersonalBest = child.personalBest;
+
+                        if (selectedChildName != null) {
+                            selectedChildName.setText(selectedChildNameStr);
+                        }
+
+                        loadPeakFlowData();
+                    } else if (childrenList.isEmpty()) {
+                        // No children - show empty state
+                        if (selectedChildName != null) {
+                            selectedChildName.setText("No children registered");
+                        }
+                        loadTestData();
+                    } else {
+                        // Multiple children - show prompt to select
+                        if (selectedChildName != null) {
+                            selectedChildName.setText("Select a child");
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error loading children list", e);
+                    Toast.makeText(this, "Failed to load children", Toast.LENGTH_SHORT).show();
+                    loadTestData();
+                });
+    }
+
+    private void showChildSelectionDialog() {
+        if (childrenList.isEmpty()) {
+            Toast.makeText(this, "No children registered yet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create array of child names
+        List<String> names = new ArrayList<>();
+        for (ChildInfo child : childrenList) {
+            names.add(child.name);
+        }
+
+        String[] nameArray = names.toArray(new String[0]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Child");
+        builder.setItems(nameArray, (dialog, which) -> {
+            // Specific child selected
+            ChildInfo selectedChild = childrenList.get(which);
+            selectedChildId = selectedChild.id;
+            selectedChildNameStr = selectedChild.name;
+            selectedChildPersonalBest = selectedChild.personalBest;
+
+            // Update UI
+            if (selectedChildName != null) {
+                selectedChildName.setText(selectedChildNameStr);
+            }
+
+            // Reload data for selected child
+            loadPeakFlowData();
+
+            Toast.makeText(this, "Showing data for: " + selectedChildNameStr, Toast.LENGTH_SHORT).show();
+        });
+
+        builder.show();
+    }
+
+    private void setupTrendSnippet() {
+        // Create trend snippet
+        trendSnippet = new TrendSnippet(this);
+
+        // Add to container
+        if (trendContainer != null) {
+            trendContainer.removeAllViews();
+            trendContainer.addView(trendSnippet);
+        }
+    }
+
+    private void loadPeakFlowData() {
+        if (selectedChildId == null) {
+            Log.w(TAG, "No child selected");
+            if (trendSnippet != null) {
+                trendSnippet.showLoading();
+            }
+            return;
+        }
+
+        // Show loading
+        if (trendSnippet != null) {
+            trendSnippet.showLoading();
+        }
+
+        // Load data for the selected child
+        List<PeakFlow> peakFlows = new ArrayList<>();
+        loadChildPeakFlowData(selectedChildId, selectedChildPersonalBest, peakFlows, () -> {
+            updateTrendSnippet(peakFlows);
+        });
+    }
+
+    private void loadChildPeakFlowData(String childId, int personalBest, List<PeakFlow> allPeakFlows, Runnable onComplete) {
+        db.collection("users").document(childId)
+                .collection("peakFlowLogs")
+                .orderBy("time", com.google.firebase.firestore.Query.Direction.DESCENDING)
+                .limit(30)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        try {
+                            Integer peakFlowValue = doc.getLong("peakFlow") != null ?
+                                    doc.getLong("peakFlow").intValue() : 0;
+                            com.google.firebase.Timestamp timestamp = doc.getTimestamp("time");
+
+                            if (timestamp != null && peakFlowValue > 0) {
+                                Date date = timestamp.toDate();
+                                LocalDateTime localDateTime = LocalDateTime.ofInstant(
+                                        date.toInstant(),
+                                        java.time.ZoneId.systemDefault()
+                                );
+
+                                PeakFlow pf = new PeakFlow(peakFlowValue, localDateTime);
+
+                                // Compute zone based on personal best
+                                if (peakFlowValue >= 0.8 * personalBest) {
+                                    pf.setZone("green");
+                                } else if (peakFlowValue >= 0.5 * personalBest) {
+                                    pf.setZone("yellow");
+                                } else {
+                                    pf.setZone("red");
+                                }
+
+                                allPeakFlows.add(pf);
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error parsing peak flow data", e);
+                        }
+                    }
+                    onComplete.run();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error loading peak flow data for child: " + childId, e);
+                    onComplete.run();
+                });
+    }
+
+    private void updateTrendSnippet(List<PeakFlow> peakFlows) {
+        if (trendSnippet != null) {
+            if (peakFlows.isEmpty()) {
+                // Show test data if no real data
+                loadTestData();
+            } else {
+                trendSnippet.setData(peakFlows);
+            }
+        }
+    }
+
+    private void loadTestData() {
+        List<PeakFlow> testData = new ArrayList<>();
+
+        for (int i = 0; i < 30; i++) {
+            LocalDateTime time = LocalDateTime.now().minusDays(i);
+            int value = 250 + (int)(Math.random() * 150);
+
+            PeakFlow pf = new PeakFlow(value, time);
+
+            if (value >= 360) {
+                pf.setZone("green");
+            } else if (value >= 250) {
+                pf.setZone("yellow");
+            } else {
+                pf.setZone("red");
+            }
+
+            testData.add(pf);
+        }
+
+        if (trendSnippet != null) {
+            trendSnippet.setData(testData);
+        }
     }
 
     private void setupBottomNavigation() {
         try {
-            // Set the current item as selected
             bottomNavigationView.setSelectedItemId(R.id.homeButton);
 
             bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
@@ -94,111 +330,100 @@ public class ParentHomeActivity extends AppCompatActivity {
                     int id = item.getItemId();
 
                     if (id == R.id.homeButton) {
-                        // Already on Parent Home - do nothing
                         return true;
-
                     } else if (id == R.id.fileButton) {
-                        // Navigate to Parent Management
                         startActivity(new Intent(ParentHomeActivity.this, ParentManagement.class));
                         overridePendingTransition(0, 0);
                         finish();
                         return true;
-
                     } else if (id == R.id.nav_profile) {
-                        // Navigate to Parent Tutorial
                         startActivity(new Intent(ParentHomeActivity.this, ParentTutorial.class));
                         overridePendingTransition(0, 0);
                         finish();
                         return true;
-
                     } else if (id == R.id.moreButton) {
-                        // Navigate to Sign Out Page
                         startActivity(new Intent(ParentHomeActivity.this, SignOut.class));
                         overridePendingTransition(0, 0);
                         finish();
                         return true;
                     }
-
                     return false;
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error setting up navigation", e);
         }
     }
 
     private void setCurrentDate() {
         try {
-            // Format current date as "MMM dd, yyyy"
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
             String currentDate = dateFormat.format(new Date());
             todayDate.setText(currentDate);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error setting date", e);
         }
     }
 
     private void setupButtonListeners() {
-        // Profile button click
-        if (profileButton != null) {
-            profileButton.setOnClickListener(v -> {
-                // TODO: Navigate to profile page
-            });
-        }
-
-        // Bell button click (notifications)
         if (bellButton != null) {
             bellButton.setOnClickListener(v -> {
-                // TODO: Navigate to notifications page
+                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
             });
         }
     }
 
     private void setupCardListeners() {
-        // Status Card 1 - Today's Status
         if (statusCard1 != null) {
             statusCard1.setOnClickListener(v -> {
-                // TODO: Navigate to detailed status view
+                Toast.makeText(this, "Today's Status", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Status Card 2 - Last Rescue Time
         if (statusCard2 != null) {
             statusCard2.setOnClickListener(v -> {
-                // TODO: Navigate to rescue time details
+                Toast.makeText(this, "Last Rescue Time", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Status Card 3 - Weekly Rescue Time
         if (statusCard3 != null) {
             statusCard3.setOnClickListener(v -> {
-                // TODO: Navigate to weekly rescue time view
+                Toast.makeText(this, "Weekly Rescue Time", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Graph Card - Daily Check-in
         if (graphCard != null) {
             graphCard.setOnClickListener(v -> {
-                // TODO: Navigate to daily check-in
+                Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show();
             });
         }
     }
 
-    //This method is to block users' access to visit this app's Parent Home Activities,
-    // if they don't have an account
     @Override
     protected void onStart(){
         super.onStart();
         try {
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if(currentUser == null){
-                //people cannot log in
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error in onStart", e);
+        }
+    }
+
+    // Inner class to hold child information
+    private static class ChildInfo {
+        String id;
+        String name;
+        int personalBest;
+
+        ChildInfo(String id, String name, int personalBest) {
+            this.id = id;
+            this.name = name;
+            this.personalBest = personalBest;
         }
     }
 }

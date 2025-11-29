@@ -1,33 +1,33 @@
 package com.example.myapplication.models;
 
 import java.time.LocalDateTime;
+
 public class PeakFlow {
     int peakFlow;
-    LocalDateTime time;
+    LocalDateTime time;  // Keep as package-private or private
     String zone;
 
-    /**
-     * Constructor for PeakFlow
-     * @param peakFlow, a measure in integer of how fast a child can blow air out
-     * @param time of logging the peak flow value
-     */
     public PeakFlow(int peakFlow, LocalDateTime time) {
         this.peakFlow = peakFlow;
         this.time = time;
     }
 
-    /**
-     * Getter for peakFlow
-     * @return peakFlow
-     */
     public int getPeakFlow() {
         return peakFlow;
     }
 
-    /**
-     * Setter for zone
-     * @return zone of green, yellow, or red
-     */
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
     public String computeZone(Child child){
         int personalBest = child.getHealthProfile().getPEF_PB();
         if (peakFlow >= 0.8*personalBest){

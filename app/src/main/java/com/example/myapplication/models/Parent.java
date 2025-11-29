@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import com.example.myapplication.health.SharedAccessInvite;
+import com.example.myapplication.health.Inventory;
 
 public class Parent extends User{
     private final ArrayList<Child> children;
@@ -64,5 +65,26 @@ public class Parent extends User{
                 return invite;
         }
         return null;
+    }
+
+    public Inventory getInventory(Child child) {
+        return child.getInventory();
+    }
+
+    // Might be redundant
+//    public ArrayList<String> viewControllerUsage(Child child) {
+//        return child.getInventory().getControllerLog();
+//    }
+//
+//    public ArrayList<String> viewRescueUsage(Child child) {
+//        return child.getInventory().getRescueLog();
+//    }
+
+    public StreakCount getStreakCount(Child child) {
+        return child.getStreakCount();
+    }
+
+    public Badges getBadges(Child child) {
+        return child.getBadges();
     }
 }

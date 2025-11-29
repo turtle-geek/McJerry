@@ -44,6 +44,10 @@ dependencies {
     // Firebase Libraries (Versions determined by the BOM above)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
     // Utility libraries
     implementation("jp.wasabeef:blurry:4.0.1")
@@ -53,4 +57,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

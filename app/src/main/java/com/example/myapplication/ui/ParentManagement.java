@@ -170,11 +170,13 @@ public class ParentManagement extends AppCompatActivity {
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             String childId = document.getId();
                             String childName = document.getString("name");
+                            String userId = document.getString("userId");
+                            String password = document.getString("password");  // ✅ ADDED - Retrieve password
                             String email = document.getString("email");
                             String dob = document.getString("dateOfBirth");
                             String notes = document.getString("notes");
 
-                            ChildData childData = new ChildData(childId, childName, email, dob, notes);
+                            ChildData childData = new ChildData(childId, childName, userId, password, email, dob, notes);
                             childrenList.add(childData);
                         }
 
@@ -245,7 +247,8 @@ public class ParentManagement extends AppCompatActivity {
                         Intent intent = new Intent(ParentManagement.this, ParentChildDetails.class);
                         intent.putExtra("childId", child.id);
                         intent.putExtra("childName", child.name);
-                        intent.putExtra("childEmail", child.email);
+                        intent.putExtra("childUserId", child.userId);
+                        intent.putExtra("childPassword", child.password);  // ✅ ADDED - Pass password
                         intent.putExtra("childBirthday", child.dob);
                         intent.putExtra("childNote", child.notes);
                         startActivity(intent);
@@ -272,18 +275,20 @@ public class ParentManagement extends AppCompatActivity {
         }
     }
 
-    // Inner class to hold child data
+    // Inner class to hold child data - UPDATED with password field
     private static class ChildData {
         String id;
         String name;
-        String email;
+        String userId;
+        String password;
         String dob;
         String notes;
 
-        ChildData(String id, String name, String email, String dob, String notes) {
+        ChildData(String id, String name, String userId, String password, String email, String dob, String notes) {
             this.id = id;
             this.name = name;
-            this.email = email;
+            this.userId = userId;
+            this.password = password;
             this.dob = dob;
             this.notes = notes;
         }

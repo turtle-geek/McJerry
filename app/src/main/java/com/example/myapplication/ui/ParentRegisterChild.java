@@ -2,7 +2,9 @@ package com.example.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -11,21 +13,31 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class ParentRegisterChild extends AppCompatActivity {
 
-    private TextInputEditText nameET, mailET, passwordET, confirmPasswordET;
+    private TextInputEditText nameET, userIdET, passwordET, confirmPasswordET;
+    private TextInputLayout userIdLayout;
     private Button nextButton;
     private ImageButton btnBack;
+    private FirebaseFirestore db;
+    private boolean isUserIdValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_registerchild);
 
-        // Initialize UI components
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+
+        // Initialize UI components - CORRECTED
         nameET = findViewById(R.id.nameETRegister);
-        mailET = findViewById(R.id.mailETRegister);
+        userIdET = findViewById(R.id.userIdETRegister);           // ✅ FIXED - was missing
+        userIdLayout = findViewById(R.id.userIdLayoutRegister);   // ✅ FIXED - was wrong ID
         passwordET = findViewById(R.id.passwordETRegister);
         confirmPasswordET = findViewById(R.id.confirmPasswordETRegister);
         nextButton = findViewById(R.id.loginBotton);
@@ -34,13 +46,58 @@ public class ParentRegisterChild extends AppCompatActivity {
         // Back button
         btnBack.setOnClickListener(v -> finish());
 
+        // Add TextWatcher to check ID availability in real-time
+        userIdET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    checkUserIdAvailability(s.toString().trim());
+                } else {
+                    userIdLayout.setError(null);
+                    userIdLayout.setHelperText(null);
+                    isUserIdValid = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // Next button - validate and go to health info page
         nextButton.setOnClickListener(v -> proceedToHealthInfo());
     }
 
+    private void checkUserIdAvailability(String userId) {
+        // Query Firebase to check if the ID already exists
+        db.collection("users")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // ID is occupied
+                        userIdLayout.setError("ID is occupied, please use another one");
+                        userIdLayout.setErrorEnabled(true);
+                        isUserIdValid = false;
+                    } else {
+                        // ID is available
+                        userIdLayout.setError(null);
+                        userIdLayout.setErrorEnabled(false);
+                        userIdLayout.setHelperText("✓ ID is available");
+                        isUserIdValid = true;
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    userIdLayout.setError("Unable to verify ID availability");
+                    isUserIdValid = false;
+                });
+    }
+
     private void proceedToHealthInfo() {
         String name = nameET.getText().toString().trim();
-        String email = mailET.getText().toString().trim();
+        String userId = userIdET.getText().toString().trim();
         String password = passwordET.getText().toString().trim();
         String confirmPassword = confirmPasswordET.getText().toString().trim();
 
@@ -51,15 +108,15 @@ public class ParentRegisterChild extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            mailET.setError("Email is required");
-            mailET.requestFocus();
+        if (TextUtils.isEmpty(userId)) {
+            userIdET.setError("User ID is required");
+            userIdET.requestFocus();
             return;
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mailET.setError("Enter a valid email address");
-            mailET.requestFocus();
+        if (!isUserIdValid) {
+            userIdET.setError("Please choose a valid and unique ID");
+            userIdET.requestFocus();
             return;
         }
 
@@ -84,7 +141,7 @@ public class ParentRegisterChild extends AppCompatActivity {
         // All validation passed, proceed to health info page
         Intent intent = new Intent(ParentRegisterChild.this, ParentRegisterLogin.class);
         intent.putExtra("childName", name);
-        intent.putExtra("childEmail", email);
+        intent.putExtra("childUserId", userId);
         intent.putExtra("childPassword", password);
         startActivity(intent);
     }

@@ -49,119 +49,126 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Child's Name Field -->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/nameLayoutRegister"
+                    android:hint="Child's Name"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/pfp_logo2">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:id="@+id/nameLayoutRegister"
-                        android:hint="@string/legalName"
-                        app:boxCornerRadiusTopStart="30dp"
-                        app:boxCornerRadiusTopEnd="30dp"
-                        app:boxCornerRadiusBottomEnd="30dp"
-                        app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
-                        app:startIconDrawable="@drawable/pfp_logo2">
+                        android:id="@+id/nameETRegister"
+                        android:inputType="textPersonName"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="328dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/nameETRegister"
-                            android:inputType="textPersonName"
-                            android:fontFamily="@font/quicksand"
-                            android:textStyle="bold"
-                            android:paddingStart="48dp"
-                            android:paddingEnd="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <!-- User ID Field (for child login) - NEW! -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/userIdLayoutRegister"
+                    android:hint="User ID (for child login)"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:errorEnabled="true"
+                    app:helperTextEnabled="true"
+                    app:helperTextTextColor="#4CAF50"
+                    app:startIconDrawable="@drawable/pfp_logo2">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:id="@+id/mailLayoutRegister"
-                        android:hint="@string/email_address_name"
-                        app:boxCornerRadiusTopStart="30dp"
-                        app:boxCornerRadiusTopEnd="30dp"
-                        app:boxCornerRadiusBottomEnd="30dp"
-                        app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
-                        app:startIconDrawable="@drawable/pfp_logo2">
+                        android:id="@+id/userIdETRegister"
+                        android:inputType="text"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="328dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/mailETRegister"
-                            android:inputType="textEmailAddress"
-                            android:fontFamily="@font/quicksand"
-                            android:textStyle="bold"
-                            android:paddingStart="48dp"
-                            android:paddingEnd="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <!-- Password Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/passwordLayoutRegister"
+                    android:hint="@string/password"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/lock_logo"
+                    app:endIconMode="password_toggle">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:id="@+id/passwordLayoutRegister"
-                        android:hint="@string/password"
-                        app:boxCornerRadiusTopStart="30dp"
-                        app:boxCornerRadiusTopEnd="30dp"
-                        app:boxCornerRadiusBottomEnd="30dp"
-                        app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
-                        app:startIconDrawable="@drawable/lock_logo"
-                        app:endIconMode="password_toggle">
+                        android:id="@+id/passwordETRegister"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="328dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/passwordETRegister"
-                            android:inputType="textPassword"
-                            android:fontFamily="@font/quicksand"
-                            android:textStyle="bold"
-                            android:paddingStart="48dp"
-                            android:paddingEnd="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <!-- Confirm Password Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/confirmPasswordLayoutRegister"
+                    android:hint="@string/confirmPassword"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/lock_logo"
+                    app:endIconMode="password_toggle">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:id="@+id/confirmPasswordLayoutRegister"
-                        android:hint="@string/confirmPassword"
-                        app:boxCornerRadiusTopStart="30dp"
-                        app:boxCornerRadiusTopEnd="30dp"
-                        app:boxCornerRadiusBottomEnd="30dp"
-                        app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
-                        app:startIconDrawable="@drawable/lock_logo"
-                        app:endIconMode="password_toggle">
+                        android:id="@+id/confirmPasswordETRegister"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="328dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/confirmPasswordETRegister"
-                            android:inputType="textPassword"
-                            android:fontFamily="@font/quicksand"
-                            android:textStyle="bold"
-                            android:paddingStart="48dp"
-                            android:paddingEnd="16dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
+            </LinearLayout>
 
 
             <Button

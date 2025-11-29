@@ -30,7 +30,7 @@ public class ParentRegisterLogin extends AppCompatActivity {
     private FirebaseAuth fAuth;
     private FirebaseFirestore db;
 
-    private String childEmail, childPassword;
+    private String childName, childUserId, childPassword;
     private Calendar calendar;
 
     @Override
@@ -44,10 +44,10 @@ public class ParentRegisterLogin extends AppCompatActivity {
 
         calendar = Calendar.getInstance();
 
-        // Get data from previous activity
+        // Get data from previous activity (ParentRegisterChild)
         Intent intent = getIntent();
-        String childName = intent.getStringExtra("childName");
-        childEmail = intent.getStringExtra("childEmail");
+        childName = intent.getStringExtra("childName");
+        childUserId = intent.getStringExtra("childUserId");
         childPassword = intent.getStringExtra("childPassword");
 
         // Initialize UI components
@@ -93,12 +93,12 @@ public class ParentRegisterLogin extends AppCompatActivity {
     }
 
     private void registerChild() {
-        String childName = etChildName.getText().toString().trim();
+        String displayName = etChildName.getText().toString().trim();
         String birthday = etBirthday.getText().toString().trim();
         String specialNote = etSpecialNote.getText().toString().trim();
 
         // Validation
-        if (TextUtils.isEmpty(childName)) {
+        if (TextUtils.isEmpty(displayName)) {
             etChildName.setError("Child name is required");
             etChildName.requestFocus();
             return;
@@ -113,6 +113,10 @@ public class ParentRegisterLogin extends AppCompatActivity {
         // Get current parent ID
         String parentId = fAuth.getCurrentUser().getUid();
 
+        // Generate a unique email for Firebase Auth (since userId is for login display)
+        // Format: userId@mcjerry.app (this is just for Firebase Auth, user won't see it)
+        String childEmail = childUserId + "@mcjerry.app";
+
         // Create child account in Firebase Auth
         fAuth.createUserWithEmailAndPassword(childEmail, childPassword)
                 .addOnSuccessListener(authResult -> {
@@ -120,8 +124,10 @@ public class ParentRegisterLogin extends AppCompatActivity {
 
                     // Create child document in Firestore
                     Map<String, Object> childData = new HashMap<>();
-                    childData.put("name", childName);
-                    childData.put("email", childEmail);
+                    childData.put("name", displayName);
+                    childData.put("userId", childUserId);      // User ID for login
+                    childData.put("password", childPassword);  // Store password for parent reference
+                    childData.put("email", childEmail);        // Email for Firebase Auth (hidden from user)
                     childData.put("role", "child");
                     childData.put("parentID", parentId);
                     childData.put("dateOfBirth", birthday);

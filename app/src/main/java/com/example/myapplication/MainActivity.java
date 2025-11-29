@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.auth.LoginPage;
+import com.example.myapplication.callbacks.RoleCallback;
 import com.example.myapplication.ui.ChildHomeActivity;
 import com.example.myapplication.ui.ParentHomeActivity;
 import com.example.myapplication.ui.ProviderHomeActivity;
@@ -69,6 +70,43 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Cannot process: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 });
         }
+
+    // fetches the user role
+    private void fetchUserRole(RoleCallback callback) {
+        // These two lines are often already initialized in onCreate, but it's safer to ensure they are available here if not passed in.
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (user == null) {
+            callback.onFailure("User is not logged in.");
+            return;
+        }
+
+        String userId = user.getUid();
+
+        // Reference the user document in Firestore
+        DocumentReference userDoc = fStore.collection("users").document(userId);
+
+        // Fetch the document and extract the role asynchronously
+        userDoc.get().addOnSuccessListener(documentInfo -> {
+                    if (documentInfo.exists()) {
+                        String role = documentInfo.getString("role");
+                        if (role != null) {
+                            // SUCCESS: Pass the role to the onRoleFetched method of the callback
+                            callback.onRoleFetched(role);
+                        } else {
+                            callback.onFailure("User document found, but 'role' field is missing.");
+                        }
+                    } else {
+                        callback.onFailure("Cannot find user information in Firestore.");
+                    }
+                })
+                .addOnFailureListener(exception -> {
+                    // FAILURE: Pass the error message to the onFailure method of the callback
+                    callback.onFailure("Firestore operation failed: " + exception.getMessage());
+                });
+    }
         //helper function: depends on users' role, land user on their specific page
         private void landonSpecificPage(String role){
             Intent intent;

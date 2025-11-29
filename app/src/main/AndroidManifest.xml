@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,13 +18,10 @@
         <activity
             android:name=".ui.PeakFlowInput"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -46,9 +46,6 @@
             android:exported="true">
         </activity>
 
-
-
-
         <activity
             android:name=".ui.ChildHomeActivity"  android:exported="true">
         </activity>
@@ -59,6 +56,18 @@
 
         <activity
             android:name=".ui.ProviderHomeActivity"  android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ui.DailyCheckInActivity"  android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ui.HistoryFilterActivity"  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -84,8 +93,7 @@
         <activity
             android:name=".ui.ParentRegisterLogin"  android:exported="true">
         </activity>
-
-
+      
     </application>
 
 </manifest>

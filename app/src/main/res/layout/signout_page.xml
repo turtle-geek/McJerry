@@ -28,27 +28,49 @@
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Profile Picture (clickable to upload) -->
         <ImageButton
             android:id="@+id/pfp_logo"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:src="@drawable/pfp_logo"
             android:background="@drawable/circle_background"
             android:scaleType="centerCrop"
+            android:contentDescription="Profile Picture"
             app:tint="@color/gray"/>
 
-        <TextView
-            android:id="@+id/userNameText"
+        <!-- User Info (Name + Email) -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Rachel Wong"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:fontFamily="@font/quicksand"
+            android:orientation="vertical"
             android:paddingStart="20dp"
-            android:paddingEnd="16dp"/>
+            android:paddingEnd="16dp">
+
+            <!-- User Name -->
+            <TextView
+                android:id="@+id/userNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand"/>
+
+            <!-- User Email -->
+            <TextView
+                android:id="@+id/userEmailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textSize="14sp"
+                android:textColor="#B3FFFFFF"
+                android:fontFamily="@font/quicksand"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

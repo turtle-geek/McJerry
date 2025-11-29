@@ -60,17 +60,6 @@
                 android:fontFamily="@font/quicksand"
                 android:layout_gravity="center_horizontal" />
 
-            <Button
-                android:id="@+id/childrenButton"
-                android:layout_width="280dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/children"
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:backgroundTint="#064200"
-                android:fontFamily="@font/quicksand"
-                android:layout_gravity="center_horizontal" />
 
             <Button
                 android:id="@+id/doctorButton"
@@ -78,7 +67,7 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="30dp"
-                android:text="@string/doctor"
+                android:text="@string/provider"
                 android:textSize="24sp"
                 android:textColor="@color/white"
                 android:backgroundTint="#064200"

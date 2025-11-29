@@ -10,9 +10,13 @@ constraintlayout = "2.2.1"
 googleServices = "4.4.4"
 firebaseBom = "33.5.1"
 firebaseAuth = "24.0.1"
+<<<<<<< HEAD
 firebaseFirestore = "24.10.0"
 legacySupportV4 = "1.0.0"
 cardview = "1.0.0"
+=======
+firebaseStorage = "22.0.1"
+>>>>>>> origin/master
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -27,8 +31,12 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+<<<<<<< HEAD
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+=======
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+>>>>>>> origin/master
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

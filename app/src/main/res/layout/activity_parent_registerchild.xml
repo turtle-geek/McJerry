@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E8F5E9">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#064200"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            tools:tint="@color/white"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Register Account for Child"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Child's Name Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/nameLayoutRegister"
+                    android:hint="Child's Name"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/pfp_logo2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nameETRegister"
+                        android:inputType="textPersonName"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- User ID Field (for child login) - NEW! -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/userIdLayoutRegister"
+                    android:hint="User ID (for child login)"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:errorEnabled="true"
+                    app:helperTextEnabled="true"
+                    app:helperTextTextColor="#4CAF50"
+                    app:startIconDrawable="@drawable/pfp_logo2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/userIdETRegister"
+                        android:inputType="text"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Password Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:id="@+id/passwordLayoutRegister"
+                    android:hint="@string/password"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/lock_logo"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/passwordETRegister"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Confirm Password Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/confirmPasswordLayoutRegister"
+                    android:hint="@string/confirmPassword"
+                    app:boxCornerRadiusTopStart="30dp"
+                    app:boxCornerRadiusTopEnd="30dp"
+                    app:boxCornerRadiusBottomEnd="30dp"
+                    app:boxCornerRadiusBottomStart="30dp"
+                    app:hintTextColor="@color/white"
+                    app:boxStrokeColor="#ffff"
+                    app:startIconDrawable="@drawable/lock_logo"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="328dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/confirmPasswordETRegister"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:paddingStart="48dp"
+                        android:paddingEnd="16dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/loginBotton"
+                android:layout_width="280dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/next"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#064200"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

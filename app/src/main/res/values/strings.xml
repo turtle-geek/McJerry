@@ -29,4 +29,6 @@
     <string name="select_all_that_applies">Select all that applies</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="provider">Provider</string>
+    <string name="next">Next</string>
 </resources>

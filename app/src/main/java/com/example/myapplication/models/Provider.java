@@ -1,8 +1,11 @@
 package com.example.myapplication.models;
-import java.util.ArrayList;
+import android.util.Log;
 
-import com.example.myapplication.HealthInfo;
-import com.example.myapplication.SharedAccessInvite;
+import java.util.ArrayList;
+import com.example.myapplication.health.HealthInfo;
+import com.example.myapplication.health.SharedAccessInvite;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Provider extends User{
     private final ArrayList<String> patients;
@@ -30,6 +33,34 @@ public class Provider extends User{
     // Setter for patients is omitted; the addPatient method controls modification.
 
     // ----- Sharing invitation -----
+
+    // Helper method
+    private void findChildById(String childId, OnSuccessListener<Child> listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users")  // or "children" if stored differently
+                .document(childId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Child child = documentSnapshot.toObject(Child.class);
+                        listener.onSuccess(child);
+                    } else {
+                        listener.onSuccess(null);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Failed to fetch child", e);
+                    listener.onSuccess(null);
+                });
+    }
+
+    public void redeemInvite(
+            Parent parent,
+            String code,
+            OnSuccessListener<HealthProfile> listener
+    ) {
+        SharedAccessInvite invite = parent.getInviteByCode(code);
     public HealthProfile redeemInvite(Parent parent, String code) {
         SharedAccessInvite invite = parent.getInviteByCode(code);
         if (invite != null && invite.isValid()) {
@@ -56,4 +87,51 @@ public class Provider extends User{
         return shared;
     }
 
+        if (invite == null || !invite.isValid()) {
+            listener.onSuccess(null);
+            return;
+        }
+
+        invite.markAsUsed();
+
+        findChildById(invite.getChildID(), child -> {
+            if (child == null) {
+                listener.onSuccess(null);
+                return;
+            }
+
+            HealthProfile filtered = filterProfileByInvite(child.getHealthProfile(), invite);
+            listener.onSuccess(filtered);
+        });
+    }
+
+    private HealthProfile filterProfileByInvite(HealthProfile full, SharedAccessInvite invite) {
+        HealthProfile shared = new HealthProfile();
+        for (HealthInfo field : invite.getSharedFields()) {
+            switch (field) {
+                case RESCUE_LOGS:
+                    shared.setRescueLogs(full.getRescueLogs());
+                    break;
+                case CONTROLLER_ADHERENCE:
+                    shared.setControllerAdherence(full.getControllerAdherence());
+                    break;
+                case SYMPTOMS:
+                    shared.setSymptoms(full.getSymptoms());
+                    break;
+                case TRIGGERS:
+                    shared.setTriggers(full.getTriggers());
+                    break;
+                case PEF_LOG:
+                    shared.setPEF_PB(full.getPEF_PB());
+                    break;
+                case TRIAGE_INCIDENTS:
+                    shared.setTriageIncidents(full.getTriageIncidents());
+                    break;
+                case CHARTS:
+                    shared.setCharts(full.getCharts());
+                    break;
+            }
+        }
+        return shared;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import com.example.myapplication.SharedAccessInvite;
 
+import com.example.myapplication.health.Inventory;
 
 public class Parent extends User{
     private ArrayList<Child> children;
@@ -13,6 +14,7 @@ public class Parent extends User{
     static int idChildModifier;
 
     public Parent(){}
+
     public Parent(String id, String name, String emailUsername, String role) {
         super(id, name, role);
         this.emailUsername = emailUsername;
@@ -51,7 +53,7 @@ public class Parent extends User{
 
     // ----- Sharing invitation -----
 
-    public SharedAccessInvite generateInvite(int providerID, int childID, EnumSet<HealthInfo> sharedFields) {
+    public SharedAccessInvite generateInvite(String providerID, String childID, EnumSet<HealthInfo> sharedFields) {
         SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
         invites.add(invite);
         return invite;
@@ -63,5 +65,26 @@ public class Parent extends User{
                 return invite;
         }
         return null;
+    }
+
+    public Inventory getInventory(Child child) {
+        return child.getInventory();
+    }
+
+    // Might be redundant
+//    public ArrayList<String> viewControllerUsage(Child child) {
+//        return child.getInventory().getControllerLog();
+//    }
+//
+//    public ArrayList<String> viewRescueUsage(Child child) {
+//        return child.getInventory().getRescueLog();
+//    }
+
+    public StreakCount getStreakCount(Child child) {
+        return child.getStreakCount();
+    }
+
+    public Badges getBadges(Child child) {
+        return child.getBadges();
     }
 }

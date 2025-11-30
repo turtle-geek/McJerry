@@ -17,7 +17,6 @@
         android:contentDescription="@null"
         android:importantForAccessibility="no"/>
 
-    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -28,18 +27,33 @@
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            tools:tint="@color/white"/>
+
         <TextView
+            android:id="@+id/titleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Controlling Tutorial"
-            android:textSize="26sp"
+            android:text="Technique Help"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:fontFamily="times"
-            android:gravity="center"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"/>
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/btnSaveMedicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finish"
+            android:backgroundTint="@color/white"
+            android:textColor="#064200"/>
 
     </LinearLayout>
 
@@ -51,7 +65,7 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -69,7 +83,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,7 +132,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,7 +170,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -198,7 +212,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -247,7 +261,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -289,7 +303,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -330,7 +344,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+                app:cardBackgroundColor="#D5FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -371,18 +385,5 @@
 
     </ScrollView>
 
-    <!-- Bottom Navigation Bar -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menuBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#064200"
-        app:itemBackground="@drawable/circle_background"
-        app:itemIconTint="#8A90A5"
-        app:itemTextColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

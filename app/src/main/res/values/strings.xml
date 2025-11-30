@@ -39,4 +39,7 @@
     <string name="next">Next</string>
     <string name="medicine_details">Medicine Details</string>
     <string name="default_start_date">Start Date: (Tap to select)</string>
+    <string name="worse">Worse</string>
+    <string name="same">Same</string>
+    <string name="better">Better</string>
 </resources>

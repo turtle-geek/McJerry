@@ -81,7 +81,6 @@
             </intent-filter>
         </activity>
 
-<<<<<<< HEAD
         <activity
             android:name=".ui.ParentManagement"
             android:exported="false" />
@@ -102,9 +101,10 @@
             android:name=".ui.ParentRegisterLogin"
             android:exported="true" />
 
-=======
->>>>>>> 4cca377 (update daily check in ui with quiz questions and buttons)
-    </application>
+        <activity
+            android:name=".ui.ParentRegisterLogin"  android:exported="true">
+        </activity>
 
+    </application>
 
 </manifest>

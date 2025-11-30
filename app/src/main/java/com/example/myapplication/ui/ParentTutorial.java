@@ -21,7 +21,7 @@ public class ParentTutorial extends BaseParentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_tutorial);
+        setContentView(R.layout.activity_parent_technique_help);
 
         // Initialize Bottom Navigation
         bottomNavigationView = findViewById(R.id.menuBar);
@@ -31,34 +31,16 @@ public class ParentTutorial extends BaseParentActivity {
             setupBottomNavigation();
         }
 
-        // Initialize Rescue Inhaler YouTube Player
-        try {
-            YouTubePlayerView rescuePlayer = findViewById(R.id.rescueYoutubePlayer);
-            if (rescuePlayer != null) {
-                getLifecycle().addObserver(rescuePlayer);
-
-                rescuePlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                    @Override
-                    public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                        String videoId = "KGcaoDM5rds";
-                        youTubePlayer.cueVideo(videoId, 0);
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // Initialize Controller Inhaler YouTube Player
         try {
-            YouTubePlayerView controllerPlayer = findViewById(R.id.controllerYoutubePlayer);
+            YouTubePlayerView controllerPlayer = findViewById(R.id.breathingPlayer);
             if (controllerPlayer != null) {
                 getLifecycle().addObserver(controllerPlayer);
 
                 controllerPlayer.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                     @Override
                     public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                        String videoId = "SsbbDOR-HU8";
+                        String videoId = "BbONuRXJdr0";
                         youTubePlayer.cueVideo(videoId, 0);
                     }
                 });

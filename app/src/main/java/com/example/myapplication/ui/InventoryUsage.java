@@ -1,6 +1,8 @@
 package com.example.myapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -80,8 +82,6 @@ public class InventoryUsage extends AppCompatActivity {
 
             double amount = Double.parseDouble(etDosage.getText().toString());
 
-            // TODO: go to technique session here
-            // Placeholder
             TechniqueQuality quality =
                     (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
 
@@ -90,6 +90,12 @@ public class InventoryUsage extends AppCompatActivity {
             if (success) {
                 child.getStreakCount().countStreaks();
                 setResult(RESULT_OK);
+
+                //Navigate to technique help page (tutorial)
+                Intent tutorialIntent = new Intent(InventoryUsage.this, ParentTutorial.class);
+                tutorialIntent.putExtra("medicineLabel", label.toString());
+                startActivity(tutorialIntent);
+
                 finish();
             }
         });

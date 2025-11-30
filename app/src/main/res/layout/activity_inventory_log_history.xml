@@ -54,27 +54,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Example Log Entry Block (You will populate dynamically) -->
-            <LinearLayout
-                android:id="@+id/exampleEntry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@color/white"
-                android:elevation="4dp"
-                android:layout_marginBottom="12dp"
-                android:clipToPadding="false"
-                android:backgroundTint="@color/white">
-
-                <TextView
-                    android:id="@+id/tvLogLine"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Medicine: ExampleMed, Dosage: 2, Timestamp: 2025-11-26 00:00"
-                    android:textSize="16sp"
-                    android:textColor="#064200"/>
-            </LinearLayout>
 
         </LinearLayout>
 

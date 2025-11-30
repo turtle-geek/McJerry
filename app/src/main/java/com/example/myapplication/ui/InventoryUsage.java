@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import com.example.myapplication.health.*;
-import com.example.myapplication.models.*;
+        import com.example.myapplication.models.*;
 
 public class InventoryUsage extends AppCompatActivity {
 
@@ -89,11 +89,17 @@ public class InventoryUsage extends AppCompatActivity {
 
             if (success) {
                 child.getStreakCount().countStreaks();
+
+                // Get medicine name
+//                String medicineName = child.getInventory().getMedicine(label).getName();
+
                 setResult(RESULT_OK);
 
-                //Navigate to technique help page (tutorial)
+                //Navigate to technique help page (tutorial) with medicine details
                 Intent tutorialIntent = new Intent(InventoryUsage.this, ParentTutorial.class);
                 tutorialIntent.putExtra("medicineLabel", label.toString());
+//                tutorialIntent.putExtra("medicineName", medicineName);
+                tutorialIntent.putExtra("dosage", (int)amount);
                 startActivity(tutorialIntent);
 
                 finish();

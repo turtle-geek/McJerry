@@ -31,7 +31,7 @@ public class InventoryRefill extends AppCompatActivity {
     private String childId;
 
     private void loadChild() {
-        db.collection("children").document(childId)
+        db.collection("users").document(childId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     if (snapshot.exists()) {
@@ -86,8 +86,8 @@ public class InventoryRefill extends AppCompatActivity {
         // --- Pre-fill when editing ---
         if (isEdit) {
             InventoryItem item = child.getInventory().getMedicine(label);
-            etPurchaseDate.setText(item.getPurchaseDate().format(dateFormatter));
-            etExpiryDate.setText(item.getExpiryDate().format(dateFormatter));
+            etPurchaseDate.setText(item.parsePurchaseDate().format(dateFormatter));
+            etExpiryDate.setText(item.parseExpiryDate().format(dateFormatter));
             etCapacity.setText(String.valueOf(item.getCapacity()));
             etRemainingAmount.setText(String.valueOf(item.getAmount()));
         }
@@ -97,8 +97,8 @@ public class InventoryRefill extends AppCompatActivity {
 
         // --- Save button ---
         btnSave.setOnClickListener(v -> {
-            LocalDate purchase = LocalDate.parse(etPurchaseDate.getText(), dateFormatter);
-            LocalDate expiry = LocalDate.parse(etExpiryDate.getText(), dateFormatter);
+            String purchase = LocalDate.parse(etPurchaseDate.getText(), dateFormatter).toString();
+            String expiry = LocalDate.parse(etExpiryDate.getText(), dateFormatter).toString();
             double capacity = Double.parseDouble(etCapacity.getText().toString());
             double amount = Double.parseDouble(etRemainingAmount.getText().toString());
 

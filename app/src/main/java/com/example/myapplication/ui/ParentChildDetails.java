@@ -1,7 +1,9 @@
 package com.example.myapplication.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,7 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ParentChildDetails extends AppCompatActivity {
 
     private TextView tvLegalName;
-    private TextView tvUsername;
+
+    private TextView tvUserID;
+
     private TextView tvUserEmail;
     private TextView tvChildPassword;
     private TextView tvDetailBirthday;
@@ -23,6 +27,7 @@ public class ParentChildDetails extends AppCompatActivity {
     private ImageButton btnEdit;
     private EditText editPB;
 
+    private Button btnViewMedicalRecords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +39,13 @@ public class ParentChildDetails extends AppCompatActivity {
         tvUserEmail = findViewById(R.id.tvUserEmail);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
-        tvUsername = findViewById(R.id.tvUsername);
+        tvUserID = findViewById(R.id.tvUserID);
         tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
         editPB = findViewById(R.id.editPB);
 
+        btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
 
         // Get data from intent
         String childName = getIntent().getStringExtra("childName");
@@ -54,8 +60,8 @@ public class ParentChildDetails extends AppCompatActivity {
             tvLegalName.setText(childName != null ? childName : "Unknown");
         }
 
-        if (tvUsername != null) {
-            tvUsername.setText(tvUserEmail != null ? childEmail : "Not set");
+        if (tvUserID != null) {
+            tvUserID.setText(tvUserEmail != null ? childEmail : "Not set");
         }
 
         if (tvDetailBirthday != null) {
@@ -67,8 +73,8 @@ public class ParentChildDetails extends AppCompatActivity {
             tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
         }
 
-        if (tvUsername != null) {
-            tvUsername.setText(childId != null ? childId : "Not set");
+        if (tvUserID != null) {
+            tvUserID.setText(childId != null ? childId : "Not set");
         }
 
         if (tvChildPassword != null) {
@@ -110,6 +116,13 @@ public class ParentChildDetails extends AppCompatActivity {
                 }
 
             }
+        });
+
+        // Medicine button
+        btnViewMedicalRecords.setOnClickListener(v -> {
+            Intent intent = new Intent(this, InventoryManagement.class);
+            intent.putExtra("childId", childId);
+            startActivityForResult(intent, 1);
         });
     }
 

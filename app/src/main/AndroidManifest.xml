@@ -114,6 +114,24 @@
             android:name=".ui.Onboarding"
             android:exported="true" />
 
+        <activity
+            android:name=".ui.InventoryManagement"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.InventoryRefill"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.InventoryUsage"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.StreakManagement"
+            android:exported="false" />
+
+
     </application>
+
 
 </manifest>

@@ -60,26 +60,26 @@ public class StreakCount {
         // Find lastControllerDate: the latest timestamp's date
         MedicineUsageLog latestControllerLog = controllerLogs.get(0);
         for (MedicineUsageLog log : controllerLogs) {
-            if (log.getTimestamp().isAfter(latestControllerLog.getTimestamp())) {
+            if (log.parseTimestamp().isAfter(latestControllerLog.parseTimestamp())) {
                 latestControllerLog = log;
             }
         }
-        LocalDate lastControllerDate = latestControllerLog.getDate();
+        LocalDate lastControllerDate = latestControllerLog.parseDate();
 
         MedicineUsageLog latestRescueLog = rescueLogs.get(0);
         for (MedicineUsageLog log : rescueLogs) {
-            if (log.getTimestamp().isAfter(latestRescueLog.getTimestamp())) {
+            if (log.parseTimestamp().isAfter(latestRescueLog.parseTimestamp())) {
                 latestRescueLog = log;
             }
         }
-        LocalDate lastRescueDate = latestRescueLog.getDate();
+        LocalDate lastRescueDate = latestRescueLog.parseDate();
 
         // Calculate rescueCount: number of distinct days with rescue usage in the current month
         int currentMonth = lastRescueDate.getMonthValue();
         int currentYear = lastRescueDate.getYear();
         Set<LocalDate> uniqueDates = new HashSet<>();
         for (MedicineUsageLog log : rescueLogs) {
-            LocalDate date = log.getDate();
+            LocalDate date = log.parseDate();
             if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
                 uniqueDates.add(date);
             }
@@ -96,7 +96,7 @@ public class StreakCount {
                 LocalDate scheduledDate = scheduledDates.get(i);
                 boolean hasUsage = false;
                 for (MedicineUsageLog log : controllerLogs) {
-                    if (log.getDate().equals(scheduledDate)) {
+                    if (log.parseDate().equals(scheduledDate)) {
                         hasUsage = true;
                         break;
                     }

@@ -24,7 +24,7 @@ public class InventoryLog extends AppCompatActivity {
     private String childId;
 
     private void loadChild() {
-        db.collection("children").document(childId)
+        db.collection("users").document(childId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     if (snapshot.exists()) {

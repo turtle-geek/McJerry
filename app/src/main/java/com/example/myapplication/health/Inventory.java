@@ -13,8 +13,8 @@ public class Inventory {
     private ArrayList<MedicineUsageLog> rescueLog;
 
     public Inventory() {
-        controller = new InventoryItem(0, 0, LocalDate.now(), LocalDate.now());
-        rescue = new InventoryItem(0, 0, LocalDate.now(), LocalDate.now());
+        controller = new InventoryItem();
+        rescue = new InventoryItem();
         controllerLog = new ArrayList<>();
         rescueLog = new ArrayList<>();
     }
@@ -59,7 +59,7 @@ public class Inventory {
         return rescueLog;
     }
 
-    public boolean useMedicine(MedicineLabel label, double amount, LocalDateTime timestamp) {
+    public boolean useMedicine(MedicineLabel label, double amount, String timestamp) {
         InventoryItem medicine = getMedicine(label);
         if (amount > medicine.getAmount())
             return false;

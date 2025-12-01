@@ -34,7 +34,7 @@ public class InventoryUsage extends AppCompatActivity {
     private String childId;
 
     private void loadChild() {
-        db.collection("children").document(childId)
+        db.collection("users").document(childId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     if (snapshot.exists()) {
@@ -100,7 +100,7 @@ public class InventoryUsage extends AppCompatActivity {
             TechniqueQuality quality =
                     (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
 
-            boolean success = child.getInventory().useMedicine(label, amount, timestamp);
+            boolean success = child.getInventory().useMedicine(label, amount, timestamp.toString());
 
             if (success) {
                 child.getStreakCount().countStreaks();

@@ -104,6 +104,16 @@ public class InventoryUsage extends AppCompatActivity {
 
             if (success) {
                 child.getStreakCount().countStreaks();
+                db.collection("users").document(childId)
+                        .set(child)
+                        .addOnSuccessListener(aVoid -> {
+                            setResult(RESULT_OK);
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle error
+                            android.widget.Toast.makeText(this, "Failed to save usage", android.widget.Toast.LENGTH_SHORT).show();
+                        });
 
                 // Get the medicine item and dosage for passing to next activities
                 InventoryItem medicineItem = child.getInventory().getMedicine(label);

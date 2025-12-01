@@ -10,6 +10,8 @@ import android.text.Editable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.myapplication.R;
 import android.app.DatePickerDialog;
+import android.widget.Toast;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -24,7 +26,6 @@ public class InventoryRefill extends AppCompatActivity {
     private Button btnSave;
     private ImageButton btnBack;
     private MedicineLabel label;
-    private boolean isEdit;
     private Child child;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     private FirebaseFirestore db;
@@ -54,7 +55,6 @@ public class InventoryRefill extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
 
         label = MedicineLabel.valueOf(getIntent().getStringExtra("label"));
-        isEdit = getIntent().getBooleanExtra("isEdit", false);
 
         // Load child from firebase
         db = FirebaseFirestore.getInstance();
@@ -83,15 +83,6 @@ public class InventoryRefill extends AppCompatActivity {
         etPurchaseDate.setOnClickListener(v -> showDatePicker(etPurchaseDate));
         etExpiryDate.setOnClickListener(v -> showDatePicker(etExpiryDate));
 
-        // --- Pre-fill when editing ---
-        if (isEdit) {
-            InventoryItem item = child.getInventory().getMedicine(label);
-            etPurchaseDate.setText(item.parsePurchaseDate().format(dateFormatter));
-            etExpiryDate.setText(item.parseExpiryDate().format(dateFormatter));
-            etCapacity.setText(String.valueOf(item.getCapacity()));
-            etRemainingAmount.setText(String.valueOf(item.getAmount()));
-        }
-
         // --- Back button ---
         btnBack.setOnClickListener(v -> finish());
 
@@ -105,8 +96,15 @@ public class InventoryRefill extends AppCompatActivity {
             InventoryItem newItem = new InventoryItem(amount, capacity, purchase, expiry);
             child.getInventory().setMedicine(label, newItem);
 
-            setResult(RESULT_OK);
-            finish();
+            db.collection("users").document(childId)
+                    .set(child)
+                    .addOnSuccessListener(aVoid -> {
+                        setResult(RESULT_OK);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to save changes", Toast.LENGTH_SHORT).show();
+                    });
         });
     }
 

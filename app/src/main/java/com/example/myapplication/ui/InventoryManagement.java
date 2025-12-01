@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class InventoryManagement extends AppCompatActivity {
 
-    private TextView tvDetailMedicineName, tvDetailPurchaseDate, tvDetailExpiryDate, tvDetailAmount;
+    private TextView tvDetailMedicineName, tvDetailPurchaseDate, tvDetailExpiryDate, tvDetailAmount, tvLowCapacity, tvExpired;
     private ImageView iconLowCapacity, iconExpired;
     private Button btnConsume, btnRefill;
     private ImageButton btnBack;
@@ -50,6 +50,8 @@ public class InventoryManagement extends AppCompatActivity {
         tvDetailPurchaseDate = findViewById(R.id.tvDetailPurchaseDate);
         tvDetailExpiryDate = findViewById(R.id.tvDetailExpiryDate);
         tvDetailAmount = findViewById(R.id.tvDetailAmount);
+        tvLowCapacity = findViewById(R.id.tvLowCapacity);
+        tvExpired = findViewById(R.id.tvExpired);
         iconLowCapacity = findViewById(R.id.iconLowCapacity);
         iconExpired = findViewById(R.id.iconExpired);
         btnConsume = findViewById(R.id.btnConsume);
@@ -98,8 +100,10 @@ public class InventoryManagement extends AppCompatActivity {
         tvDetailAmount.setText(String.valueOf(item.getAmount()));
 
         // Update alert icons
-        iconLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.GONE);
-        iconExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.GONE);
+        tvLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        iconLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        tvExpired.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        iconExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

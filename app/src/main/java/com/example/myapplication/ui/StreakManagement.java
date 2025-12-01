@@ -11,6 +11,7 @@ import com.example.myapplication.R;
 
 import com.example.myapplication.health.*;
 import com.example.myapplication.models.*;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class StreakManagement extends AppCompatActivity {
 
@@ -20,6 +21,19 @@ public class StreakManagement extends AppCompatActivity {
     private ImageView badgeController, badgeTechnique, badgeRescue;
 
     private Child child;
+
+    private FirebaseFirestore db;
+    private String childId;
+
+    private void loadChild() {
+        db.collection("users").document(childId)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (snapshot.exists()) {
+                        child = snapshot.toObject(Child.class);
+                    }
+                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +49,11 @@ public class StreakManagement extends AppCompatActivity {
         badgeTechnique = findViewById(R.id.badgeTechnique);
         badgeRescue = findViewById(R.id.badgeRescue);
 
-        // TODO: Load child from Firebase here
+        // Load child from Firebase here
+        db = FirebaseFirestore.getInstance();
+        childId = getIntent().getStringExtra("childId");
+        loadChild();
+
         child.getStreakCount().setInventory(child.getInventory());
         child.getBadges().setStreakCount(child.getStreakCount());
 

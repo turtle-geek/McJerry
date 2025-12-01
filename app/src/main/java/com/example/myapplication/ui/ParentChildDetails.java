@@ -11,12 +11,14 @@ import com.example.myapplication.R;
 
 public class ParentChildDetails extends AppCompatActivity {
 
-    private TextView tvDetailName;
+    private TextView tvLegalName;
+
+    private TextView tvUserID;
+
+    private TextView tvUserEmail;
+    private TextView tvChildPassword;
     private TextView tvDetailBirthday;
-    private TextView tvAge;
     private TextView tvDetailSpecialNote;
-    private TextView tvUserId;
-    private TextView tvPassword;
     private ImageButton btnBack;
     private ImageButton btnEdit;
 
@@ -26,12 +28,12 @@ public class ParentChildDetails extends AppCompatActivity {
         setContentView(R.layout.activity_parent_carddetails);
 
         // Initialize views
-        tvDetailName = findViewById(R.id.tvDetailName);
+        tvLegalName = findViewById(R.id.tvLegalName);
+        tvUserEmail = findViewById(R.id.tvUserEmail);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
-        tvAge = findViewById(R.id.tvAge);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
-        tvUserId = findViewById(R.id.tvIDName);
-        tvPassword = findViewById(R.id.tvChildPassword);
+        tvUserID = findViewById(R.id.tvUserID);
+        tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
 
@@ -45,35 +47,33 @@ public class ParentChildDetails extends AppCompatActivity {
         String childPassword = getIntent().getStringExtra("childPassword");
 
         // Display data
-        if (tvDetailName != null) {
-            tvDetailName.setText(childName != null ? childName : "Unknown");
+        if (tvLegalName != null) {
+            tvLegalName.setText(childName != null ? childName : "Unknown");
+        }
+
+        if (tvUserID != null) {
+            tvUserID.setText(tvUserEmail != null ? childEmail : "Not set");
         }
 
         if (tvDetailBirthday != null) {
             tvDetailBirthday.setText(childBirthday != null ? childBirthday : "Not provided");
         }
 
-        if (tvAge != null) {
-            // Calculate age from birthday if needed
-            // For now, just show a placeholder
-            tvAge.setText("Age: Calculating...");
-            calculateAge(childBirthday);
-        }
 
         if (tvDetailSpecialNote != null) {
             tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
         }
 
-        if (tvUserId != null) {
-            tvUserId.setText(childUserId != null ? childUserId : "Not set");
+        if (tvUserID != null) {
+            tvUserID.setText(childUserId != null ? childUserId : "Not set");
         }
 
-        if (tvPassword != null) {
+        if (tvChildPassword != null) {
             // Display masked password or a placeholder
             if (childPassword != null && !childPassword.isEmpty()) {
-                tvPassword.setText(maskPassword(childPassword));
+                tvChildPassword.setText(maskPassword(childPassword));
             } else {
-                tvPassword.setText("••••••••");
+                tvChildPassword.setText("••••••••");
             }
         }
 
@@ -104,46 +104,4 @@ public class ParentChildDetails extends AppCompatActivity {
         return masked.toString();
     }
 
-    private void calculateAge(String birthday) {
-        if (tvAge == null || birthday == null || birthday.isEmpty()) {
-            if (tvAge != null) {
-                tvAge.setText("Age: Unknown");
-            }
-            return;
-        }
-
-        try {
-            // Parse birthday (format: MM/dd/yyyy)
-            String[] parts = birthday.split("/");
-            if (parts.length == 3) {
-                int month = Integer.parseInt(parts[0]);
-                int day = Integer.parseInt(parts[1]);
-                int year = Integer.parseInt(parts[2]);
-
-                // Get current date
-                java.util.Calendar today = java.util.Calendar.getInstance();
-                int currentYear = today.get(java.util.Calendar.YEAR);
-                int currentMonth = today.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH is 0-based
-                int currentDay = today.get(java.util.Calendar.DAY_OF_MONTH);
-
-                // Calculate age
-                int age = currentYear - year;
-
-                // Adjust if birthday hasn't occurred this year
-                if (currentMonth < month || (currentMonth == month && currentDay < day)) {
-                    age--;
-                }
-
-                if (age >= 0) {
-                    tvAge.setText("Age: " + age + " years old");
-                } else {
-                    tvAge.setText("Age: Invalid date");
-                }
-            } else {
-                tvAge.setText("Age: Invalid format");
-            }
-        } catch (Exception e) {
-            tvAge.setText("Age: Unable to calculate");
-        }
-    }
 }

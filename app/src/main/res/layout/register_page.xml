@@ -71,8 +71,6 @@
                         app:boxCornerRadiusTopEnd="30dp"
                         app:boxCornerRadiusBottomEnd="30dp"
                         app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
                         app:startIconDrawable="@drawable/pfp_logo2">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -97,8 +95,6 @@
                         app:boxCornerRadiusTopEnd="30dp"
                         app:boxCornerRadiusBottomEnd="30dp"
                         app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
                         app:startIconDrawable="@drawable/pfp_logo2">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -123,8 +119,6 @@
                         app:boxCornerRadiusTopEnd="30dp"
                         app:boxCornerRadiusBottomEnd="30dp"
                         app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
                         app:startIconDrawable="@drawable/lock_logo"
                         app:endIconMode="password_toggle">
 
@@ -150,8 +144,6 @@
                         app:boxCornerRadiusTopEnd="30dp"
                         app:boxCornerRadiusBottomEnd="30dp"
                         app:boxCornerRadiusBottomStart="30dp"
-                        app:hintTextColor="@color/white"
-                        app:boxStrokeColor="#ffff"
                         app:startIconDrawable="@drawable/lock_logo"
                         app:endIconMode="password_toggle">
 

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.models.User;
+import com.example.myapplication.ui.Onboarding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -71,8 +72,8 @@ public class UserRole extends AppCompatActivity {
         Toast.makeText(UserRole.this,
                 "Welcome! Setting up your account...", Toast.LENGTH_SHORT).show();
 
-        // Navigate to MainActivity which will redirect to appropriate home page
-        Intent intent = new Intent(UserRole.this, MainActivity.class);
+        // Navigate to OnboardingActivity for first-time users
+        Intent intent = new Intent(UserRole.this, Onboarding.class);
         startActivity(intent);
         finish();
     }

@@ -323,20 +323,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Graph Card (existing) -->
+            <!-- Graph Cards Container -->
             <LinearLayout
                 android:id="@+id/graphContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
+                <!-- Graph Card 1: Daily Check-in -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/graphCard"
-                    android:layout_width="match_parent"
+                    android:id="@+id/graphCard1"
+                    android:layout_width="0dp"
                     android:layout_height="100dp"
+                    android:layout_weight="1"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="6dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -354,17 +357,62 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Daily Checkin"
+                            android:text="Daily Check-in"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="#064200"/>
+                            android:textColor="#064200"
+                            android:gravity="center"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2 due today"
-                            android:textSize="14sp"
+                            android:text="Track symptoms"
+                            android:textSize="13sp"
                             android:textColor="#666666"
+                            android:gravity="center"
+                            android:layout_marginTop="8dp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Graph Card 2: Peak Flow Log -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/graphCard2"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#ABFFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/medicine_details"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#064200"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View measurements"
+                            android:textSize="13sp"
+                            android:textColor="#666666"
+                            android:gravity="center"
                             android:layout_marginTop="8dp"/>
 
                     </LinearLayout>

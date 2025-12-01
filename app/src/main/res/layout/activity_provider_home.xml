@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/testbg2"
-    tools:context=".ui.ProviderHomeActivity">
+    tools:context=".ui.ParentHomeActivity">
 
 
     <ImageView
@@ -31,13 +31,13 @@
 
         <!-- pf Button -->
         <ImageButton
-            android:id="@+id/pfp_logo"
+            android:id="@+id/logo"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/pfp_logo"
+            android:src="@drawable/logo"
             android:background="@drawable/circle_background"
             android:scaleType="centerCrop"
-            app:tint="@color/gray"/>
+            android:contentDescription="Logo"/>
 
         <TextView
             android:layout_width="0dp"
@@ -61,11 +61,24 @@
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:padding="1dp"
+            android:contentDescription="Notifications"
             app:tint="@color/white"/>
 
     </LinearLayout>
 
-    <!-- Today Header -->
+    <!-- Child Selector Bar  -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/childSelectorCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#ABFFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Today Header  -->
     <LinearLayout
         android:id="@+id/todayHeader"
         android:layout_width="match_parent"
@@ -73,7 +86,7 @@
         android:orientation="horizontal"
         android:padding="16dp"
         android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintTop_toBottomOf="@id/childSelectorCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -85,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/today"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black"/>
 
         <TextView
@@ -123,7 +136,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/statusCard1"
                 android:layout_width="300dp"
-                android:layout_height="180dp"
+                android:layout_height="120dp"
                 android:layout_marginEnd="12dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -162,7 +175,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/statusCard2"
                 android:layout_width="300dp"
-                android:layout_height="180dp"
+                android:layout_height="120dp"
                 android:layout_marginEnd="12dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -201,7 +214,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/statusCard3"
                 android:layout_width="300dp"
-                android:layout_height="180dp"
+                android:layout_height="120dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -227,7 +240,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="All complete"
+                        android:text="Weekly Rescue Time"
                         android:textSize="14sp"
                         android:textColor="#666666"
                         android:layout_marginTop="8dp"/>
@@ -249,48 +262,114 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:id="@+id/graphContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp">
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/graphCard"
-                android:layout_width="379dp"
-                android:layout_height="180dp"
-                android:layout_marginEnd="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
+            <!-- Graph Cards Container -->
+            <LinearLayout
+                android:id="@+id/graphContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
+                <!-- Graph Card 1: Daily Check-in -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/graphCard1"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#ABFFFFFF">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Daily Checkin"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#064200"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2 due today"
-                        android:textSize="14sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="8dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily Check-in"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#064200"
+                            android:gravity="center"/>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Track symptoms"
+                            android:textSize="13sp"
+                            android:textColor="#666666"
+                            android:gravity="center"
+                            android:layout_marginTop="8dp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Graph Card 2: Peak Flow Log -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/graphCard2"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#ABFFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/medicine_details"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#064200"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View measurements"
+                            android:textSize="13sp"
+                            android:textColor="#666666"
+                            android:gravity="center"
+                            android:layout_marginTop="8dp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/trendContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!-- TrendSnippet will be added programmatically here -->
+            </LinearLayout>
 
         </LinearLayout>
 

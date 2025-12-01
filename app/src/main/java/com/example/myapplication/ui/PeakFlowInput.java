@@ -78,7 +78,7 @@ public class PeakFlowInput extends BaseChildActivity {
 
     void setListeners(){
         sosButton.setOnClickListener(v ->
-            startActivity(new Intent(this, TriageActivity.class)));
+                startActivity(new Intent(this, TriageActivity.class)));
 
         submitButton.setOnClickListener(v -> submitPEF());
 
@@ -96,8 +96,15 @@ public class PeakFlowInput extends BaseChildActivity {
 
             if (submitTime != null){
                 PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
-                hp.addPEFToLog(pef);
+
+                // CRITICAL FIX: Compute zone and SAVE it to the PeakFlow object
                 String zone = pef.computeZone(currentChild);
+                pef.setZone(zone);  // ← This was missing! The zone must be saved
+
+                // Now add to log with zone included
+                hp.addPEFToLog(pef);
+
+                // Display the zone screen
                 setZoneScreen(zone, submitTime);
             }
             else throw new RuntimeException("submitTime is null");
@@ -117,6 +124,9 @@ public class PeakFlowInput extends BaseChildActivity {
     }
 
     void resetToInput(){
+        // Clear the input field
+        peakFlowInput.setText("");
+
         // Hide zone layout
         findViewById(R.id.zoneLayout).setVisibility(View.GONE);
         // Show input layout

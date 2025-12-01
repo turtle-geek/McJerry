@@ -1,6 +1,8 @@
 package com.example.myapplication.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -18,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import com.example.myapplication.health.*;
-import com.example.myapplication.models.*;
+        import com.example.myapplication.models.*;
 
 public class InventoryUsage extends AppCompatActivity {
 
@@ -80,8 +82,6 @@ public class InventoryUsage extends AppCompatActivity {
 
             double amount = Double.parseDouble(etDosage.getText().toString());
 
-            // TODO: go to technique session here
-            // Placeholder
             TechniqueQuality quality =
                     (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
 
@@ -89,7 +89,19 @@ public class InventoryUsage extends AppCompatActivity {
 
             if (success) {
                 child.getStreakCount().countStreaks();
+
+                // Get the medicine item and dosage for passing to next activities
+                InventoryItem medicineItem = child.getInventory().getMedicine(label);
+
                 setResult(RESULT_OK);
+
+                //Navigate to technique help page (tutorial) with medicine details
+                Intent tutorialIntent = new Intent(InventoryUsage.this, ParentTutorial.class);
+                tutorialIntent.putExtra("medicineLabel", label.toString());
+                tutorialIntent.putExtra("medicineName", medicineItem.toString());
+                tutorialIntent.putExtra("dosage", amount);
+                startActivity(tutorialIntent);
+
                 finish();
             }
         });

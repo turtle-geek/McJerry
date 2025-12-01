@@ -35,7 +35,14 @@
     <string name="weekly_rescue_time">Weekly Rescue Time</string>
     <string name="daily_checkin">Daily Check-in</string>
     <string name="birthday">Birthday</string>
+    <string name="medicine_details">Medicine Details</string>
+    <string name="default_start_date">Start Date: (Tap to select)</string>
+    <string name="worse">Worse</string>
+    <string name="same">Same</string>
+    <string name="better">Better</string>
+    <string name="profile_picture_button">pfp_button</string>
+    <string name="reminder_button">reminder button</string>
     <string name="children_management">Children Management</string>
     <string name="legalName">Legal Name</string>
-    <string name="medicine_details">Medicine Details</string>
+    <string name="legal_name">Legal Name</string>
 </resources>

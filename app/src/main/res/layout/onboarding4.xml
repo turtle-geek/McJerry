@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/testbg3"
+    tools:context=".auth.LoginPage">
+
+    <ImageView
+        android:id="@+id/backgroundImageLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/testbg3"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"/>
+
+    <LinearLayout
+        android:id="@+id/loginContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:background="@drawable/blur_bg"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/logo"
+                android:src="@drawable/logo"
+                android:contentDescription="@string/logo"
+                android:layout_gravity="center_horizontal"/>
+
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="What Each Role Can Do?"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
+                android:textSize="26sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Parent"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
+                android:textSize="20sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="View dashboard with child's zone, medicine use, and trends"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Get instant alerts (red zone, rapid rescue use, low medication)"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Track medicine inventory and expiration dates"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="View 3-6 months of history and patterns"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:text="Control sharing with granular privacy toggles"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Generate and export provider reports (PDF/CSV)"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/line7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="Send secure invite codes to healthcare providers"
+                android:textColor="#000000"
+                android:fontFamily="@font/quicksand"
+                android:textSize="14sp">
+            </TextView>
+
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="280dp"
+                android:layout_height="52dp"
+                android:text="@string/next"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/quicksand"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#064200"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.672" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

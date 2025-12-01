@@ -25,11 +25,26 @@ public class Child extends User{
     // Constructor is not updated to initialize the new fields yet
     // If update, remember to link inventory to streakCount and streakCount to badges
 
+    public Child() {
+        super();
+        this.parentID = "";
+        this.dateOfBirth = "";
+        this.notes = "";
+        this.healthProfile = new HealthProfile();
+        this.inventory = new Inventory();
+        this.streakCount = new StreakCount();
+    }
+
     public Child(String id, String parentID, String name, String parentEmail, String role) {
         super(id, name, role);
         this.parentID = parentID;
         this.emailUsername = parentEmail;
-        this.emailUsername = parentEmail;
+        this.dateOfBirth = LocalDate.now().toString();
+        this.notes = "";
+        this.healthProfile = new HealthProfile();
+        this.inventory = new Inventory();
+        this.streakCount = new StreakCount();
+        this.badges = new Badges();
     }
 
     // Public Setters
@@ -95,7 +110,7 @@ public class Child extends User{
     // For reference, LocalDate.of(int year, int month, int day) may be used for changing if needed
 
     // When use medicine, automatically add to streak
-    public void useMedicine(MedicineLabel label, double amount, LocalDateTime timestamp) {
+    public void useMedicine(MedicineLabel label, double amount, String timestamp) {
         inventory.useMedicine(label, amount, timestamp);
         streakCount.countStreaks();
         badges.updateControllerBadge();

@@ -30,7 +30,7 @@ public class InventoryManagement extends AppCompatActivity {
     private String childId;
 
     private void loadChild() {
-        db.collection("children").document(childId)
+        db.collection("users").document(childId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
                     if (snapshot.exists()) {
@@ -75,6 +75,7 @@ public class InventoryManagement extends AppCompatActivity {
         btnRefill.setOnClickListener(v -> {
             Intent intent = new Intent(this, InventoryRefill.class);
             intent.putExtra("label", currentLabel.name());
+            intent.putExtra("childId", childId);
             startActivityForResult(intent, 1);
         });
 
@@ -82,6 +83,7 @@ public class InventoryManagement extends AppCompatActivity {
         btnConsume.setOnClickListener(v -> {
             Intent intent = new Intent(this, InventoryUsage.class);
             intent.putExtra("label", currentLabel.name());
+            intent.putExtra("childId", childId);
             startActivityForResult(intent, 2);
         });
     }
@@ -91,8 +93,8 @@ public class InventoryManagement extends AppCompatActivity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         tvDetailMedicineName.setText(currentLabel.name());
-        tvDetailPurchaseDate.setText(item.getPurchaseDate().format(formatter));
-        tvDetailExpiryDate.setText(item.getExpiryDate().format(formatter));
+        tvDetailPurchaseDate.setText(item.parsePurchaseDate().format(formatter));
+        tvDetailExpiryDate.setText(item.parseExpiryDate().format(formatter));
         tvDetailAmount.setText(String.valueOf(item.getAmount()));
 
         // Update alert icons

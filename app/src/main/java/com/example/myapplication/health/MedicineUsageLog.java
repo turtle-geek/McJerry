@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 public class MedicineUsageLog {
     private InventoryItem medicine;
     private double dosageAmount;
-    private LocalDateTime timestamp;
+    private String timestamp;
     private TechniqueQuality techniqueQuality;
     private String rating;
 
-    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, LocalDateTime timestamp, TechniqueQuality techniqueQuality) {
+    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, String timestamp, TechniqueQuality techniqueQuality) {
         this.medicine = medicine;
         this.dosageAmount = dosageAmount;
         this.timestamp = timestamp;
@@ -37,12 +37,16 @@ public class MedicineUsageLog {
         return dosageAmount;
     }
 
-    public LocalDateTime getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public LocalDate getDate() {
-        return timestamp.toLocalDate();
+    public LocalDateTime parseTimestamp() {
+        return LocalDateTime.parse(timestamp);
+    }
+
+    public LocalDate parseDate() {
+        return LocalDateTime.parse(timestamp).toLocalDate();
     }
 
     public TechniqueQuality getControllerQuality() {

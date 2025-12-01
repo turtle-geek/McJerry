@@ -4,11 +4,18 @@ import java.time.LocalDate;
 
 public class InventoryItem {
     private double amount;
-    private final double capacity;
-    private final LocalDate purchaseDate;
-    private final LocalDate expiryDate;
+    private double capacity;
+    private String purchaseDate;
+    private String expiryDate;
 
-    public InventoryItem(double amount, double capacity, LocalDate purchaseDate, LocalDate expiryDate) {
+    public InventoryItem() {
+        this.amount = 0;
+        this.capacity = 0;
+        this.purchaseDate = LocalDate.now().toString();
+        this.expiryDate = LocalDate.now().toString();
+    }
+
+    public InventoryItem(double amount, double capacity, String purchaseDate, String expiryDate) {
         this.amount = amount;
         this.capacity = capacity;
         this.purchaseDate = purchaseDate;
@@ -27,12 +34,20 @@ public class InventoryItem {
         return capacity;
     }
 
-    public LocalDate getExpiryDate() {
+    public String getExpiryDate() {
         return expiryDate;
     }
 
-    public LocalDate getPurchaseDate() {
+    public LocalDate parseExpiryDate() {
+        return LocalDate.parse(expiryDate);
+    }
+
+    public String getPurchaseDate() {
         return purchaseDate;
+    }
+
+    public LocalDate parsePurchaseDate() {
+        return LocalDate.parse(purchaseDate);
     }
 
     public boolean lowVolumeAlert() {
@@ -40,6 +55,6 @@ public class InventoryItem {
     }
 
     public boolean expiryAlert() {
-        return LocalDate.now().isAfter(expiryDate);
+        return LocalDate.now().isAfter(this.parseExpiryDate());
     }
 }

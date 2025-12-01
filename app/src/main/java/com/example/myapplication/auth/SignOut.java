@@ -22,6 +22,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ui.HomeStepsRecovery;
 import com.example.myapplication.ui.ParentHomeActivity;
 import com.example.myapplication.ui.ParentManagement;
 import com.example.myapplication.ui.ParentTutorial;
@@ -43,7 +44,7 @@ public class SignOut extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseStorage storage;
 
-    private CardView medicationHistoryCard, inviteCard, reportCard;
+    private CardView inviteCard, reportCard;
     private Button logoutButton;
     private ImageButton profilePicture;
     private TextView userNameText, userEmailText;
@@ -63,7 +64,6 @@ public class SignOut extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
 
         // Initialize views
-        medicationHistoryCard = findViewById(R.id.medicationHistoryCard);
         inviteCard = findViewById(R.id.inviteCard);
         reportCard = findViewById(R.id.reportCard);
         logoutButton = findViewById(R.id.LogoutButton);
@@ -93,13 +93,6 @@ public class SignOut extends AppCompatActivity {
             profilePicture.setOnClickListener(v -> openImagePicker());
         }
 
-        // Set click listeners for cards
-        if (medicationHistoryCard != null) {
-            medicationHistoryCard.setOnClickListener(v -> {
-                Toast.makeText(this, "Opening Medication History", Toast.LENGTH_SHORT).show();
-                // TODO: Implement medication history
-            });
-        }
 
         if (inviteCard != null) {
             inviteCard.setOnClickListener(v -> {
@@ -280,7 +273,7 @@ public class SignOut extends AppCompatActivity {
                         return true;
 
                     } else if (id == R.id.nav_profile) {
-                        startActivity(new Intent(SignOut.this, ParentTutorial.class));
+                        startActivity(new Intent(SignOut.this, HomeStepsRecovery.class));
                         overridePendingTransition(0, 0);
                         finish();
                         return true;

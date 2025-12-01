@@ -25,7 +25,6 @@
         <receiver
             android:name=".CheckupNotificationReceiver"
             android:exported="false" />
-
         <activity
             android:name=".ui.HomeStepsRecovery"
             android:exported="false" />
@@ -59,6 +58,11 @@
         <activity
             android:name=".auth.SignOut"
             android:exported="true" />
+
+        <activity
+            android:name=".auth.SignOut_child"
+            android:exported="true" />
+
         <activity
             android:name=".ui.ChildHomeActivity"
             android:exported="true" />
@@ -68,6 +72,16 @@
         <activity
             android:name=".ui.ProviderHomeActivity"
             android:exported="true" />
+        <activity
+            android:name=".ui.DailyCheckInActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ui.HistoryFilterActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".ui.ParentManagement"
             android:exported="false" />
@@ -83,6 +97,23 @@
         <activity
             android:name=".ui.ParentRegisterLogin"
             android:exported="true" />
+
+        <activity
+            android:name=".ui.ChildManagement"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ChildChildDetails"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.InventoryLog"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.Onboarding"
+            android:exported="true" />
+
     </application>
 
 </manifest>

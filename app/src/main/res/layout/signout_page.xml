@@ -101,44 +101,7 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#ABFFFFFF">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_recent_history"
-                        android:contentDescription="Medication History Icon"
-                        app:tint="#064200"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Medication History"
-                        android:textSize="18sp"
-                        android:textColor="#064200"
-                        android:fontFamily="@font/quicksand"
-                        android:textStyle="bold"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="16dp"/>
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_more"
-                        android:contentDescription="Arrow"
-                        app:tint="#8A90A5"
-                        android:rotation="270"/>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                app:cardBackgroundColor="#ABFFFFFF"/>
 
             <!-- Invite Card -->
             <androidx.cardview.widget.CardView

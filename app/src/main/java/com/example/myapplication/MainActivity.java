@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.auth.LoginPage;
+import com.example.myapplication.callbacks.RoleCallback;
 import com.example.myapplication.ui.ChildHomeActivity;
+import com.example.myapplication.ui.Onboarding;
 import com.example.myapplication.ui.ParentHomeActivity;
 import com.example.myapplication.ui.ProviderHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,11 +55,24 @@ public class MainActivity extends AppCompatActivity {
         String userId = currentUser.getUid();
 
         // use users' id to find their own documents
-        // if document exists, find users' role on it, then depending on users' role land them on specific home page
+        // if document exists, check if onboarding is completed, then find users' role
         //If system cannot operate, show failure messages
         DocumentReference userDoc = fStore.collection("users").document(userId);
-                userDoc.get().addOnSuccessListener(documentInfo -> {
+        userDoc.get().addOnSuccessListener(documentInfo -> {
                     if(documentInfo.exists()){
+                        // Check if onboarding is completed
+                        Boolean onboardingCompleted = documentInfo.getBoolean("onboardingCompleted");
+
+                        if (onboardingCompleted == null || !onboardingCompleted) {
+                            // Onboarding not completed, redirect to onboarding
+                            Intent intent = new Intent(this, Onboarding.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Onboarding completed, proceed to appropriate home page
+                            String role = documentInfo.getString("role");
+                            landonSpecificPage(role);
+                        }
                         String role = documentInfo.getString("role");
                         if (role != null)
                             landonSpecificPage(role);
@@ -73,28 +88,65 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(exception -> {
                     Toast.makeText(this, "Cannot process: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    // fetches the user role
+    private void fetchUserRole(RoleCallback callback) {
+        // These two lines are often already initialized in onCreate, but it's safer to ensure they are available here if not passed in.
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = fAuth.getCurrentUser();
+        if (user == null) {
+            callback.onFailure("User is not logged in.");
+            return;
         }
-        //helper function: depends on users' role, land user on their specific page
-        private void landonSpecificPage(String role){
-            Intent intent;
-            switch (role) {
-                case "child":
-                    intent = new Intent(this, ChildHomeActivity.class);
-                    intent.putExtra("id", currentUser.getUid());
-                    break;
-                case "parent":
-                    intent = new Intent(this, ParentHomeActivity.class);
-                    intent.putExtra("id", currentUser.getUid());
-                    break;
-                case "provider":
-                    intent = new Intent(this, ProviderHomeActivity.class);
-                    intent.putExtra("id", currentUser.getUid());
-                    break;
-                default:
-                    Toast.makeText(this, "Unknown Character", Toast.LENGTH_SHORT).show();
-                    return;
-            }
-            startActivity(intent);
-            finish();
+        String userId = user.getUid();
+
+        // Reference the user document in Firestore
+        DocumentReference userDoc = fStore.collection("users").document(userId);
+
+        // Fetch the document and extract the role asynchronously
+        userDoc.get().addOnSuccessListener(documentInfo -> {
+                    if (documentInfo.exists()) {
+                        String role = documentInfo.getString("role");
+                        if (role != null) {
+                            // SUCCESS: Pass the role to the onRoleFetched method of the callback
+                            callback.onRoleFetched(role);
+                        } else {
+                            callback.onFailure("User document found, but 'role' field is missing.");
+                        }
+                    } else {
+                        callback.onFailure("Cannot find user information in Firestore.");
+                    }
+                })
+                .addOnFailureListener(exception -> {
+                    // FAILURE: Pass the error message to the onFailure method of the callback
+                    callback.onFailure("Firestore operation failed: " + exception.getMessage());
+                });
+    }
+
+    //helper function: depends on users' role, land user on their specific page
+    private void landonSpecificPage(String role) {
+        Intent intent;
+        switch (role) {
+            case "child":
+                intent = new Intent(this, ChildHomeActivity.class);
+                intent.putExtra("id", currentUser.getUid());
+                break;
+            case "parent":
+                intent = new Intent(this, ParentHomeActivity.class);
+                intent.putExtra("id", currentUser.getUid());
+                break;
+            case "provider":
+                intent = new Intent(this, ProviderHomeActivity.class);
+                intent.putExtra("id", currentUser.getUid());
+                break;
+            default:
+                Toast.makeText(this, "Unknown Character", Toast.LENGTH_SHORT).show();
+                return;
         }
+        startActivity(intent);
+        finish();
+    }
 }

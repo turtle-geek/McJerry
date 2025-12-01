@@ -108,7 +108,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         pefCard = findViewById(R.id.statusCard1);
         statusCard2 = findViewById(R.id.statusCard2);
         statusCard3 = findViewById(R.id.statusCard3);
-        graphCard = findViewById(R.id.graphCard);
+        graphCard = findViewById(R.id.graphCard1);
         bottomNavigationView = findViewById(R.id.menuBar);
         trendContainer = findViewById(R.id.trendContainer);
         pefDisplay = findViewById(R.id.pefDisplay);

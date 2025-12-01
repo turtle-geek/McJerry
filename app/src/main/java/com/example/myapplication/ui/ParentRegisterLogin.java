@@ -1,7 +1,5 @@
 package com.example.myapplication.ui;
 
-import static java.time.LocalDate.parse;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -15,22 +13,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.auth.AuthMan;
 import com.example.myapplication.models.Child;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Parent Register Login Activity
+ * Final step of child registration - saves child data to Firestore
+ * This creates the link between parent and child accounts
+ */
 public class ParentRegisterLogin extends AppCompatActivity {
+
+    private static final String TAG = "ParentRegisterLogin";
 
     private TextInputEditText etChildName, etBirthday, etSpecialNote;
     private Button registerButton;
@@ -41,7 +42,6 @@ public class ParentRegisterLogin extends AppCompatActivity {
 
     private String childName, childUsername, childPassword;
     private Calendar calendar;
-    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,34 +102,6 @@ public class ParentRegisterLogin extends AppCompatActivity {
         });
     }
 
-    private void signParentBackIn(String parentId) {
-        // After creating child account, we need to sign the parent back in
-        // Get parent's email from Firestore
-        db.collection("users").document(parentId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        String parentEmail = documentSnapshot.getString("email");
-
-                        // Note: We don't have parent's password here
-                        // Best practice: Just sign out and redirect to ParentManagement
-                        // Parent will remain signed in because we got their data
-                        fAuth.signOut();
-
-                        // Redirect back to ParentManagement with success flag
-                        Intent intent = new Intent(ParentRegisterLogin.this, ParentManagement.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("childAdded", true);
-                        startActivity(intent);
-                        finish();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(ParentRegisterLogin.this,
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
-                });
-    }
     private void registerChild() {
         String displayName = etChildName.getText().toString().trim();
         String birthday = etBirthday.getText().toString().trim();
@@ -152,21 +124,30 @@ public class ParentRegisterLogin extends AppCompatActivity {
         String parentId = fAuth.getCurrentUser().getUid();
         String childEmail = childUsername + "@mcjerry.app";
 
-        // Create an account with firebase Auth
+        // Create child account with Firebase Auth
         fAuth.createUserWithEmailAndPassword(childEmail, childPassword)
                 .addOnSuccessListener(authResult -> {
                     String childId = authResult.getUser().getUid();
 
-                    Child child = new Child(childId, parentId, displayName, childEmail, "child");
-                    // TODO What if it's an older build version
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        child.setDOB(birthday);
-                    }
-                    child.setNotes(specialNote);
+                    // ✅ CRITICAL: Create complete child document with all fields
+                    // This ensures the child can see their profile when they log in
+                    Map<String, Object> childData = new HashMap<>();
+                    childData.put("id", childId);
+                    childData.put("parentID", parentId);
+                    childData.put("name", displayName);
+                    childData.put("email", childEmail);
+                    childData.put("emailUsername", childUsername);
+                    childData.put("role", "child");
+                    childData.put("dateOfBirth", birthday);
+                    childData.put("notes", specialNote != null ? specialNote : "");
+                    childData.put("PEF_PB", 400); // Default personal best
+                    childData.put("createdAt", com.google.firebase.Timestamp.now());
 
+                    // Save to Firestore
                     db.collection("users").document(childId)
-                            .set(child)
+                            .set(childData)
                             .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "Child account created successfully: " + childId);
                                 Toast.makeText(ParentRegisterLogin.this,
                                         "Child account created successfully!",
                                         Toast.LENGTH_SHORT).show();
@@ -175,18 +156,30 @@ public class ParentRegisterLogin extends AppCompatActivity {
                                 signParentBackIn(parentId);
                             })
                             .addOnFailureListener(e -> {
+                                Log.e(TAG, "Failed to save child data", e);
                                 Toast.makeText(ParentRegisterLogin.this,
                                         "Failed to save child data: " + e.getMessage(),
                                         Toast.LENGTH_LONG).show();
                             });
                 })
                 .addOnFailureListener(e -> {
+                    Log.e(TAG, "Failed to create account", e);
                     Toast.makeText(ParentRegisterLogin.this,
                             "Failed to create account: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 });
+    }
 
+    private void signParentBackIn(String parentId) {
+        // After creating child account, redirect back to parent management
+        // Note: We sign out first to clear the child's auth session
+        fAuth.signOut();
 
-
+        // Redirect back to ParentManagement with success flag
+        Intent intent = new Intent(ParentRegisterLogin.this, ParentManagement.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("childAdded", true);
+        startActivity(intent);
+        finish();
     }
 }

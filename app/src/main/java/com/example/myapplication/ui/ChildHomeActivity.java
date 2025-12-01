@@ -42,6 +42,8 @@ import com.example.myapplication.models.Child;
 import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
 import com.example.myapplication.auth.SignOut_child;
+import com.example.myapplication.models.Child;
+import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +55,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -91,6 +97,42 @@ public class ChildHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_child_home);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.homePage), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            return insets;
+        });
+
+        editPEF = findViewById(R.id.editPEF);
+        pefCard = findViewById(R.id.pefCard);
+        pefDisplay = findViewById(R.id.pefDisplay);
+        pefButton = findViewById(R.id.pefButton);
+        pefDateTime = findViewById(R.id.pefDateTime);
+
+        editPEF.setVisibility(View.GONE);
+
+        String id = getIntent().getStringExtra("id");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (id == null) {
+            Log.e("ChildHomeActivity", "No child ID provided");
+            return;
+        } else {
+            db.collection("users").document(id).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (!documentSnapshot.exists()) return;
+
+                        currentChild = documentSnapshot.toObject(Child.class);
+                        if (currentChild == null) return;
+
+                        hp = currentChild.getHealthProfile();
+                        if (hp == null || hp.getPEFLog() == null || hp.getPEFLog().isEmpty())
+                            return;
+                        displayTodayPeakFlow();
+                    });
+        }
 
         try {
             setContentView(R.layout.activity_child_home);
@@ -534,6 +576,73 @@ public class ChildHomeActivity extends AppCompatActivity {
                         return true;
                     }
 
+    private void displayTodayPeakFlow() {
+        ArrayList<PeakFlow> log = hp.getPEFLog();
+        PeakFlow latest = log.get(log.size() - 1);
+
+        updatePeakFlowUI(latest);
+    }
+
+    private void updatePeakFlowUI(PeakFlow todayPeakFlow) {
+        pefDisplay.setText(String.valueOf(todayPeakFlow.getPeakFlow()));
+
+        // Convert time format
+        DateTimeFormatter formatter = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("h:mm a, MMM d");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pefDateTime.setText(todayPeakFlow.getTime().format(formatter));
+        }
+
+        switch (todayPeakFlow.getZone()) {
+            case "green":
+                pefCard.setCardBackgroundColor(Color.parseColor("#008000"));
+                break;
+            case "yellow":
+                pefCard.setCardBackgroundColor(Color.parseColor("#FFD700"));
+                break;
+            case "red":
+                pefCard.setCardBackgroundColor(Color.parseColor("#FF0000"));
+                break;
+        }
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private void setListeners() {
+        sosButton = findViewById(R.id.sosButton);
+        sosButton.setOnClickListener(v ->{
+                Intent intent = new Intent(this, TriageActivity.class);
+                intent.putExtra("id", currentChild.getId());
+                startActivity(intent);
+                scheduleCheckupNotification();
+        });
+
+        pefButton.setOnClickListener(v -> {
+            editPEF.setVisibility(View.VISIBLE);
+            TextView editTextNumber = findViewById(R.id.editTextNumber);
+            editTextNumber.setOnFocusChangeListener((view, hasFocus) -> {
+                if (editTextNumber.hasFocus()) {
+                    // Uh;
+                } else {
+                    String text = editTextNumber.getText().toString();
+                    int peakFlowValue;
+                    if (!text.isEmpty()) {
+                        peakFlowValue = Integer.parseInt(text);
+                        LocalDateTime submitTime = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            submitTime = LocalDateTime.now();
+                        }
+
+                        if (submitTime != null){
+                            PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
+                            pef.computeZone(currentChild);
+                            hp.addPEFToLog(pef);
+                        }
+                    }
+                }
+            });
+        });
                     return false;
                 }
             });
@@ -543,6 +652,13 @@ public class ChildHomeActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ScheduleExactAlarm")
+    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
+    private void scheduleCheckupNotification() {
+        long triggerTime = System.currentTimeMillis() + 10*60*1000; // 10 minutes
+        Intent intent = new Intent(this, CheckupNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
     private void setCurrentDate() {
         try {
             if (todayDate != null) {

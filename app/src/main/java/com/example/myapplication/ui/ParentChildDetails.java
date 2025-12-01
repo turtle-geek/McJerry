@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ public class ParentChildDetails extends AppCompatActivity {
     private TextView tvChildPassword;
     private TextView tvDetailBirthday;
     private TextView tvDetailSpecialNote;
+    private TextView tvUserId;
+    private TextView tvPassword;
     private ImageButton btnBack;
     private ImageButton btnEdit;
     private EditText editPB;
@@ -30,6 +33,8 @@ public class ParentChildDetails extends AppCompatActivity {
     private Button btnViewMedicineInventory;
     private Button btnViewMedicalRecords;
     private Button btnViewProgressOverview;
+    private EditText editPB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class ParentChildDetails extends AppCompatActivity {
         btnViewMedicineInventory = findViewById(R.id.btnViewMedicineInventory);
         btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
         btnViewProgressOverview = findViewById(R.id.btnViewProgressOverview);
+        editPB = findViewById(R.id.editPB);
+
 
         // Get data from intent
         String childName = getIntent().getStringExtra("childName");
@@ -143,6 +150,25 @@ public class ParentChildDetails extends AppCompatActivity {
             Intent intent = new Intent(this, StreakManagement.class);
             intent.putExtra("childId", childId);
             startActivityForResult(intent, 1);
+        });
+
+        editPB.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                String newPB = editPB.getText().toString();
+                if (!newPB.isEmpty() && childId != null) {
+                    // Query by childId and update the personal best
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("users").document(childId)
+                                    .update("personalBest", newPB)
+                                    .addOnSuccessListener(aVoid ->
+                                        Toast.makeText(this, "New PB set to " + newPB,
+                                                Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e ->
+                                        Toast.makeText(this, "Failed to update PB",
+                                                Toast.LENGTH_SHORT).show());
+                }
+
+            }
         });
     }
 

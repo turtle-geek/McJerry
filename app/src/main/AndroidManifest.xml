@@ -31,9 +31,18 @@
         <activity
             android:name=".ui.TriageDecisionCard"
             android:exported="false" />
+            android:exported="false" />
+        <activity
+            android:name=".ui.BaseChildActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.TriageActivity"
             android:exported="false" />
+            android:exported="false" />
+        <activity
+            android:name=".ui.PeakFlowInput"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -43,18 +52,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".auth.LoginPage"
             android:exported="true" />
+
         <activity
             android:name=".auth.Register"
             android:exported="true" />
+
         <activity
             android:name=".auth.UserRole"
             android:exported="true" />
+
         <activity
             android:name=".auth.ForgotPassword"
             android:exported="true" />
+
         <activity
             android:name=".auth.SignOut"
             android:exported="true" />
@@ -66,9 +80,11 @@
         <activity
             android:name=".ui.ChildHomeActivity"
             android:exported="true" />
+
         <activity
             android:name=".ui.ParentHomeActivity"
             android:exported="true" />
+
         <activity
             android:name=".ui.ProviderHomeActivity"
             android:exported="true" />
@@ -85,15 +101,19 @@
         <activity
             android:name=".ui.ParentManagement"
             android:exported="false" />
+
         <activity
             android:name=".ui.ParentChildDetails"
             android:exported="false" />
+
         <activity
             android:name=".ui.ParentChildEdit"
             android:exported="false" />
+
         <activity
             android:name=".ui.ParentRegisterChild"
             android:exported="true" />
+
         <activity
             android:name=".ui.ParentRegisterLogin"
             android:exported="true" />

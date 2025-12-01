@@ -33,6 +33,9 @@ public class Child extends User{
         this.healthProfile = new HealthProfile();
         this.inventory = new Inventory();
         this.streakCount = new StreakCount();
+        this.badges = new Badges();
+        this.streakCount.setInventory(this.inventory);
+        this.badges.setStreakCount(this.streakCount);
     }
 
     public Child(String id, String parentID, String name, String parentEmail, String role) {
@@ -45,6 +48,8 @@ public class Child extends User{
         this.inventory = new Inventory();
         this.streakCount = new StreakCount();
         this.badges = new Badges();
+        this.streakCount.setInventory(this.inventory);
+        this.badges.setStreakCount(this.streakCount);
     }
 
     // Public Setters

@@ -23,7 +23,7 @@ public class MedicineUsageLog {
     }
 
     // NEW: Constructor with rating
-    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, LocalDateTime timestamp, TechniqueQuality techniqueQuality, String rating) {
+    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, String timestamp, TechniqueQuality techniqueQuality, String rating) {
         this.medicine = medicine;
         this.dosageAmount = dosageAmount;
         this.timestamp = timestamp;

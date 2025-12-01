@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.PeakFlowInput">
+    tools:context=".peakflow.PeakFlowInput">
 
     <ImageButton
         android:id="@+id/sosButton"
@@ -32,7 +32,7 @@
         android:layout_height="200dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/pbDisplay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -45,7 +45,7 @@
             android:id="@+id/pefPrompt"
             android:layout_width="254dp"
             android:layout_height="25dp"
-            android:text="HOW FAST IS YOUR AIR BLOW TODAY?"
+            android:text="@string/how_fast_is_your_air_blow_today"
             tools:layout_editor_absoluteX="78dp"
             tools:layout_editor_absoluteY="269dp" />
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Enter peak flow"
+            android:hint="@string/enter_peak_flow"
             android:inputType="number"
             tools:layout_editor_absoluteX="100dp"
             tools:layout_editor_absoluteY="324dp" />
@@ -63,7 +63,7 @@
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SUBMIT"
+            android:text="@string/submit"
             tools:layout_editor_absoluteX="157dp"
             tools:layout_editor_absoluteY="381dp" />
     </LinearLayout>
@@ -75,7 +75,7 @@
         android:layout_height="200dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/pbDisplay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -111,7 +111,7 @@
             android:id="@+id/newPEFButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Record new peak flow"
+            android:text="@string/record_new_peak_flow"
             tools:layout_editor_absoluteX="157dp"
             tools:layout_editor_absoluteY="381dp" />
 

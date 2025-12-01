@@ -303,12 +303,37 @@
                     android:useDefaultMargins="false"
                     android:layout_marginBottom="16dp">
 
-                    <CheckBox android:id="@+id/filterCbExercise" android:text="Exercise" style="@style/FilterCheckBox" />
-                    <CheckBox android:id="@+id/filterCbColdAir" android:text="Cold Air" style="@style/FilterCheckBox" />
-                    <CheckBox android:id="@+id/filterCbDustPets" android:text="Dust/Pets" style="@style/FilterCheckBox" />
-                    <CheckBox android:id="@+id/filterCbSmoke" android:text="Smoke" style="@style/FilterCheckBox" />
-                    <CheckBox android:id="@+id/filterCbIllness" android:text="Illness" style="@style/FilterCheckBox" />
-                    <CheckBox android:id="@+id/filterCbStrongOdors" android:text="Strong Odors/Perfumes" style="@style/FilterCheckBox" />
+                    <!-- FIX: Applying explicit styling (including buttonTint) to match symptom filters -->
+                    <CheckBox android:id="@+id/filterCbExercise" android:text="Exercise"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="0dp"
+                        android:layout_marginEnd="12dp" android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
+                    <CheckBox android:id="@+id/filterCbColdAir" android:text="Cold Air"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="12dp"
+                        android:layout_marginEnd="0dp" android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
+                    <CheckBox android:id="@+id/filterCbDustPets" android:text="Dust/Pets"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="0dp"
+                        android:layout_marginEnd="12dp" android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
+                    <CheckBox android:id="@+id/filterCbSmoke" android:text="Smoke"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="12dp"
+                        android:layout_marginEnd="0dp" android:layout_marginBottom="4dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
+                    <CheckBox android:id="@+id/filterCbIllness" android:text="Illness"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="0dp"
+                        android:layout_marginEnd="12dp" android:layout_marginBottom="0dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
+                    <CheckBox android:id="@+id/filterCbStrongOdors" android:text="Strong Odors/Perfumes"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_columnWeight="1" android:layout_marginStart="12dp"
+                        android:layout_marginEnd="0dp" android:layout_marginBottom="0dp"
+                        app:buttonTint="@color/check_box_selector_color"/>
                 </GridLayout>
 
 
@@ -321,50 +346,12 @@
                     android:paddingTop="20dp"
                     android:paddingBottom="10dp"/>
 
-                <RadioGroup
-                    android:id="@+id/radioGroupDateRange"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
-
-                    <RadioButton
-                        android:id="@+id/rbLast7Days"
-                        android:text="Last 7 Days"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:buttonTint="@color/check_box_selector_color"/>
-                    <RadioButton
-                        android:id="@+id/rbLast30Days"
-                        android:text="Last 30 Days"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:buttonTint="@color/check_box_selector_color"/>
-                    <RadioButton
-                        android:id="@+id/rbLast3Months"
-                        android:text="Last 3 Months"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:buttonTint="@color/check_box_selector_color"/>
-                    <RadioButton
-                        android:id="@+id/rbLast6Months"
-                        android:text="Last 6 Months"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:buttonTint="@color/check_box_selector_color"/>
-                    <RadioButton
-                        android:id="@+id/rbCustomRange"
-                        android:text="Custom Range"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:buttonTint="@color/check_box_selector_color"/>
-                </RadioGroup>
-
                 <LinearLayout
                     android:id="@+id/customRangeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingHorizontal="8dp"
                     android:paddingBottom="10dp">
 
@@ -373,7 +360,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Start Date: (Tap to select)"
+                        android:text="@string/default_start_date"
                         android:textColor="@color/black"
                         android:background="@drawable/rounded_border"
                         android:padding="8dp"
@@ -395,6 +382,16 @@
                         android:drawableStart="@drawable/ic_calendar"
                         android:drawablePadding="8dp"/>
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="* Filter range must be between 3 and 6 months."
+                    android:textSize="12sp"
+                    android:textColor="#FF0000"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"/>
+
 
                 <Button
                     android:id="@+id/btnApplyFilter"
@@ -420,8 +417,8 @@
         app:itemIconTint="#8A90A5"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/menu"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

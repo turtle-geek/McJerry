@@ -44,6 +44,8 @@ dependencies {
     // Firebase Libraries (Versions determined by the BOM above)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.cardview)
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -52,6 +54,7 @@ dependencies {
     // Utility libraries
     implementation("jp.wasabeef:blurry:4.0.1")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation("com.google.android.material:material:1.11.0")
 
     // Testing dependencies
     testImplementation(libs.junit)

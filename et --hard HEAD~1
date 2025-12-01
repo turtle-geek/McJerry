@@ -1,0 +1,364 @@
+[33mcommit a41e83579472f48a7be8e5b700689771713cb10e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/minhthu/pef-tracker[m[33m, [m[1;31morigin/feature/minhthu/pef-tracker[m[33m)[m
+Merge: 0c7d9f3 01af257
+Author: Le Minh Thu Nguyen <nguyenleminhthu0109@gmail.com>
+Date:   Sat Nov 29 02:03:23 2025 -0500
+
+    Merge remote-tracking branch 'origin/master' into feature/minhthu/pef-tracker
+    
+    [A#     gradle/libs.versions.toml
+    
+    Esc
+    :wq
+
+[1mdiff --cc app/build.gradle.kts[m
+[1mindex 85303d3,2172838..37dbc3f[m
+[1m--- a/app/build.gradle.kts[m
+[1m+++ b/app/build.gradle.kts[m
+[36m@@@ -40,8 -40,7 +40,12 @@@[m [mdependencies [m
+      implementation(platform(libs.firebase.bom))[m
+      implementation(libs.firebase.auth)[m
+      implementation(libs.firebase.firestore)[m
+[32m++<<<<<<< HEAD[m
+[32m +    implementation(libs.legacy.support.v4)[m
+[32m +    implementation(libs.cardview)[m
+[32m++=======[m
+[32m+     implementation(libs.firebase.storage)[m
+[32m++>>>>>>> origin/master[m
+      testImplementation(libs.junit)[m
+      androidTestImplementation(libs.ext.junit)[m
+      androidTestImplementation(libs.espresso.core)[m
+[1mdiff --cc app/src/main/AndroidManifest.xml[m
+[1mindex f6699e1,13ea5f2..85398db[m
+[1m--- a/app/src/main/AndroidManifest.xml[m
+[1m+++ b/app/src/main/AndroidManifest.xml[m
+[36m@@@ -38,22 -23,69 +38,71 @@@[m
+                  <category android:name="android.intent.category.LAUNCHER" />[m
+              </intent-filter>[m
+          </activity>[m
+[31m -[m
+          <activity[m
+              android:name=".auth.LoginPage"[m
+[32m+             android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".auth.Register"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".auth.UserRole"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".auth.ForgotPassword"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m +            android:exported="true" />[m
+          <activity[m
+              android:name=".auth.SignOut"[m
+[31m-             android:exported="true" />[m
+[32m++            android:exported="true"[m
+[32m+             android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+ [m
+[32m+ [m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ChildHomeActivity"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ParentHomeActivity"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+          <activity[m
+[31m -            android:name=".ui.ProviderHomeActivity"  android:exported="true">[m
+[31m -        </activity>[m
+[31m -[m
+[32m +            android:name=".ui.ChildHomeActivity"[m
+[32m +            android:exported="true" />[m
+          <activity[m
+[31m -            android:name=".ui.ParentTutorial"  android:exported="true">[m
+[31m -        </activity>[m
+[31m -[m
+[32m +            android:name=".ui.ParentHomeActivity"[m
+[32m +            android:exported="true" />[m
+          <activity[m
+[32m +            android:name=".ui.ProviderHomeActivity"[m
+[32m +            android:exported="true" />[m
+[31m-         <activity android:name=".auth.UserRole" />[m
+[32m++        <activity android:name=".auth.UserRole"[m
+[32m+             android:name=".ui.ParentManagement"  android:exported="false">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ParentChildDetails"  android:exported="false">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ParentChildEdit"  android:exported="false">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ParentRegisterChild"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+         <activity[m
+[32m+             android:name=".ui.ParentRegisterLogin"  android:exported="true">[m
+[32m+         </activity>[m
+[32m+ [m
+[32m+ [m
+      </application>[m
+  [m
+  </manifest>[m
+[1mdiff --cc app/src/main/java/com/example/myapplication/models/Child.java[m
+[1mindex 5453b28,bc285eb..6390401[m
+[1m--- a/app/src/main/java/com/example/myapplication/models/Child.java[m
+[1m+++ b/app/src/main/java/com/example/myapplication/models/Child.java[m
+[36m@@@ -15,11 -18,34 +18,17 @@@[m [mpublic class Child extends User[m
+      private LocalDate dateOfBirth;[m
+      private String notes;[m
+      private HealthProfile healthProfile;[m
+[32m+     private Inventory inventory;[m
+[32m+     private StreakCount streakCount;[m
+[32m+     private Badges badges;[m
+[32m+ [m
+[32m+     // Constructor is not updated to initialize the new fields yet[m
+[32m+     // If update, remember to link inventory to streakCount and streakCount to badges[m
+  [m
+[31m -    // Constructor to create child profile under a parent[m
+[31m -    // Package private[m
+[31m -[m
+[31m -    /**[m
+[31m -     * Constructor to create child profile under a parent. This constructor also calls[m
+[31m -     * addToDataBase in auth.AuthMan to add the user into the database, as a nested child profile[m
+[31m -     * cannot be logged into the app directly with email and password.[m
+[31m -     * @param id of the child user[m
+[31m -     * @param parentID[m
+[31m -     * @param name[m
+[31m -     * @param parentEmail[m
+[31m -     * @param nestedStatus[m
+[31m -     */[m
+[31m -    Child(String id, String parentID, String name, String parentEmail, String nestedStatus) {[m
+[31m -        super(id, name);[m
+[31m -        if (!nestedStatus.equals("nested")) {[m
+[31m -            // is this ok[m
+[31m -            throw new IllegalArgumentException("nestedStatus must be 'nested'");[m
+[31m -        }[m
+[32m +    public Child(String id, String parentID, String name, String parentEmail, String role) {[m
+[32m +        super(id, name, role);[m
+          this.parentID = parentID;[m
+[31m -        this.email = parentEmail;[m
+[32m +        this.emailUsername = parentEmail;[m
+          // Add to firebase firestore[m
+          addToDatabase(this);[m
+      }[m
+[1mdiff --cc app/src/main/java/com/example/myapplication/models/Parent.java[m
+[1mindex 1ea75f9,d0388d9..4dccb5e[m
+[1m--- a/app/src/main/java/com/example/myapplication/models/Parent.java[m
+[1m+++ b/app/src/main/java/com/example/myapplication/models/Parent.java[m
+[36m@@@ -1,21 -1,22 +1,23 @@@[m
+  package com.example.myapplication.models;[m
+  [m
+  import com.example.myapplication.health.HealthInfo;[m
+[31m -[m
+  import java.util.ArrayList;[m
+  import java.util.EnumSet;[m
+[32m +import com.example.myapplication.SharedAccessInvite;[m
+  [m
+[31m -import com.example.myapplication.health.SharedAccessInvite;[m
+[32m+ import com.example.myapplication.health.Inventory;[m
+  [m
+  public class Parent extends User{[m
+[31m -    private final ArrayList<Child> children;[m
+[31m -    private int providerID;[m
+[32m +    private ArrayList<Child> children;[m
+[32m +    private String providerID;[m
+      private ArrayList<SharedAccessInvite> invites;[m
+      static int idChildModifier;[m
+  [m
+[31m -    public Parent(String id, String name, String email) {[m
+[31m -        super(id, name);[m
+[31m -        this.email = email;[m
+[32m +    public Parent(){}[m
+[32m++[m
+[32m +    public Parent(String id, String name, String emailUsername, String role) {[m
+[32m +        super(id, name, role);[m
+[32m +        this.emailUsername = emailUsername;[m
+          this.children = new ArrayList<>(); // Using diamond operator for cleaner code[m
+      }[m
+  [m
+[1mdiff --cc app/src/main/java/com/example/myapplication/models/Provider.java[m
+[1mindex 2a8e468,ad3eeaa..25462fd[m
+[1m--- a/app/src/main/java/com/example/myapplication/models/Provider.java[m
+[1m+++ b/app/src/main/java/com/example/myapplication/models/Provider.java[m
+[36m@@@ -30,30 -31,80 +33,105 @@@[m [mpublic class Provider extends User[m
+      // Setter for patients is omitted; the addPatient method controls modification.[m
+  [m
+      // ----- Sharing invitation -----[m
+[32m+ [m
+[32m+     // Helper method[m
+[32m+     private void findChildById(String childId, OnSuccessListener<Child> listener) {[m
+[32m+         FirebaseFirestore db = FirebaseFirestore.getInstance();[m
+[32m+ [m
+[32m+         db.collection("users")  // or "children" if stored differently[m
+[32m+                 .document(childId)[m
+[32m+                 .get()[m
+[32m+                 .addOnSuccessListener(documentSnapshot -> {[m
+[32m+                     if (documentSnapshot.exists()) {[m
+[32m+                         Child child = documentSnapshot.toObject(Child.class);[m
+[32m+                         listener.onSuccess(child);[m
+[32m+                     } else {[m
+[32m+                         listener.onSuccess(null);[m
+[32m+                     }[m
+[32m+                 })[m
+[32m+                 .addOnFailureListener(e -> {[m
+[32m+                     Log.w("Firestore", "Failed to fetch child", e);[m
+[32m+                     listener.onSuccess(null);[m
+[32m+                 });[m
+[32m+     }[m
+[32m+ [m
+[32m+     public void redeemInvite([m
+[32m+             Parent parent,[m
+[32m+             String code,[m
+[32m+             OnSuccessListener<HealthProfile> listener[m
+[32m+     ) {[m
+[32m+         SharedAccessInvite invite = parent.getInviteByCode(code);[m
+[32m +    public HealthProfile redeemInvite(Parent parent, String code) {[m
+[32m +        SharedAccessInvite invite = parent.getInviteByCode(code);[m
+[32m +        if (invite != null && invite.isValid()) {[m
+[32m +            invite.markAsUsed();[m
+[32m +            Child child = /* lookup by invite.getChildID() */;[m
+[32m +            return filterProfileByInvite(child.getHealthProfile(), invite);[m
+[32m +        }[m
+[32m +        return null;[m
+[32m +    }[m
+[32m +[m
+[32m +    private HealthProfile filterProfileByInvite(HealthProfile full, SharedAccessInvite invite) {[m
+[32m +        HealthProfile shared = new HealthProfile();[m
+[32m +        for (HealthInfo field : invite.getSharedFields()) {[m
+[32m +            switch (field) {[m
+[32m +                case RESCUE_LOGS -> shared.addRescueLog(full.getRescueLogs());[m
+[32m +                case CONTROLLER_ADHERENCE -> shared.addControllerAdherence(full.getControllerAdherence());[m
+[32m +                case SYMPTOMS -> shared.addSymptom(full.getSymptoms());[m
+[32m +                case TRIGGERS -> shared.addTrigger(full.getTriggers());[m
+[32m +                case PEF_LOG -> shared.setPEF(full.getPEF());[m
+[32m +                case TRIAGE_INCIDENTS -> shared.addTriageIncident(full.getTriageIncidents());[m
+[32m +                case CHARTS -> shared.addChart(full.getCharts());[m
+[32m +            }[m
+[32m +        }[m
+[32m +        return shared;[m
+[32m +    }[m
+  [m
+[32m+         if (invite == null || !invite.isValid()) {[m
+[32m+             listener.onSuccess(null);[m
+[32m+             return;[m
+[32m+         }[m
+[32m+ [m
+[32m+         invite.markAsUsed();[m
+[32m+ [m
+[32m+         findChildById(invite.getChildID(), child -> {[m
+[32m+             if (child == null) {[m
+[32m+                 listener.onSuccess(null);[m
+[32m+                 return;[m
+[32m+             }[m
+[32m+ [m
+[32m+             HealthProfile filtered = filterProfileByInvite(child.getHealthProfile(), invite);[m
+[32m+             listener.onSuccess(filtered);[m
+[32m+         });[m
+[32m+     }[m
+[32m+ [m
+[32m+     private HealthProfile filterProfileByInvite(HealthProfile full, SharedAccessInvite invite) {[m
+[32m+         HealthProfile shared = new HealthProfile();[m
+[32m+         for (HealthInfo field : invite.getSharedFields()) {[m
+[32m+             switch (field) {[m
+[32m+                 case RESCUE_LOGS:[m
+[32m+                     shared.setRescueLogs(full.getRescueLogs());[m
+[32m+                     break;[m
+[32m+                 case CONTROLLER_ADHERENCE:[m
+[32m+                     shared.setControllerAdherence(full.getControllerAdherence());[m
+[32m+                     break;[m
+[32m+                 case SYMPTOMS:[m
+[32m+                     shared.setSymptoms(full.getSymptoms());[m
+[32m+                     break;[m
+[32m+                 case TRIGGERS:[m
+[32m+                     shared.setTriggers(full.getTriggers());[m
+[32m+                     break;[m
+[32m+                 case PEF_LOG:[m
+[32m+                     shared.setPEF_PB(full.getPEF_PB());[m
+[32m+                     break;[m
+[32m+                 case TRIAGE_INCIDENTS:[m
+[32m+                     shared.setTriageIncidents(full.getTriageIncidents());[m
+[32m+                     break;[m
+[32m+                 case CHARTS:[m
+[32m+                     shared.setCharts(full.getCharts());[m
+[32m+                     break;[m
+[32m+             }[m
+[32m+         }[m
+[32m+         return shared;[m
+[32m+     }[m
+  }[m
+[1mdiff --cc app/src/main/res/values/strings.xml[m
+[1mindex e854419,7e972b9..580f4a7[m
+[1m--- a/app/src/main/res/values/strings.xml[m
+[1m+++ b/app/src/main/res/values/strings.xml[m
+[36m@@@ -22,11 -22,13 +22,13 @@@[m
+      <string name="parent">Parent</string>[m
+      <string name="children">Children</string>[m
+      <string name="log_out">Log out</string>[m
+[31m -    <string name="legalName">Legal Name</string>[m
+[31m -    <string name="children_management">Children Management</string>[m
+[31m -    <string name="today_status">Today Status</string>[m
+[31m -    <string name="last_rescue_time">Last Rescue Time</string>[m
+[31m -    <string name="weekly_rescue_time">Weekly Rescue Time</string>[m
+[31m -    <string name="daily_checkin">Daily Checkin</string>[m
+[31m -    <string name="birthday">Birthday</string>[m
+[32m +    <string name="how_fast_is_your_air_blow_today">HOW FAST IS YOUR AIR BLOW TODAY?</string>[m
+[32m +    <string name="enter_peak_flow">Enter peak flow</string>[m
+[32m +    <string name="submit">SUBMIT</string>[m
+[32m +    <string name="record_new_peak_flow">Record new peak flow</string>[m
+[32m +    <string name="select_all_that_applies">Select all that applies</string>[m
+[32m +    <!-- TODO: Remove or change this placeholder text -->[m
+[32m +    <string name="hello_blank_fragment">Hello blank fragment</string>[m
+[32m+     <string name="provider">Provider</string>[m
+[32m+     <string name="next">Next</string>[m
+  </resources>[m
+[1mdiff --cc gradle/libs.versions.toml[m
+[1mindex a23c7f4,13af908..7fc6a32[m
+[1m--- a/gradle/libs.versions.toml[m
+[1m+++ b/gradle/libs.versions.toml[m
+[36m@@@ -8,11 -8,10 +8,15 @@@[m [mmaterial = "1.13.0[m
+  activity = "1.11.0"[m
+  constraintlayout = "2.2.1"[m
+  googleServices = "4.4.4"[m
+[31m -firebaseFirestore = "26.0.2"[m
+  firebaseBom = "33.5.1"[m
+  firebaseAuth = "24.0.1"[m
+[32m++<<<<<<< HEAD[m
+[32m +firebaseFirestore = "24.10.0"[m
+[32m +legacySupportV4 = "1.0.0"[m
+[32m +cardview = "1.0.0"[m
+[32m++=======[m
+[32m+ firebaseStorage = "22.0.1"[m
+[32m++>>>>>>> origin/master[m
+  [m
+  [libraries][m
+  junit = { group = "junit", name = "junit", version.ref = "junit" }[m
+[36m@@@ -24,11 -23,10 +28,15 @@@[m [mactivity = { group = "androidx.activity[m
+  constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }[m
+  [m
+  # --- Firebase Dependencies ---[m
+[32m +firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }[m
+  firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }[m
+[31m -firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" } # Keeping the one with version.ref[m
+  firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }[m
+[32m++<<<<<<< HEAD[m
+[32m +legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }[m
+[32m +cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }[m
+[32m++=======[m
+[32m+ firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }[m
+[32m++>>>>>>> origin/master[m
+  [m
+  [plugins][m
+  android-application = { id = "com.android.application", version.ref = "agp" }[m

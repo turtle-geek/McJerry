@@ -29,24 +29,13 @@ public class Register extends AppCompatActivity {
 
     private TextInputEditText nameET, mailET, passwordET, confirmPasswordET;
     private Button registerButton;
-    private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_page);
 
-        // Initialize Firebase
-        fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-
         // Initialize UI components
-        TextInputLayout nameLayout = findViewById(R.id.nameLayoutRegister);
-        TextInputLayout mailLayout = findViewById(R.id.mailLayoutRegister);
-        TextInputLayout passwordLayout = findViewById(R.id.passwordLayoutRegister);
-        TextInputLayout confirmPasswordLayout = findViewById(R.id.confirmPasswordLayoutRegister);
-
         nameET = findViewById(R.id.nameETRegister);
         mailET = findViewById(R.id.mailETRegister);
         passwordET = findViewById(R.id.passwordETRegister);
@@ -54,7 +43,6 @@ public class Register extends AppCompatActivity {
         registerButton = findViewById(R.id.loginBotton);
 
         // Apply blur effect to the register container - FIXED VERSION
-        ViewGroup loginContainer = findViewById(R.id.registerContainer);
         Blurry.with(this)
                 .radius(25)              // Blur intensity (higher = more blur)
                 .sampling(2)             // Down sampling (higher = faster but lower quality)
@@ -86,6 +74,12 @@ public class Register extends AppCompatActivity {
             return;
         }
 
+        if (!email.contains("@")) {
+            mailET.setError("Invalid email format");
+            mailET.requestFocus();
+            return;
+        }
+
         if (TextUtils.isEmpty(password)) {
             passwordET.setError("Password is required");
             passwordET.requestFocus();
@@ -98,28 +92,45 @@ public class Register extends AppCompatActivity {
             return;
         }
 
+        boolean hasUpperCase = false;
+        boolean hasLowerCase = false;
+        boolean hasDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUpperCase = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLowerCase = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+        }
+        if (!hasUpperCase) {
+            passwordET.setError("Password must contain at least one uppercase letter");
+            passwordET.requestFocus();
+            return;
+        }
+        if (!hasLowerCase) {
+            passwordET.setError("Password must contain at least one lowercase letter");
+            passwordET.requestFocus();
+            return;
+        }
+        if (!hasDigit) {
+            passwordET.setError("Password must contain at least one digit");
+            passwordET.requestFocus();
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
             confirmPasswordET.setError("Passwords do not match");
             confirmPasswordET.requestFocus();
             return;
         }
 
-        // Create user with Firebase Auth ONLY
-        fAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(Register.this, "Account created! Please select your role.", Toast.LENGTH_SHORT).show();
-
-                        // Navigate to IdentityChoosingActivity to select role
-                        Intent intent = new Intent(Register.this, UserRole.class);
-                        intent.putExtra("userName", name);  // Pass name to save later
-                        intent.putExtra("userEmail", email);  // Pass email to save later
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        // Registration failed
-                        Toast.makeText(Register.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+        Intent intent = new Intent(Register.this, UserRole.class);
+        intent.putExtra("userName", name);  // Pass name to save later
+        intent.putExtra("userEmail", email);  // Pass email to save later
+        intent.putExtra("userPassword", password);  // Pass password to save later
+        startActivity(intent);
+        finish();
     }
 }

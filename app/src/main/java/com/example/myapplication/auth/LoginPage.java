@@ -123,12 +123,15 @@ public class LoginPage extends AppCompatActivity {
     private void loginUser() {
         String input = mailET.getText().toString().trim();
         String password = passwordET.getText().toString().trim();
+        String email = input;
 
         // Validation
         if (TextUtils.isEmpty(input)) {
-            mailET.setError("Email or User ID is required");
+            mailET.setError("Email or Username required");
             mailET.requestFocus();
             return;
+        } else if (!input.contains("@")){
+            email=input+"@mcjerry.app";
         }
 
         if (TextUtils.isEmpty(password)) {
@@ -137,26 +140,15 @@ public class LoginPage extends AppCompatActivity {
             return;
         }
 
-        // Check if input is an email or userId
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
-            // It's an email - use Firebase Auth
-            loginWithEmail(input, password);
-        } else {
-            // It's a userId - check Firestore for child account
-            loginWithUserId(input, password);
-        }
-    }
-
-    private void loginWithEmail(String email, String password) {
-        // Authenticate with Firebase
         fAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Login successful
-                        Toast.makeText(LoginPage.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginPage.this, "Login successful!",
+                                Toast.LENGTH_SHORT).show();
 
                         // Save credentials if "Remember Me" is checked
-                        saveCredentials(email, password);
+                        saveCredentials(input, password);
 
                         // Navigate to MainActivity (which will check role and redirect)
                         Intent intent = new Intent(LoginPage.this, MainActivity.class);
@@ -164,49 +156,10 @@ public class LoginPage extends AppCompatActivity {
                         finish();
                     } else {
                         // Login failed
-                        Toast.makeText(LoginPage.this, "Login failed: " + task.getException().getMessage(),
+                        Toast.makeText(LoginPage.this,
+                                "Login failed: " + task.getException().getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }
-                });
-    }
-
-    private void loginWithUserId(String userId, String password) {
-        // Query Firestore for a user with this userId
-        db.collection("users")
-                .whereEqualTo("userId", userId)
-                .whereEqualTo("role", "child")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        // Found the child account
-                        String childEmail = queryDocumentSnapshots.getDocuments().get(0).getString("email");
-
-                        // Now authenticate with Firebase using the email and password
-                        if (childEmail != null) {
-                            fAuth.signInWithEmailAndPassword(childEmail, password)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(LoginPage.this, "Welcome back!", Toast.LENGTH_SHORT).show();
-
-                                            // Save credentials if "Remember Me" is checked
-                                            saveCredentials(userId, password);
-
-                                            // Navigate to ChildHomeActivity
-                                            Intent intent = new Intent(LoginPage.this, ChildHomeActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(LoginPage.this, "Invalid password", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    } else {
-                        // No child account found with this userId
-                        Toast.makeText(LoginPage.this, "Invalid User ID or password", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(LoginPage.this, "Login error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 }

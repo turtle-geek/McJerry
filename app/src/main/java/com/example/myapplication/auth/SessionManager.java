@@ -6,9 +6,7 @@ public class SessionManager {
     private static SessionManager instance; // static - one session (logged in user) at a time
     private User currentUser;
 
-    private SessionManager() {
-        // private constructor to enforce singleton
-    }
+    private SessionManager(){} // Empty constructor to prevent instantiation from outside
 
     public static SessionManager getInstance() {
         if (instance == null) {

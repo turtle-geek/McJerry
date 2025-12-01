@@ -15,7 +15,7 @@ import static com.example.myapplication.auth.AuthMan.addToDatabase;
 public class Child extends User{
 
     final String parentID;
-    private LocalDate dateOfBirth;
+    private String dateOfBirth;
     private String notes;
     private HealthProfile healthProfile;
     private Inventory inventory;
@@ -25,41 +25,18 @@ public class Child extends User{
     // Constructor is not updated to initialize the new fields yet
     // If update, remember to link inventory to streakCount and streakCount to badges
 
-    // Constructor to create child profile under a parent
-    // Package private
-
-    /**
-     * Constructor to create child profile under a parent. This constructor also calls
-     * addToDataBase in auth.AuthMan to add the user into the database, as a nested child profile
-     * cannot be logged into the app directly with email and password.
-     * @param id of the child user
-     * @param parentID
-     * @param name
-     * @param parentEmail
-     * @param nestedStatus
-     */
-    Child(String id, String parentID, String name, String parentEmail, String nestedStatus) {
-        super(id, name);
-        if (!nestedStatus.equals("nested")) {
-            // is this ok
-            throw new IllegalArgumentException("nestedStatus must be 'nested'");
-        }
+    public Child(String id, String parentID, String name, String parentEmail, String role) {
+        super(id, name, role);
         this.parentID = parentID;
-        this.email = parentEmail;
-        // Add to firebase firestore
-        addToDatabase(this);
-    }
-
-    // Overloaded constructor for child to create their own profile
-    public Child(String id, String parentID, String name, String email){
-        super(id, name);
-        this.parentID = parentID;
-        if (email != null)
-            this.email = email;
+        this.emailUsername = parentEmail;
+        this.emailUsername = parentEmail;
     }
 
     // Public Setters
-    public void setDOB(LocalDate dateOfBirth) {
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    public void setDOB(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -88,7 +65,7 @@ public class Child extends User{
         docRef.get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String email = documentSnapshot.getString("email");
+                        String email = documentSnapshot.getString("emailUsername");
                         listener.onSuccess(email);
                     } else {
                         listener.onSuccess(null); // No user found
@@ -100,7 +77,7 @@ public class Child extends User{
                 });
     }
 
-    public LocalDate getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -109,6 +86,10 @@ public class Child extends User{
     public StreakCount getStreakCount() { return streakCount; }
 
     public Badges getBadges() { return badges; }
+
+    public String getNotes(){
+        return notes;
+    }
 
     // Setter is omitted as parentID shouldn't change after creation.
     // For reference, LocalDate.of(int year, int month, int day) may be used for changing if needed

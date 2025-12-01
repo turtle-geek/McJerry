@@ -1,43 +1,43 @@
 package com.example.myapplication.models;
 
 import com.example.myapplication.health.HealthInfo;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
-
 import com.example.myapplication.health.SharedAccessInvite;
 import com.example.myapplication.health.Inventory;
 
 public class Parent extends User{
-    private final ArrayList<Child> children;
-    private int providerID;
+    private ArrayList<Child> children;
+    private String providerID;
     private ArrayList<SharedAccessInvite> invites;
     static int idChildModifier;
 
-    public Parent(String id, String name, String email) {
-        super(id, name);
-        this.email = email;
+    public Parent(){}
+
+    public Parent(String id, String name, String emailUsername, String role) {
+        super(id, name, role);
+        this.emailUsername = emailUsername;
         this.children = new ArrayList<>(); // Using diamond operator for cleaner code
+        this.invites = new ArrayList<>();
     }
 
     public void createChild(String idParent, String childName) {
         String idChild = id + idChildModifier;
         idChildModifier++;
-        Child child = new Child(idChild, idParent, name, email,"nested");
+        Child child = new Child(idChild, idParent, name, emailUsername, role);
+        if (children == null) {
+            children = new ArrayList<>();
+        }
         children.add(child);
     }
 
-    public void addProvider(int providerID) {
+    public void addProvider(String providerID) {
         this.providerID = providerID; // setter logic
     }
 
     // Public Getters and Setters
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public String getEmailUsername() {
+        return emailUsername;
     }
 
     public ArrayList<Child> getChildren() {
@@ -46,7 +46,7 @@ public class Parent extends User{
         return children;
     }
 
-    public int getProviderID() {
+    public String getProviderID() {
         return providerID;
     }
     // Note: addProvider(int) serves as the setter for providerID

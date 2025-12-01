@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.auth.SignOut;
+import com.example.myapplication.models.Child;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.chip.ChipGroup;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class ParentManagement extends AppCompatActivity {
     private ImageButton btnAddChild;
     private TextView tvEmptyState;
     private LinearLayout childrenCardsContainer;
-    private List<ChildData> childrenList;
+    private List<Child> childrenList;
     private SwitchMaterial doctorFilterSwitch;
     private ChipGroup doctorChipGroup;
     private BottomNavigationView bottomNavigationView;
@@ -63,6 +65,7 @@ public class ParentManagement extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.menuBar);
 
         // Initialize children list
+        // TODO what does this do?
         childrenList = new ArrayList<>();
 
         // Set up bottom navigation - ONLY if it exists
@@ -81,6 +84,7 @@ public class ParentManagement extends AppCompatActivity {
         if (btnAddChild != null) {
             btnAddChild.setOnClickListener(v -> {
                 Intent intent = new Intent(ParentManagement.this, ParentRegisterChild.class);
+                intent.putExtra("parentID", currentParentId);
                 startActivity(intent);
             });
         }
@@ -145,6 +149,7 @@ public class ParentManagement extends AppCompatActivity {
         }
     }
 
+    // TODO What does this do?
     private void loadChildren() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
@@ -170,14 +175,16 @@ public class ParentManagement extends AppCompatActivity {
                         for (DocumentSnapshot document : queryDocumentSnapshots) {
                             String childId = document.getId();
                             String childName = document.getString("name");
-                            String userId = document.getString("userId");
-                            String password = document.getString("password");  // ✅ ADDED - Retrieve password
-                            String email = document.getString("email");
+                            String id = document.getString("id");
+                            String username = document.getString("emailUsername");
                             String dob = document.getString("dateOfBirth");
                             String notes = document.getString("notes");
 
-                            ChildData childData = new ChildData(childId, childName, userId, password, email, dob, notes);
-                            childrenList.add(childData);
+                            Child child = new Child(childId, currentParentId, childName, username, "child");
+                            child.setDOB(dob);
+                            child.setNotes(notes);
+
+                            childrenList.add(child);
                         }
 
                         // Display children cards
@@ -209,7 +216,7 @@ public class ParentManagement extends AppCompatActivity {
 
         childrenCardsContainer.removeAllViews();
 
-        for (ChildData child : childrenList) {
+        for (Child child : childrenList) {
             try {
                 View cardView = LayoutInflater.from(this).inflate(
                         R.layout.activity_parent_childcard,
@@ -222,20 +229,20 @@ public class ParentManagement extends AppCompatActivity {
                 CardView childCard = cardView.findViewById(R.id.childCard);
 
                 if (tvChildName != null) {
-                    tvChildName.setText(child.name);
+                    tvChildName.setText(child.getName());
                 }
 
                 if (tvBirthday != null) {
-                    if (child.dob != null && !child.dob.isEmpty()) {
-                        tvBirthday.setText("Birthday: " + child.dob);
+                    if (child.getDateOfBirth() != null) {
+                        tvBirthday.setText("Birthday: " + child.getDateOfBirth());
                     } else {
                         tvBirthday.setText("Birthday: Not provided");
                     }
                 }
 
                 if (tvSpecialNote != null) {
-                    if (child.notes != null && !child.notes.isEmpty()) {
-                        tvSpecialNote.setText("Special Note: " + child.notes);
+                    if (child.getNotes() != null && !child.getNotes().isEmpty()) {
+                        tvSpecialNote.setText("Special Note: " + child.getNotes());
                     } else {
                         tvSpecialNote.setText("Special Note: None");
                     }
@@ -245,12 +252,13 @@ public class ParentManagement extends AppCompatActivity {
                 if (childCard != null) {
                     childCard.setOnClickListener(v -> {
                         Intent intent = new Intent(ParentManagement.this, ParentChildDetails.class);
-                        intent.putExtra("childId", child.id);
-                        intent.putExtra("childName", child.name);
-                        intent.putExtra("childUserId", child.userId);
-                        intent.putExtra("childPassword", child.password);  // ✅ ADDED - Pass password
-                        intent.putExtra("childBirthday", child.dob);
-                        intent.putExtra("childNote", child.notes);
+                        intent.putExtra("childId", child.getId());
+                        intent.putExtra("childName", child.getName());
+                        intent.putExtra("childUserId", child.getId());
+                        // TODO remove
+                        // intent.putExtra("childPassword", child.password);  // ✅ ADDED - Pass password
+                        intent.putExtra("childBirthday", child.getDateOfBirth());
+                        intent.putExtra("childNote", child.getNotes());
                         startActivity(intent);
                     });
                 }
@@ -272,25 +280,6 @@ public class ParentManagement extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
-    }
-
-    // Inner class to hold child data - UPDATED with password field
-    private static class ChildData {
-        String id;
-        String name;
-        String userId;
-        String password;
-        String dob;
-        String notes;
-
-        ChildData(String id, String name, String userId, String password, String email, String dob, String notes) {
-            this.id = id;
-            this.name = name;
-            this.userId = userId;
-            this.password = password;
-            this.dob = dob;
-            this.notes = notes;
         }
     }
 }

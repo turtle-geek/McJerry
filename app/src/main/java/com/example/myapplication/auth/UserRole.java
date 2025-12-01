@@ -21,11 +21,9 @@ import java.util.Map;
 import jp.wasabeef.blurry.Blurry;
 
 public class UserRole extends AppCompatActivity {
-
     private Button parentButton, doctorButton;
     private FirebaseAuth fAuth;
-    private FirebaseFirestore fStore;
-    private String userName, userEmail;
+    private String userName, userEmail, userPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +32,13 @@ public class UserRole extends AppCompatActivity {
 
         // Initialize Firebase
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
 
         // Get user info from Register activity
         Intent intent = getIntent();
         userName = intent.getStringExtra("userName");
         userEmail = intent.getStringExtra("userEmail");
+        userPassword = intent.getStringExtra("userPassword");
+
 
         // Initialize buttons
         parentButton = findViewById(R.id.parentButton);
@@ -60,28 +59,21 @@ public class UserRole extends AppCompatActivity {
     }
 
     private void saveUserRole(String role) {
+        AuthMan.signUp(userEmail, userPassword, userName, role, task -> {
+            if (!task.isSuccessful()) {
+                Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show();
+            }
+        });
         String userId = fAuth.getCurrentUser().getUid();
+        User user = AuthMan.createUserProfile(userId, userName, userEmail, role);
+        AuthMan.addToDatabase(user);
 
-        // Create user document in Firestore with selected role
-        Map<String, Object> user = new HashMap<>();
-        user.put("name", userName);
-        user.put("email", userEmail);
-        user.put("role", role);
+        Toast.makeText(UserRole.this,
+                "Welcome! Setting up your account...", Toast.LENGTH_SHORT).show();
 
-        fStore.collection("users").document(userId)
-                .set(user)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(UserRole.this,
-                            "Welcome! Setting up your account...", Toast.LENGTH_SHORT).show();
-
-                    // Navigate to MainActivity which will redirect to appropriate home page
-                    Intent intent = new Intent(UserRole.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(UserRole.this,
-                            "Failed to save role: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+        // Navigate to MainActivity which will redirect to appropriate home page
+        Intent intent = new Intent(UserRole.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

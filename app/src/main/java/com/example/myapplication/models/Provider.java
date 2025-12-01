@@ -10,9 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class Provider extends User{
     private final ArrayList<String> patients;
 
-    public Provider(String id, String name, String email) {
-        super(id, name);
-        this.email = email;
+    public Provider(String id, String name, String email, String role) {
+        super(id, name, role);
+        this.emailUsername = email;
         patients = new ArrayList<>(); // Using diamond operator
     }
 

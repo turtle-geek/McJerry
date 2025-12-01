@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -136,7 +137,7 @@ public class ChildHomeActivity extends AppCompatActivity {
 
         // Only get views that ACTUALLY EXIST in XML
         todayDate = findViewById(R.id.todayDate);
-        pefCard = findViewById(R.id.statusCard1);
+        pefCard = findViewById(R.id.pefCard);
         statusCard2 = findViewById(R.id.statusCard2);
         statusCard3 = findViewById(R.id.statusCard3);
         graphCard = findViewById(R.id.graphCard1);
@@ -241,6 +242,36 @@ public class ChildHomeActivity extends AppCompatActivity {
         }
     }
 
+    private void savePeakFlowToFirebase(int peakFlowValue, String zone) {
+        if (selectedChildId == null) {
+            Log.e(TAG, "Cannot save: selectedChildId is null");
+            return;
+        }
+
+        try {
+            // Create a map to store the peak flow data
+            java.util.HashMap<String, Object> peakFlowData = new java.util.HashMap<>();
+            peakFlowData.put("peakFlow", peakFlowValue);
+            peakFlowData.put("zone", zone);
+            peakFlowData.put("time", com.google.firebase.firestore.FieldValue.serverTimestamp());
+
+            // Save to Firebase
+            db.collection("users")
+                    .document(selectedChildId)
+                    .collection("peakFlowLogs")
+                    .add(peakFlowData)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.d(TAG, "Peak flow saved successfully: " + documentReference.getId());
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error saving peak flow", e);
+                        Toast.makeText(this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in savePeakFlowToFirebase", e);
+        }
+    }
+
     @SuppressLint("ScheduleExactAlarm")
     private void setListeners() {
         sosButton = findViewById(R.id.sosButton);
@@ -252,27 +283,66 @@ public class ChildHomeActivity extends AppCompatActivity {
         });
 
         pefButton.setOnClickListener(v -> {
+            // Hide button and show edit field
+            pefButton.setVisibility(View.GONE);
             editPEF.setVisibility(View.VISIBLE);
-            TextView editTextNumber = findViewById(R.id.editTextNumber);
-            editTextNumber.setOnFocusChangeListener((view, hasFocus) -> {
-                if (editTextNumber.hasFocus()) {
-                    // Uh;
-                } else {
-                    String text = editTextNumber.getText().toString();
-                    int peakFlowValue;
-                    if (!text.isEmpty()) {
-                        peakFlowValue = Integer.parseInt(text);
-                        LocalDateTime submitTime = null;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            submitTime = LocalDateTime.now();
-                        }
 
-                        if (submitTime != null) {
-                            PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
-                            pef.computeZone(currentChild);
-                            hp.addPEFToLog(pef);
+            EditText editTextNumber = findViewById(R.id.editTextNumber);
+
+            // Request focus so keyboard appears
+            editTextNumber.requestFocus();
+
+            editTextNumber.setOnFocusChangeListener((view, hasFocus) -> {
+                if (!hasFocus) {
+                    // User finished entering data
+                    String text = editTextNumber.getText().toString();
+
+                    if (!text.isEmpty()) {
+                        try {
+                            int peakFlowValue = Integer.parseInt(text);
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                LocalDateTime submitTime = LocalDateTime.now();
+                                PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
+
+                                // Calculate zone based on personal best
+                                if (peakFlowValue >= 0.8 * selectedChildPersonalBest) {
+                                    pef.setZone("green");
+                                } else if (peakFlowValue >= 0.5 * selectedChildPersonalBest) {
+                                    pef.setZone("yellow");
+                                } else {
+                                    pef.setZone("red");
+                                }
+
+                                // Update UI immediately
+                                updatePeakFlowUI(pef);
+
+                                // Save to Firebase
+                                if (selectedChildId != null) {
+                                    savePeakFlowToFirebase(peakFlowValue, pef.getZone());
+                                }
+
+                                // Update local data if available
+                                if (currentChild != null && hp != null) {
+                                    hp.addPEFToLog(pef);
+                                }
+
+                                Toast.makeText(ChildHomeActivity.this,
+                                        "Peak flow recorded: " + peakFlowValue,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(ChildHomeActivity.this,
+                                    "Please enter a valid number",
+                                    Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Invalid number format", e);
                         }
                     }
+
+                    // Hide edit field and show button again
+                    editPEF.setVisibility(View.GONE);
+                    pefButton.setVisibility(View.VISIBLE);
+                    editTextNumber.setText(""); // Clear the field for next time
                 }
             });
         });
@@ -451,7 +521,6 @@ public class ChildHomeActivity extends AppCompatActivity {
                         return true;
 
                     } else if (id == R.id.moreButton) {
-                        // ✅ FIXED: Added curly braces
                         startActivity(new Intent(ChildHomeActivity.this, SignOut_child.class));
                         overridePendingTransition(0, 0);
                         finish();
@@ -481,8 +550,8 @@ public class ChildHomeActivity extends AppCompatActivity {
 
     private void setupCardListeners() {
         try {
-            if (statusCard1 != null) {
-                statusCard1.setOnClickListener(v ->
+            if (editPEF != null) {
+                editPEF.setOnClickListener(v ->
                         Toast.makeText(this, "Today's Status", Toast.LENGTH_SHORT).show());
             }
 

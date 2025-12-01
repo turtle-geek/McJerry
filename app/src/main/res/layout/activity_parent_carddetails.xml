@@ -113,7 +113,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Child Username"
+                        android:text="@string/child_userid"
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:paddingBottom="4dp"/>
@@ -122,7 +122,7 @@
                         android:id="@+id/tvUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Username"
+                        android:text="@string/account_username"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>

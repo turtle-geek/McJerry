@@ -105,7 +105,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Child UserID"
+                        android:text="@string/child_userid"
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:paddingBottom="4dp"/>
@@ -114,7 +114,7 @@
                         android:id="@+id/tvUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Account Username"
+                        android:text="@string/account_username"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
@@ -239,15 +239,6 @@
                         android:textColor="#333333"
                         android:paddingStart="28dp"/>
 
-                    <TextView
-                        android:id="@+id/tvAge"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Age: 0 years old"
-                        android:textSize="14sp"
-                        android:textColor="#757575"
-                        android:paddingStart="28dp"
-                        android:paddingTop="4dp"/>
 
                 </LinearLayout>
 

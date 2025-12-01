@@ -45,4 +45,6 @@
     <string name="children_management">Children Management</string>
     <string name="legalName">Legal Name</string>
     <string name="legal_name">Legal Name</string>
+    <string name="account_username">Account Username</string>
+    <string name="child_userid">Child UserID</string>
 </resources>

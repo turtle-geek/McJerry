@@ -14,7 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ParentChildDetails extends AppCompatActivity {
 
     private TextView tvLegalName;
-    private TextView tvUserID;
+    private TextView tvUsername;
     private TextView tvUserEmail;
     private TextView tvChildPassword;
     private TextView tvDetailBirthday;
@@ -34,7 +34,7 @@ public class ParentChildDetails extends AppCompatActivity {
         tvUserEmail = findViewById(R.id.tvUserEmail);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
-        tvUserID = findViewById(R.id.tvUserID);
+        tvUsername = findViewById(R.id.tvUsername);
         tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
@@ -54,8 +54,8 @@ public class ParentChildDetails extends AppCompatActivity {
             tvLegalName.setText(childName != null ? childName : "Unknown");
         }
 
-        if (tvUserID != null) {
-            tvUserID.setText(tvUserEmail != null ? childEmail : "Not set");
+        if (tvUsername != null) {
+            tvUsername.setText(tvUserEmail != null ? childEmail : "Not set");
         }
 
         if (tvDetailBirthday != null) {
@@ -67,8 +67,8 @@ public class ParentChildDetails extends AppCompatActivity {
             tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
         }
 
-        if (tvUserID != null) {
-            tvUserID.setText(childUserId != null ? childUserId : "Not set");
+        if (tvUsername != null) {
+            tvUsername.setText(childId != null ? childId : "Not set");
         }
 
         if (tvChildPassword != null) {

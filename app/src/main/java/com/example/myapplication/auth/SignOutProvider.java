@@ -28,6 +28,8 @@ import com.example.myapplication.ui.ChildUI.TriageAndResponse.HomeStepsRecovery;
 import com.example.myapplication.ui.Inventory.InventoryUsage;
 import com.example.myapplication.ui.ParentUI.ParentHomeActivity;
 import com.example.myapplication.ui.ParentUI.ParentManagement;
+import com.example.myapplication.ui.ProviderUI.ProviderHomeActivity;
+import com.example.myapplication.ui.ProviderUI.ProviderManagement;
 import com.example.myapplication.ui.RedeemInviteActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;

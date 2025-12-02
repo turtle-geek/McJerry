@@ -252,6 +252,9 @@ public class ChildHomeActivity extends AppCompatActivity {
         // Only get views that ACTUALLY EXIST in XML
         todayDate = findViewById(R.id.todayDate);
         pefCard = findViewById(R.id.pefCard);
+        statusCard1 = findViewById(R.id.statusCard1);
+        statusCard2 = findViewById(R.id.statusCard2);
+        statusCard3 = findViewById(R.id.statusCard3);
         graphCard1 = findViewById(R.id.graphCard1);
         graphCard2 = findViewById(R.id.graphCard2);
         bottomNavigationView = findViewById(R.id.menuBar);
@@ -713,6 +716,19 @@ public class ChildHomeActivity extends AppCompatActivity {
                         Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
+                    intent.putExtra("childId", selectedChildId);
+                    startActivity(intent);
+                });
+            }
+
+            if (graphCard1 != null) {
+                graphCard1.setOnClickListener(v ->
+                        Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show());
+            }
+
+            if (graphCard2 != null) {
+                graphCard2.setOnClickListener(v -> {
                     Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
                     intent.putExtra("childId", selectedChildId);
                     startActivity(intent);

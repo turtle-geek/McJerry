@@ -25,16 +25,32 @@ public class Badges {
         this.controllerStreakThreshold = threshold;
     }
 
+    public int getControllerStreakThreshold() {
+        return controllerStreakThreshold;
+    }
+
     public void setTechniqueStreakThreshold(int threshold) {
         this.techniqueStreakThreshold = threshold;
+    }
+
+    public int getTechniqueStreakThreshold() {
+        return techniqueStreakThreshold;
     }
 
     public void setRescueCountThreshold(int threshold) {
         this.rescueCountThreshold = threshold;
     }
 
+    public int getRescueCountThreshold() {
+        return rescueCountThreshold;
+    }
+
     public void setStreakCount(StreakCount streakCount) {
         this.streakCount = streakCount;
+    }
+
+    public StreakCount getStreakCount() {
+        return streakCount;
     }
 
     public boolean isControllerBadge() {

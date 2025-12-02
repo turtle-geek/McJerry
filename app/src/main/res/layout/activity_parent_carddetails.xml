@@ -457,7 +457,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Set PB Section -->
+            <!-- Sharing Health Information Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -508,6 +508,22 @@
                         tools:ignore="MissingConstraints" />
 
             </LinearLayout>
+                            android:text="Share Health Information with Provider"
+                            android:textSize="14sp"
+                            android:textColor="#757575"/>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnShareHealthInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Share Health Information"
+                        android:backgroundTint="#064200"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

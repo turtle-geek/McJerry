@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import com.example.myapplication.health.*;
-        import com.example.myapplication.models.*;
-        import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.models.*;
+import com.google.firebase.firestore.FirebaseFirestore;
 import android.util.Log;
 
 public class InventoryUsage extends AppCompatActivity {
@@ -124,12 +124,37 @@ public class InventoryUsage extends AppCompatActivity {
         btnSaveMedicine.setOnClickListener(v -> {
             Log.d(TAG, "Save button clicked");
 
-            // Add null check for child
-            if (child == null) {
-                Log.e(TAG, "Child not loaded yet!");
-                android.widget.Toast.makeText(this, "Please wait, loading data...", android.widget.Toast.LENGTH_SHORT).show();
-                return;
-            }
+            double amount = Double.parseDouble(etDosage.getText().toString());
+
+            TechniqueQuality quality =
+                    (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
+
+            boolean success = child.getInventory().useMedicine(label, amount, timestamp.toString());
+
+            if (success) {
+                child.getStreakCount().countStreaks();
+                db.collection("users").document(childId)
+                        .set(child)
+                        .addOnSuccessListener(aVoid -> {
+                            setResult(RESULT_OK);
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle error
+                            android.widget.Toast.makeText(this, "Failed to save usage", android.widget.Toast.LENGTH_SHORT).show();
+                        });
+
+                // Get the medicine item and dosage for passing to next activities
+                InventoryItem medicineItem = child.getInventory().getMedicine(label);
+
+                setResult(RESULT_OK);
+
+                //Navigate to technique help page (tutorial) with medicine details
+                Intent tutorialIntent = new Intent(InventoryUsage.this, ParentTutorial.class);
+                tutorialIntent.putExtra("medicineLabel", label.toString());
+                tutorialIntent.putExtra("medicineName", medicineItem.toString());
+                tutorialIntent.putExtra("dosage", amount);
+                startActivity(tutorialIntent);
 
             try {
                 // Parse date and time

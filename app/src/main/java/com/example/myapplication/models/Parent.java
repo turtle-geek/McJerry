@@ -51,10 +51,18 @@ public class Parent extends User{
     }
     // Note: addProvider(int) serves as the setter for providerID
 
+    public ArrayList<SharedAccessInvite> getInvites() {
+        return invites;
+    }
+
+    public void setInvites(ArrayList<SharedAccessInvite> invites) {
+        this.invites = invites;
+    }
+
     // ----- Sharing invitation -----
 
-    public SharedAccessInvite generateInvite(String providerID, String childID, EnumSet<HealthInfo> sharedFields) {
-        SharedAccessInvite invite = new SharedAccessInvite(providerID, childID, sharedFields, 7);
+    public SharedAccessInvite generateInvite(String childID, ArrayList<HealthInfo> sharedFields) {
+        SharedAccessInvite invite = new SharedAccessInvite(childID, sharedFields, 7);
         invites.add(invite);
         return invite;
     }

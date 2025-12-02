@@ -1,11 +1,12 @@
 package com.example.myapplication.models;
 
 import com.example.myapplication.health.Chart;
+import com.example.myapplication.health.MedicineUsageLog;
 
 import java.util.ArrayList;
 
 public class HealthProfile {
-    private ArrayList<String> rescueLogs;
+    private MedicineUsageLog rescueLogs;
     private ArrayList<String> controllerAdherence;
     private ArrayList<String> symptoms;
     private ArrayList<String> triggers;
@@ -16,7 +17,7 @@ public class HealthProfile {
 
     // Default constructor
     public HealthProfile() {
-        rescueLogs = new ArrayList<>();
+        rescueLogs = new MedicineUsageLog();
         controllerAdherence = new ArrayList<>();
         symptoms = new ArrayList<>();
         triggers = new ArrayList<>();
@@ -27,16 +28,12 @@ public class HealthProfile {
 
     // Public Getters and Setters
 
-    public void setRescueLogs(ArrayList<String> rescueLogs) {
+    public void setRescueLogs(MedicineUsageLog rescueLogs) {
         this.rescueLogs = rescueLogs;
     }
 
-    public ArrayList<String> getRescueLogs() {
+    public MedicineUsageLog getRescueLogs() {
         return rescueLogs;
-    }
-
-    public void addRescueLog(String log) {
-        rescueLogs.add(log);
     }
 
     public void setControllerAdherence(ArrayList<String> adherence) {

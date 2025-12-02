@@ -7,130 +7,163 @@
     android:background="#E8F5E9"
     tools:context=".ui.TriageActivity">
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
-        android:layout_width="357dp"
-        android:layout_height="343dp"
-        android:layout_marginTop="20dp"
-        app:chipBackgroundColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/TriagePEF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RedFlagCheck"
-        app:layout_constraintVertical_bias="0.125">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Short breaths" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chest pain or tightness" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wheezing" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gasping for air" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nausea" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Difficulty speaking" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Severe sweating" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Symptoms worsen when lying on back" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="I don't have an inhaler" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="I used my inhaler within the past two hours" />
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <EditText
-        android:id="@+id/TriagePEF"
-        android:layout_width="301dp"
-        android:layout_height="48dp"
-        android:ems="10"
-        android:hint="(Optional) Enter current peak flow"
-        android:inputType="number"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="610dp" />
-
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
+    <!-- Container to center all content vertically -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Next"
-        android:backgroundTint="#064200"
-        android:textColor="@color/white"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="678dp" />
-
-    <TextView
-        android:id="@+id/RedFlagCheck"
-        android:layout_width="247dp"
-        android:layout_height="27dp"
-        android:text="@string/select_all_that_applies"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="204dp" />
-
-    <TextView
-        android:id="@+id/liabilityWarning"
-        android:layout_width="270dp"
-        android:layout_height="46dp"
-        android:text="Warning: This is guidance, not a diagnosis. If in doubt, call emergency"
-        tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="41dp" />
-
-    <ImageView
-        android:id="@+id/warningSymbol"
-        android:layout_width="42dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="147dp"
-        app:layout_constraintBottom_toTopOf="@+id/RedFlagCheck"
-        app:layout_constraintEnd_toStartOf="@+id/liabilityWarning"
-        app:layout_constraintHorizontal_bias="0.93"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/warning" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Warning Symbol -->
+        <ImageView
+            android:id="@+id/warningSymbol"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:contentDescription="Warning symbol"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/warning" />
+
+        <!-- Liability Warning Text -->
+        <TextView
+            android:id="@+id/liabilityWarning"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="Warning: This is guidance, not a diagnosis. If in doubt, call emergency"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/warningSymbol"
+            app:layout_constraintTop_toTopOf="@+id/warningSymbol"
+            app:layout_constraintBottom_toBottomOf="@+id/warningSymbol" />
+
+        <!-- Red Flag Check Header -->
+        <TextView
+            android:id="@+id/RedFlagCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/select_all_that_applies"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/warningSymbol" />
+
+        <!-- Chip Group for Symptoms -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
+            app:chipBackgroundColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/RedFlagCheck">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Short breaths" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chest pain or tightness" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wheezing" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gasping for air" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nausea" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Difficulty speaking" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Severe sweating" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Symptoms worsen when lying on back" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I don't have an inhaler" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I used my inhaler within the past two hours" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Peak Flow Input -->
+        <EditText
+            android:id="@+id/TriagePEF"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="(Optional) enter current peak flow"
+            android:inputType="number"
+            android:padding="12dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup" />
+
+        <!-- Next Button -->
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#064200"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:text="Next"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TriagePEF" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

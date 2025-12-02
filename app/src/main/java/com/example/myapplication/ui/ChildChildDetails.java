@@ -58,7 +58,7 @@ public class ChildChildDetails extends AppCompatActivity {
         tvUserEmail = findViewById(R.id.tvUserEmail);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
-        tvUserID = findViewById(R.id.tvUserID);
+        tvUserID = findViewById(R.id.tvUsername);
         tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
     }

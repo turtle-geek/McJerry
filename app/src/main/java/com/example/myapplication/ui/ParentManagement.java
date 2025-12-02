@@ -254,7 +254,6 @@ public class ParentManagement extends AppCompatActivity {
                         Intent intent = new Intent(ParentManagement.this, ParentChildDetails.class);
                         intent.putExtra("childId", child.getId());
                         intent.putExtra("childName", child.getName());
-                        intent.putExtra("childUserId", child.getId());
                         // TODO remove
                         // intent.putExtra("childPassword", child.password);  // ✅ ADDED - Pass password
                         intent.putExtra("childBirthday", child.getDateOfBirth());

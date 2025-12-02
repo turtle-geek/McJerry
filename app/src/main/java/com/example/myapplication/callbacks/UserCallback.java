@@ -1,4 +1,4 @@
-package com.example.myapplication.auth;
+package com.example.myapplication.callbacks;
 
 import com.example.myapplication.models.User;
 

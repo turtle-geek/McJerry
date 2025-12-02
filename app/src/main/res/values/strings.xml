@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="email_address_name">Email Address</string>
+    <string name="email_address_name">Email/Username</string>
     <string name="welcome_to_mcjerry">Welcome to McJerry</string>
     <string name="password">Password</string>
     <string name="remember_me">Remember me</string>
@@ -45,4 +45,6 @@
     <string name="children_management">Children Management</string>
     <string name="legalName">Legal Name</string>
     <string name="legal_name">Legal Name</string>
+    <string name="account_username">Account Username</string>
+    <string name="child_userid">Child UserID</string>
 </resources>

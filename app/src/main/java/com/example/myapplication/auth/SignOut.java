@@ -197,24 +197,42 @@ public class SignOut extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String name = documentSnapshot.getString("name");
-                        String email = documentSnapshot.getString("email");
+                        // **FIXED:** Fetching the email using the custom 'emailUsername' key
+                        String email = documentSnapshot.getString("emailUsername");
 
-                        // Update UI
-                        if (name != null && userNameText != null) {
+                        // Update userNameText
+                        if (name != null && !name.isEmpty() && userNameText != null) {
                             userNameText.setText(name);
+                        } else if (userNameText != null) {
+                            userNameText.setText("Name not set");
                         }
 
-                        if (email != null && userEmailText != null) {
+                        // Update userEmailText
+                        if (email != null && !email.isEmpty() && userEmailText != null) {
                             userEmailText.setText(email);
+                        } else if (userEmailText != null) {
+                            userEmailText.setText("Email not available (Field: emailUsername missing)");
                         }
 
                         Log.d(TAG, "User info loaded: " + name);
+                    } else {
+                        // Handle case where user document doesn't exist
+                        if (userEmailText != null) {
+                            userEmailText.setText("User data missing");
+                        }
+                        if (userNameText != null) {
+                            userNameText.setText("User data missing");
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
+                    // Handle Firestore connection/read failure
                     Log.e(TAG, "Error loading user info", e);
                     if (userNameText != null) {
                         userNameText.setText("Error loading name");
+                    }
+                    if (userEmailText != null) {
+                        userEmailText.setText("Connection failed");
                     }
                 });
     }

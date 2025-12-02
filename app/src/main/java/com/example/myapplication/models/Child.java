@@ -14,7 +14,7 @@ import static com.example.myapplication.auth.AuthMan.addToDatabase;
 
 public class Child extends User{
 
-    final String parentID;
+    private String parentID;
     private String dateOfBirth;
     private String notes;
     private HealthProfile healthProfile;

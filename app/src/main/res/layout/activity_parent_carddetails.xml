@@ -113,16 +113,16 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Child UserID"
+                        android:text="@string/child_userid"
                         android:textSize="14sp"
                         android:textColor="#757575"
                         android:paddingBottom="4dp"/>
 
                     <TextView
-                        android:id="@+id/tvUserID"
+                        android:id="@+id/tvUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Acount ID"
+                        android:text="@string/account_username"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
@@ -390,6 +390,7 @@
                             android:textSize="14sp"
                             android:textColor="#757575"/>
 
+
                     </LinearLayout>
 
                     <Button
@@ -476,18 +477,37 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:paddingBottom="4dp">
+                        android:paddingBottom="4dp"
+                        tools:ignore="MissingConstraints">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@android:drawable/ic_menu_share"
+                            android:contentDescription="wrench logo"
+                            android:src="@drawable/wrench"
                             tools:tint="#757575"
                             android:layout_marginEnd="8dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Set Peak Flow Personal Best"
+                            android:textColor="#757575"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/editPB"
+                        android:layout_width="122dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:autofillHints="Enter new Personal Best"
+                        android:ems="10"
+                        android:inputType="number"
+                        tools:ignore="MissingConstraints" />
+
+            </LinearLayout>
                             android:text="Share Health Information with Provider"
                             android:textSize="14sp"
                             android:textColor="#757575"/>

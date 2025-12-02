@@ -3,6 +3,7 @@ package com.example.myapplication.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,23 +11,24 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ParentChildDetails extends AppCompatActivity {
 
     private TextView tvLegalName;
-
     private TextView tvUserID;
-
     private TextView tvUserEmail;
     private TextView tvChildPassword;
     private TextView tvDetailBirthday;
     private TextView tvDetailSpecialNote;
     private ImageButton btnBack;
     private ImageButton btnEdit;
+    private EditText editPB; 
+
     private Button btnViewMedicineInventory;
     private Button btnViewMedicalRecords;
     private Button btnViewProgressOverview;
-    private Button btnShareHealthInfo;
+    private Button btnShareHealthInfo; 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +40,20 @@ public class ParentChildDetails extends AppCompatActivity {
         tvUserEmail = findViewById(R.id.tvUserEmail);
         tvDetailBirthday = findViewById(R.id.tvDetailBirthday);
         tvDetailSpecialNote = findViewById(R.id.tvDetailSpecialNote);
-        tvUserID = findViewById(R.id.tvUserID);
+        tvUserID = findViewById(R.id.tvUsername); 
         tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
+        editPB = findViewById(R.id.editPB); 
+
         btnViewMedicineInventory = findViewById(R.id.btnViewMedicineInventory);
         btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
         btnViewProgressOverview = findViewById(R.id.btnViewProgressOverview);
-        btnShareHealthInfo = findViewById(R.id.btnShareHealthInfo);
+        btnShareHealthInfo = findViewById(R.id.btnShareHealthInfo); 
 
         // Get data from intent
-        String childId = getIntent().getStringExtra("childId");
         String childName = getIntent().getStringExtra("childName");
-        String childUserId = getIntent().getStringExtra("childUserId");
+        String childId = getIntent().getStringExtra("childId");
         String childEmail = getIntent().getStringExtra("childEmail");
         String childBirthday = getIntent().getStringExtra("childBirthday");
         String childNote = getIntent().getStringExtra("childNote");
@@ -61,21 +64,20 @@ public class ParentChildDetails extends AppCompatActivity {
             tvLegalName.setText(childName != null ? childName : "Unknown");
         }
 
-        if (tvUserID != null) {
-            tvUserID.setText(tvUserEmail != null ? childEmail : "Not set");
+        if (tvUserEmail != null) {
+            tvUserEmail.setText(childEmail != null ? childEmail : "Not set");
         }
 
         if (tvDetailBirthday != null) {
             tvDetailBirthday.setText(childBirthday != null ? childBirthday : "Not provided");
         }
 
-
         if (tvDetailSpecialNote != null) {
             tvDetailSpecialNote.setText(childNote != null && !childNote.isEmpty() ? childNote : "None");
         }
 
         if (tvUserID != null) {
-            tvUserID.setText(childUserId != null ? childUserId : "Not set");
+            tvUserID.setText(childId != null ? childId : "Not set");
         }
 
         if (tvChildPassword != null) {
@@ -120,16 +122,42 @@ public class ParentChildDetails extends AppCompatActivity {
             intent.putExtra("childId", childId);
             startActivityForResult(intent, 1);
         });
-
+        
         // Share Health Info button
-        btnShareHealthInfo.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ShareHealthProfileActivity.class);
-            intent.putExtra("childId", childId);
-            startActivityForResult(intent, 1);
-        });
+        if (btnShareHealthInfo != null) {
+            btnShareHealthInfo.setOnClickListener(v -> {
+                Intent intent = new Intent(this, ShareHealthProfileActivity.class);
+                intent.putExtra("childId", childId);
+                startActivityForResult(intent, 1);
+            });
+        }
+
+        // Personal Best (PB) update logic
+        if (editPB != null) {
+            editPB.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus) {
+                    String newPBText = editPB.getText().toString();
+                    if (!newPBText.isEmpty() && childId != null) {
+                        try {
+                            int newPB = Integer.parseInt(newPBText);
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("users").document(childId)
+                                    .update("PEF_PB", newPB)
+                                    .addOnSuccessListener(aVoid ->
+                                            Toast.makeText(this, "New PB set to " + newPB,
+                                                    Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(this, "Failed to update PB: " + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show());
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+        }
     }
-
-
 
     private String maskPassword(String password) {
         // Create a masked version of the password (show first 2 chars, rest as dots)
@@ -143,5 +171,4 @@ public class ParentChildDetails extends AppCompatActivity {
         }
         return masked.toString();
     }
-
 }

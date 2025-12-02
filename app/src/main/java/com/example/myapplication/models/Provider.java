@@ -9,7 +9,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Provider extends User{
     private final ArrayList<String> patients;
-
     public Provider(String id, String name, String email, String role) {
         super(id, name, role);
         this.emailUsername = email;

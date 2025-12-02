@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#E8F5E9">
 
-    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
             android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            tools:tint="@color/white"/>
+            tools:tint="@android:color/white"/>
 
         <TextView
             android:layout_width="0dp"
@@ -33,7 +32,7 @@
             android:text="Child Details"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:gravity="center"/>
 
         <ImageButton
@@ -43,7 +42,7 @@
             android:src="@android:drawable/ic_menu_edit"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Edit"
-            tools:tint="@color/white"/>
+            tools:tint="@android:color/white"/>
 
     </LinearLayout>
 
@@ -60,14 +59,13 @@
             android:padding="24dp">
 
 
-            <!-- Name Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,7 +100,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -137,7 +135,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +170,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -200,14 +198,13 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-            <!-- Birthday Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -251,14 +248,13 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Special Note Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -303,14 +299,13 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Medicine Inventory Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -347,21 +342,20 @@
                         android:layout_height="wrap_content"
                         android:text="View Medicine Inventory"
                         android:backgroundTint="#064200"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:layout_marginTop="8dp"/>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Medical History Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -399,21 +393,20 @@
                         android:layout_height="wrap_content"
                         android:text="View Medical Records"
                         android:backgroundTint="#064200"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:layout_marginTop="8dp"/>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Progress Overview Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -450,21 +443,20 @@
                         android:layout_height="wrap_content"
                         android:text="View Progress Overview"
                         android:backgroundTint="#064200"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:layout_marginTop="8dp"/>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Sharing Health Information Section -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@android:color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -477,8 +469,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:paddingBottom="4dp"
-                        tools:ignore="MissingConstraints">
+                        android:paddingBottom="4dp">
 
                         <ImageView
                             android:layout_width="20dp"
@@ -501,13 +492,48 @@
                         android:id="@+id/editPB"
                         android:layout_width="122dp"
                         android:layout_height="45dp"
-                        android:layout_weight="1"
                         android:autofillHints="Enter new Personal Best"
                         android:ems="10"
                         android:inputType="number"
+                        android:layout_marginStart="28dp"
                         tools:ignore="MissingConstraints" />
 
-            </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="4dp"
+                        tools:ignore="MissingConstraints">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_share"
+                            tools:tint="#757575"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="Share Icon"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Share Health Information with Provider"
                             android:textSize="14sp"
                             android:textColor="#757575"/>
@@ -520,7 +546,7 @@
                         android:layout_height="wrap_content"
                         android:text="Share Health Information"
                         android:backgroundTint="#064200"
-                        android:textColor="@color/white"
+                        android:textColor="@android:color/white"
                         android:layout_marginTop="8dp"/>
 
                 </LinearLayout>

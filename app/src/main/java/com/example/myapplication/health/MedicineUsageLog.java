@@ -196,13 +196,11 @@ public class MedicineUsageLog {
         String timestampText = getFormattedTimestamp();
 
         if (techniqueQuality == TechniqueQuality.NA) {
-            return "Medicine: " + (medicine != null ? medicine.toString() : "N/A") +
-                    ", Dosage: " + dosageAmount +
+            return "Dosage: " + dosageAmount +
                     ratingText +
                     ", Timestamp: " + timestampText;
         } else {
-            return "Medicine: " + (medicine != null ? medicine.toString() : "N/A") +
-                    ", Dosage: " + dosageAmount +
+            return "Dosage: " + dosageAmount +
                     ratingText +
                     ", Timestamp: " + timestampText +
                     ", Controller Quality: " + techniqueQuality;

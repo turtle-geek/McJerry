@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.example.myapplication.auth.AuthMan.addToDatabase;
+import static com.example.myapplication.auth.AuthManager.addToDatabase;
 
 public class Child extends User{
 

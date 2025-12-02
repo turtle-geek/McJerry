@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.auth.AuthMan;
+import com.example.myapplication.auth.AuthManager;
 import com.example.myapplication.models.Child;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;

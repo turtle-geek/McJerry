@@ -124,37 +124,12 @@ public class InventoryUsage extends AppCompatActivity {
         btnSaveMedicine.setOnClickListener(v -> {
             Log.d(TAG, "Save button clicked");
 
-            double amount = Double.parseDouble(etDosage.getText().toString());
-
-            TechniqueQuality quality =
-                    (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
-
-            boolean success = child.getInventory().useMedicine(label, amount, timestamp.toString());
-
-            if (success) {
-                child.getStreakCount().countStreaks();
-                db.collection("users").document(childId)
-                        .set(child)
-                        .addOnSuccessListener(aVoid -> {
-                            setResult(RESULT_OK);
-                            finish();
-                        })
-                        .addOnFailureListener(e -> {
-                            // Handle error
-                            android.widget.Toast.makeText(this, "Failed to save usage", android.widget.Toast.LENGTH_SHORT).show();
-                        });
-
-                // Get the medicine item and dosage for passing to next activities
-                InventoryItem medicineItem = child.getInventory().getMedicine(label);
-
-                setResult(RESULT_OK);
-
-                //Navigate to technique help page (tutorial) with medicine details
-                Intent tutorialIntent = new Intent(InventoryUsage.this, ParentTutorial.class);
-                tutorialIntent.putExtra("medicineLabel", label.toString());
-                tutorialIntent.putExtra("medicineName", medicineItem.toString());
-                tutorialIntent.putExtra("dosage", amount);
-                startActivity(tutorialIntent);
+            // Check if child data has been loaded before proceeding
+            if (child == null) {
+                Log.e(TAG, "Child data not loaded. Cannot save medicine usage.");
+                android.widget.Toast.makeText(this, "Please wait, loading data...", android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             try {
                 // Parse date and time
@@ -165,7 +140,7 @@ public class InventoryUsage extends AppCompatActivity {
                 double amount = Double.parseDouble(etDosage.getText().toString());
                 Log.d(TAG, "Parsed data - Date: " + date + ", Time: " + time + ", Amount: " + amount);
 
-                // Determine technique quality
+                // Determine technique quality (Logic kept from the merge conflict blocks)
                 TechniqueQuality quality =
                         (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
 
@@ -177,9 +152,6 @@ public class InventoryUsage extends AppCompatActivity {
 
                     // Update streak count
                     child.getStreakCount().countStreaks();
-
-                    // Get the medicine item for passing to next activities
-                    InventoryItem medicineItem = child.getInventory().getMedicine(label);
 
                     // Get proper medicine name
                     String medicineName = getMedicineName(label);
@@ -257,7 +229,7 @@ public class InventoryUsage extends AppCompatActivity {
         Log.d(TAG, "  Dosage: '" + dosageText + "' valid=" + dosageValid);
         Log.d(TAG, "  Child loaded: " + (child != null));
 
-        boolean isValid = dateValid && timeValid && dosageValid;
+        boolean isValid = dateValid && timeValid && dosageValid && (child != null);
 
         btnSaveMedicine.setEnabled(isValid);
         btnSaveMedicine.setAlpha(isValid ? 1.0f : 0.5f);
@@ -326,6 +298,7 @@ public class InventoryUsage extends AppCompatActivity {
                 (view, year, month, day) -> {
                     etDate.setText(String.format("%02d/%02d/%d", month + 1, day, year));
                     Log.d(TAG, "Date selected: " + etDate.getText().toString());
+                    updateSaveButtonState(); // Re-validate when date is set
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -341,6 +314,7 @@ public class InventoryUsage extends AppCompatActivity {
                 (view, hour, min) -> {
                     etTime.setText(String.format("%02d:%02d", hour, min));
                     Log.d(TAG, "Time selected: " + etTime.getText().toString());
+                    updateSaveButtonState(); // Re-validate when time is set
                 },
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),

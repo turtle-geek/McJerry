@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,29 +76,25 @@ public class ChildHomeActivity extends AppCompatActivity {
     private Button pefButton;
     private ConstraintLayout editPEF;
 
-    // FIX: Loading indicator
     private ProgressDialog progressDialog;
     private boolean isDataLoaded = false;
 
-    // FIX: Properly initialize prepostCheckPopup
     private View prepostCheckPopup;
 
-    // FIX: Use consistent variable name - only currentChild
     private Child currentChild;
 
-    // FIX: Medicine data from intent
     private String medicineLabel;
     private String medicineName;
     private double dosage;
 
-    // Trend Snippet
     private LinearLayout trendContainer;
     private TrendSnippet trendSnippet;
 
-    // Child data
     private HealthProfile hp;
     private String selectedChildId;
     private int selectedChildPersonalBest = 400;
+
+    // FIX: Removing statusCard1, statusCard2, statusCard3 as they do not exist in the XML
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +104,7 @@ public class ChildHomeActivity extends AppCompatActivity {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.homePage), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            return insets;
+            return WindowInsetsCompat.CONSUMED;
         });
 
         try {
@@ -118,44 +113,22 @@ public class ChildHomeActivity extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             db = FirebaseFirestore.getInstance();
 
-            // FIX: Get intent data for medicine rating
             retrieveIntentData();
-
-            // Initialize ONLY views that exist
             initializeViews();
-
-            // Set up bottom navigation
             setupBottomNavigation();
-
-            // Set current date
             setCurrentDate();
-
-            // Set up card listeners
             setupCardListeners();
-
-            // Setup trend snippet
             setupTrendSnippet();
-
-            // FIX: Show loading indicator BEFORE loading data
             showLoading("Loading your data...");
-
-            // FIX: Disable UI during loading
             disableInteractiveElements(true);
-
-            // Auto-load current child
             loadCurrentChildData();
-
-            // Set up listeners for buttons
             setListeners();
-
-            // FIX: Set up prepost check buttons
             setupPrePostCheckButtons();
 
             Log.d(TAG, "onCreate completed successfully");
 
         } catch (Exception e) {
             Log.e(TAG, "FATAL ERROR in onCreate", e);
-            e.printStackTrace();
             hideLoading();
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -163,9 +136,6 @@ public class ChildHomeActivity extends AppCompatActivity {
 
     // ==================== ANR PREVENTION METHODS ====================
 
-    /**
-     * FIX: Show loading indicator to prevent ANR
-     */
     private void showLoading(String message) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
@@ -178,9 +148,6 @@ public class ChildHomeActivity extends AppCompatActivity {
         isDataLoaded = false;
     }
 
-    /**
-     * FIX: Hide loading indicator
-     */
     private void hideLoading() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
@@ -188,9 +155,6 @@ public class ChildHomeActivity extends AppCompatActivity {
         isDataLoaded = true;
     }
 
-    /**
-     * FIX: Disable/enable interactive elements during loading
-     */
     private void disableInteractiveElements(boolean disable) {
         float alpha = disable ? 0.5f : 1.0f;
 
@@ -211,13 +175,11 @@ public class ChildHomeActivity extends AppCompatActivity {
             graphCard2.setAlpha(alpha);
         }
         if (bottomNavigationView != null) {
-            bottomNavigationView.setEnabled(!disable);
+            // Note: Enabling/disabling bottomNavigationView directly is complex, controlling via alpha/listener checks is safer
+            // bottomNavigationView.setEnabled(!disable);
         }
     }
 
-    /**
-     * FIX: Set timeout for loading operations
-     */
     private void setLoadingTimeout() {
         Handler timeoutHandler = new Handler(Looper.getMainLooper());
         timeoutHandler.postDelayed(() -> {
@@ -234,7 +196,6 @@ public class ChildHomeActivity extends AppCompatActivity {
 
     // ==================== ORIGINAL METHODS ====================
 
-    // FIX: New method to retrieve intent data
     private void retrieveIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -249,12 +210,10 @@ public class ChildHomeActivity extends AppCompatActivity {
     private void initializeViews() {
         Log.d(TAG, "initializeViews started");
 
-        // Only get views that ACTUALLY EXIST in XML
+        // Initialize ONLY views that exist in XML
         todayDate = findViewById(R.id.todayDate);
         pefCard = findViewById(R.id.pefCard);
-        statusCard1 = findViewById(R.id.statusCard1);
-        statusCard2 = findViewById(R.id.statusCard2);
-        statusCard3 = findViewById(R.id.statusCard3);
+        // FIX: Removed statusCard1, statusCard2, statusCard3 as they are not in the provided XML
         graphCard1 = findViewById(R.id.graphCard1);
         graphCard2 = findViewById(R.id.graphCard2);
         bottomNavigationView = findViewById(R.id.menuBar);
@@ -264,24 +223,22 @@ public class ChildHomeActivity extends AppCompatActivity {
         pefButton = findViewById(R.id.pefButton);
         pefDateTime = findViewById(R.id.pefDateTime);
         sosButton = findViewById(R.id.sosButton);
-
-        // FIX: Initialize prepostCheckPopup
         prepostCheckPopup = findViewById(R.id.prepostCheckPopup);
 
-        editPEF.setVisibility(View.GONE);
+        if (editPEF != null) {
+            editPEF.setVisibility(View.GONE);
+        }
         if (prepostCheckPopup != null) {
             prepostCheckPopup.setVisibility(View.GONE);
         }
 
+        // Log statements for debugging
         Log.d(TAG, "todayDate: " + (todayDate != null ? "found" : "NULL"));
         Log.d(TAG, "bottomNavigationView: " + (bottomNavigationView != null ? "found" : "NULL"));
         Log.d(TAG, "trendContainer: " + (trendContainer != null ? "found" : "NULL"));
         Log.d(TAG, "prepostCheckPopup: " + (prepostCheckPopup != null ? "found" : "NULL"));
     }
 
-    /**
-     * FIX: Load child data with proper loading indicators and timeout
-     */
     private void loadCurrentChildData() {
         try {
             Log.d(TAG, "loadCurrentChildData started");
@@ -292,13 +249,15 @@ public class ChildHomeActivity extends AppCompatActivity {
                 Log.w(TAG, "No user logged in");
                 hideLoading();
                 disableInteractiveElements(false);
+                // Optionally redirect to login
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
                 return;
             }
 
             selectedChildId = currentUser.getUid();
             Log.d(TAG, "Loading data for child: " + selectedChildId);
 
-            // FIX: Set timeout
             setLoadingTimeout();
 
             db.collection("users").document(selectedChildId)
@@ -322,11 +281,9 @@ public class ChildHomeActivity extends AppCompatActivity {
                                 }
                             }
 
-                            // FIX: Hide loading and enable UI
                             hideLoading();
                             disableInteractiveElements(false);
 
-                            // FIX: Show popup if we came from medicine activity
                             if (medicineLabel != null) {
                                 showPrePostCheckPopup();
                             }
@@ -395,38 +352,34 @@ public class ChildHomeActivity extends AppCompatActivity {
 
             bottomNavigationView.setSelectedItemId(R.id.homeButton);
 
-            bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    int id = item.getItemId();
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+                int id = item.getItemId();
 
-                    if (id == R.id.homeButton) {
-                        return true;
+                if (id == R.id.homeButton) {
+                    return true;
 
-                    } else if (id == R.id.fileButton) {
-                        startActivity(new Intent(ChildHomeActivity.this, ChildManagement.class));
-                        overridePendingTransition(0, 0);
-                        finish();
-                        return true;
+                } else if (id == R.id.fileButton) {
+                    startActivity(new Intent(ChildHomeActivity.this, ChildManagement.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
 
-                    } else if (id == R.id.nav_profile) {
-                        startActivity(new Intent(ChildHomeActivity.this, HomeStepsRecovery.class));
-                        overridePendingTransition(0, 0);
-                        finish();
-                        return true;
+                } else if (id == R.id.nav_profile) {
+                    startActivity(new Intent(ChildHomeActivity.this, HomeStepsRecovery.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
 
-                    } else if (id == R.id.moreButton) {
-                        startActivity(new Intent(ChildHomeActivity.this, SignOut_child.class));
-                        overridePendingTransition(0, 0);
-                        finish();
-                        return true;
-                    }
-                    return false;
+                } else if (id == R.id.moreButton) {
+                    startActivity(new Intent(ChildHomeActivity.this, SignOut_child.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
                 }
+                return false;
             });
         } catch (Exception e) {
             Log.e(TAG, "Error setting up navigation", e);
-            e.printStackTrace();
         }
     }
 
@@ -442,50 +395,57 @@ public class ChildHomeActivity extends AppCompatActivity {
     }
 
     private void updatePeakFlowUI(PeakFlow todayPeakFlow) {
-        pefDisplay.setText(String.valueOf(todayPeakFlow.getPeakFlow()));
+        if (pefDisplay != null) {
+            pefDisplay.setText(String.valueOf(todayPeakFlow.getPeakFlow()));
+        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (pefDateTime != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a, MMM d");
             pefDateTime.setText(todayPeakFlow.getTime().format(formatter));
         }
 
-        switch (todayPeakFlow.getZone()) {
-            case "green":
-                pefCard.setCardBackgroundColor(Color.parseColor("#008000"));
-                break;
-            case "yellow":
-                pefCard.setCardBackgroundColor(Color.parseColor("#FFD700"));
-                break;
-            case "red":
-                pefCard.setCardBackgroundColor(Color.parseColor("#FF0000"));
-                break;
+        if (pefCard != null) {
+            // NOTE: The XML uses YELLOW for the default PEF card background.
+            // The code sets the background based on the zone.
+            switch (todayPeakFlow.getZone()) {
+                case "green":
+                    pefCard.setCardBackgroundColor(Color.parseColor("#008000")); // Green
+                    break;
+                case "yellow":
+                    pefCard.setCardBackgroundColor(Color.parseColor("#FFD700")); // Yellow
+                    break;
+                case "red":
+                    pefCard.setCardBackgroundColor(Color.parseColor("#FF0000")); // Red
+                    break;
+            }
         }
     }
 
     @SuppressLint("ScheduleExactAlarm")
     private void setListeners() {
-        sosButton.setOnClickListener(v -> {
-            // FIX: Check if data is loaded
-            if (!isDataLoaded || currentChild == null) {
-                Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Intent intent = new Intent(this, TriageActivity.class);
-            intent.putExtra("childId", selectedChildId);
-            startActivity(intent);
-        });
+        if (sosButton != null) {
+            sosButton.setOnClickListener(v -> {
+                if (!isDataLoaded || currentChild == null) {
+                    Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(this, TriageActivity.class);
+                intent.putExtra("childId", selectedChildId);
+                startActivity(intent);
+            });
+        }
 
-        pefButton.setOnClickListener(v -> {
-            // FIX: Check if data is loaded
-            if (!isDataLoaded || currentChild == null) {
-                Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            editPEF.setVisibility(View.VISIBLE);
-            pefButton.setVisibility(View.GONE);
-        });
+        if (pefButton != null && editPEF != null) {
+            pefButton.setOnClickListener(v -> {
+                if (!isDataLoaded || currentChild == null) {
+                    Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                editPEF.setVisibility(View.VISIBLE);
+                pefButton.setVisibility(View.GONE);
+            });
+        }
 
-        // Handle PEF input - automatically save when user presses Done/Enter
         EditText peakFlowInput = findViewById(R.id.editTextNumber);
         if (peakFlowInput != null) {
             peakFlowInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
@@ -499,11 +459,10 @@ public class ChildHomeActivity extends AppCompatActivity {
         EditText editTextNumber = findViewById(R.id.editTextNumber);
         String text = editTextNumber.getText().toString().trim();
 
-        // FIX: Check if data is loaded
         if (!isDataLoaded || currentChild == null || hp == null) {
             Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-            editPEF.setVisibility(View.GONE);
-            pefButton.setVisibility(View.VISIBLE);
+            if (editPEF != null) editPEF.setVisibility(View.GONE);
+            if (pefButton != null) pefButton.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -526,12 +485,11 @@ public class ChildHomeActivity extends AppCompatActivity {
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
-            editPEF.setVisibility(View.GONE);
-            pefButton.setVisibility(View.VISIBLE);
+            if (editPEF != null) editPEF.setVisibility(View.GONE);
+            if (pefButton != null) pefButton.setVisibility(View.VISIBLE);
         }
     }
 
-    // FIX: Properly structured setupPrePostCheckButtons method
     private void setupPrePostCheckButtons() {
         ImageButton betterBtn = findViewById(R.id.better);
         ImageButton sameBtn = findViewById(R.id.same);
@@ -557,25 +515,21 @@ public class ChildHomeActivity extends AppCompatActivity {
         }
     }
 
-    // FIX: New method to show popup
     private void showPrePostCheckPopup() {
         if (prepostCheckPopup != null) {
             prepostCheckPopup.setVisibility(View.VISIBLE);
 
-            // Optional: Blur background
             View mainContent = findViewById(R.id.homePage);
-            if (mainContent != null) {
+            if (mainContent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 Blurry.with(this).radius(25).sampling(2).onto((ViewGroup) mainContent);
             }
         }
     }
 
-    // FIX: New method to hide popup
     private void hidePrePostCheckPopup() {
         if (prepostCheckPopup != null) {
             prepostCheckPopup.setVisibility(View.GONE);
 
-            // Optional: Remove blur
             View mainContent = findViewById(R.id.homePage);
             if (mainContent != null) {
                 Blurry.delete((ViewGroup) mainContent);
@@ -583,7 +537,6 @@ public class ChildHomeActivity extends AppCompatActivity {
         }
     }
 
-    // FIX: Single, properly structured saveNewLogWithRating method
     private void saveNewLogWithRating(String rating) {
         if (currentChild == null) {
             Toast.makeText(this, "Error: Child data not loaded", Toast.LENGTH_SHORT).show();
@@ -598,7 +551,6 @@ public class ChildHomeActivity extends AppCompatActivity {
         try {
             MedicineLabel label = MedicineLabel.valueOf(medicineLabel);
 
-            // Get inventory item
             InventoryItem medicineItem = currentChild.getInventory().getMedicine(label);
 
             if (medicineItem == null) {
@@ -617,14 +569,12 @@ public class ChildHomeActivity extends AppCompatActivity {
                     rating
             );
 
-            // Add to appropriate log list
             if (label == MedicineLabel.CONTROLLER) {
                 currentChild.getInventory().getControllerLog().add(newLog);
             } else {
                 currentChild.getInventory().getRescueLog().add(newLog);
             }
 
-            // Save to Firebase
             saveChildToFirebase(rating);
 
         } catch (IllegalArgumentException e) {
@@ -633,7 +583,6 @@ public class ChildHomeActivity extends AppCompatActivity {
         }
     }
 
-    // FIX: New method to save child data to Firebase
     private void saveChildToFirebase(String rating) {
         if (selectedChildId == null || currentChild == null) {
             return;
@@ -660,8 +609,8 @@ public class ChildHomeActivity extends AppCompatActivity {
                 .update("healthProfile.PEF_LOG", hp.getPEFLog())
                 .addOnSuccessListener(aVoid -> {
                     displayTodayPeakFlow();
-                    editPEF.setVisibility(View.GONE);
-                    pefButton.setVisibility(View.VISIBLE);
+                    if (editPEF != null) editPEF.setVisibility(View.GONE);
+                    if (pefButton != null) pefButton.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Peak flow saved!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
@@ -676,7 +625,7 @@ public class ChildHomeActivity extends AppCompatActivity {
         long triggerTime = System.currentTimeMillis() + 10 * 60 * 1000; // 10 minutes
         Intent intent = new Intent(this, CheckupNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (alarmManager != null) {
@@ -698,20 +647,20 @@ public class ChildHomeActivity extends AppCompatActivity {
 
     private void setupCardListeners() {
         try {
+            // FIX: Removed duplicated listeners and kept the combined, complete logic.
             if (graphCard1 != null) {
                 graphCard1.setOnClickListener(v -> {
-                    // FIX: Check if data is loaded
                     if (!isDataLoaded) {
                         Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show();
+                    // TODO: Navigate to Daily Check-in Activity
                 });
             }
 
             if (graphCard2 != null) {
                 graphCard2.setOnClickListener(v -> {
-                    // FIX: Check if data is loaded
                     if (!isDataLoaded || selectedChildId == null) {
                         Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
                         return;
@@ -721,20 +670,6 @@ public class ChildHomeActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
             }
-
-            if (graphCard1 != null) {
-                graphCard1.setOnClickListener(v ->
-                        Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show());
-            }
-
-            if (graphCard2 != null) {
-                graphCard2.setOnClickListener(v -> {
-                    Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
-                    intent.putExtra("childId", selectedChildId);
-                    startActivity(intent);
-                });
-            }
-
         } catch (Exception e) {
             Log.e(TAG, "Error setting up card listeners", e);
         }
@@ -746,6 +681,7 @@ public class ChildHomeActivity extends AppCompatActivity {
 
         try {
             Log.d(TAG, "onResume called");
+            // Only reload PEF if data was initially loaded and child is available
             if (selectedChildId != null && isDataLoaded) {
                 loadPeakFlowData();
             }
@@ -757,7 +693,6 @@ public class ChildHomeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // FIX: Clean up progress dialog
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

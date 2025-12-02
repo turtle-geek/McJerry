@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.auth.SignOut;
+import com.example.myapplication.auth.SignOutProvider;
 import com.example.myapplication.health.HealthInfo;
 import com.example.myapplication.health.SharedAccessInvite;
 import com.example.myapplication.models.PeakFlow;

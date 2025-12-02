@@ -18,7 +18,6 @@
         android:contentDescription="@null"
         android:importantForAccessibility="no"/>
 
-    <!-- Top Bar -->
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -42,10 +41,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/mcjerry"
-            android:textSize="26sp"
+            android:text="McJerry" android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:fontFamily="times"
             android:gravity="center"
             android:paddingStart="16dp"
@@ -60,11 +58,10 @@
             android:scaleType="centerInside"
             android:padding="1dp"
             android:contentDescription="Notifications"
-            app:tint="@color/white"/>
+            app:tint="@android:color/white"/>
 
     </LinearLayout>
 
-    <!-- Child Selector Bar  -->
     <androidx.cardview.widget.CardView
         android:id="@+id/childSelectorCard"
         android:layout_width="match_parent"
@@ -133,7 +130,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Today Header  -->
     <LinearLayout
         android:id="@+id/todayHeader"
         android:layout_width="match_parent"
@@ -152,9 +148,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/today"
-            android:textSize="20sp"
-            android:textColor="@color/black"/>
+            android:text="Today" android:textSize="20sp"
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/todayDate"
@@ -164,11 +159,10 @@
             android:textStyle="bold"
             android:text="Nov 15, 2025"
             android:textSize="16sp"
-            android:textColor="@color/black"/>
+            android:textColor="@android:color/black"/>
 
     </LinearLayout>
 
-    <!-- Horizontal Scrollable Status Containers (statusScrollView is defined here) -->
     <HorizontalScrollView
         android:id="@+id/statusScrollView"
         android:layout_width="match_parent"
@@ -243,7 +237,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Status Card 2 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/statusCard2"
                 android:layout_width="300dp"
@@ -266,8 +259,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/last_rescue_time"
-                        android:textSize="16sp"
+                        android:text="Last Rescue Time" android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
 
@@ -282,7 +274,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Status Card 3 -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/statusCard3"
                 android:layout_width="300dp"
@@ -304,8 +295,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/weekly_rescue_time"
-                        android:textSize="16sp"
+                        android:text="Weekly Rescue Count" android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#064200"/>
 
@@ -323,7 +313,6 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Scrollable Details View (Now correctly constrained AFTER statusScrollView is defined) -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -338,7 +327,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Graph Cards Container -->
             <LinearLayout
                 android:id="@+id/graphContainer"
                 android:layout_width="match_parent"
@@ -347,7 +335,6 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <!-- Graph Card 2: Peak Flow Log (FULL WIDTH) -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/graphCard2"
                     android:layout_width="match_parent"
@@ -370,8 +357,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/medicine_details"
-                            android:textSize="16sp"
+                            android:text="Medicine Details" android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#064200"
                             android:gravity="center"/>
@@ -408,7 +394,7 @@
         android:background="#064200"
         app:itemBackground="@drawable/circle_background"
         app:itemIconTint="#8A90A5"
-        app:itemTextColor="@color/white"
+        app:itemTextColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

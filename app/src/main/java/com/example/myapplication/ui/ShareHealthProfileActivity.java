@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
+
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 public class ShareHealthProfileActivity extends BaseParentActivity {
@@ -121,7 +123,7 @@ public class ShareHealthProfileActivity extends BaseParentActivity {
     }
 
     private void generateAndSaveInvite() {
-        EnumSet<HealthInfo> sharedFields = EnumSet.noneOf(HealthInfo.class);
+        ArrayList<HealthInfo> sharedFields = new ArrayList<>();
 
         if (toggleRescueLogs.isChecked()) sharedFields.add(HealthInfo.RESCUE_LOGS);
         if (toggleControllerAdherence.isChecked()) sharedFields.add(HealthInfo.CONTROLLER_ADHERENCE);
@@ -144,8 +146,9 @@ public class ShareHealthProfileActivity extends BaseParentActivity {
 
     private void saveParentToFirestore(SharedAccessInvite invite) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = mAuth.getCurrentUser().getUid();
 
-        db.collection("users").document(currentParent.getId())
+        db.collection("users").document(userId)
                 .set(currentParent)
                 .addOnSuccessListener(aVoid -> showInviteCodeDialog(invite.getInviteCode()))
                 .addOnFailureListener(e ->

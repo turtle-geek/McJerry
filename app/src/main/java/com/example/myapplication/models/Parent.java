@@ -12,7 +12,11 @@ public class Parent extends User{
     private ArrayList<SharedAccessInvite> invites;
     static int idChildModifier;
 
-    public Parent(){}
+    public Parent() {
+        super();
+        this.children = new ArrayList<>();
+        this.invites = new ArrayList<>();
+    }
 
     public Parent(String id, String name, String emailUsername, String role) {
         super(id, name, role);
@@ -51,9 +55,17 @@ public class Parent extends User{
     }
     // Note: addProvider(int) serves as the setter for providerID
 
+    public ArrayList<SharedAccessInvite> getInvites() {
+        return invites;
+    }
+
+    public void setInvites(ArrayList<SharedAccessInvite> invites) {
+        this.invites = invites;
+    }
+
     // ----- Sharing invitation -----
 
-    public SharedAccessInvite generateInvite(String childID, EnumSet<HealthInfo> sharedFields) {
+    public SharedAccessInvite generateInvite(String childID, ArrayList<HealthInfo> sharedFields) {
         SharedAccessInvite invite = new SharedAccessInvite(childID, sharedFields, 7);
         invites.add(invite);
         return invite;

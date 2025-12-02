@@ -1,7 +1,5 @@
 package com.example.myapplication.ui;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,12 +20,9 @@ import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
 import com.example.myapplication.models.User;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
-public class PeakFlowInput extends BaseChildActivity {
+public class PeakFlowInput extends AppCompatActivity {
     ImageButton sosButton;
     TextView pbDisplay;
     EditText peakFlowInput;
@@ -37,113 +32,78 @@ public class PeakFlowInput extends BaseChildActivity {
     TextView pefDateTime;
     Button newPEFButton;
 
-    View inputLayout, zoneLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Make sure only a child can see this screen
+        User currentUser = SessionManager.getInstance().getCurrentUser();
+        if (!(currentUser instanceof Child)){
+            // tk: redirect to a different page
+            // Option 1: finish this activity and go to a generic home
+            //  finish();
+            // Optional 2: start another activity
+            //  startActivity(new Intent(this, GenericHomeActivity.class));
+            //  return;
+        }
+        Child child = (Child)currentUser;
+        HealthProfile hp = child.getHealthProfile();
+
         // make layout extend under system bars
         EdgeToEdge.enable(this);
         // load XML
         setContentView(R.layout.activity_peak_flow_tracker);
+
+        sosButton = findViewById(R.id.sosButton);
+        sosButton.setOnClickListener(v -> {
+            // tk
+            // take user to triage screen
+        });
+
+        pbDisplay = findViewById(R.id.pbDisplay);
+        pbDisplay.setText("Personal Best: " + hp.getPEF_PB());
+
+        peakFlowInput = findViewById(R.id.peakFlowInput);
+        submitButton = findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(v -> {
+            final String text = peakFlowInput.getText().toString();
+            if (!text.isEmpty()) {
+                int peakFlowValue = Integer.parseInt(text);
+                LocalDateTime submitTime = LocalDateTime.now();
+
+                PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
+                hp.addPEFToLog(pef);
+                String zone = pef.computeZone(child);
+
+                // switch screen based on zone
+                // Hide input layout
+                findViewById(R.id.inputLayout).setVisibility(View.GONE);
+                // Show zone layout
+                pefDisplay = findViewById(R.id.pefDisplay);
+                pefDisplay.setText(peakFlowValue);
+                zoneDisplay = findViewById(R.id.zoneDisplay);
+                zoneDisplay.setText(zone);
+                pefDateTime = findViewById(R.id.pefDateTime);
+                pefDateTime.setText(submitTime.toString()); // format might be off
+
+                findViewById(R.id.zoneLayout).setVisibility(View.VISIBLE);
+            }
+        });
+        newPEFButton = findViewById(R.id.newPEFButton);
+        newPEFButton.setOnClickListener(v -> {
+            // Show input layout
+            findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
+            // Hide zone layout
+            findViewById(R.id.zoneLayout).setVisibility(View.GONE);
+        });
+
         // Ensure content is not covered by the navigation bar
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        checkUserType();
-        bindViews();
-        setListeners();
-
-        int pb = hp.getPEF_PB();
-        String displayText = "Personal Best :" + pb;
-        pbDisplay.setText(displayText);
-
     }
 
-    void bindViews(){
-        sosButton = findViewById(R.id.sosButton);
-        pbDisplay = findViewById(R.id.pbDisplay);
-        peakFlowInput = findViewById(R.id.peakFlowInput);
-        submitButton = findViewById(R.id.submitButton);
-        newPEFButton = findViewById(R.id.newPEFButton);
-        pefDisplay = findViewById(R.id.pefDisplay);
-        zoneDisplay = findViewById(R.id.zoneDisplay);
-        pefDateTime = findViewById(R.id.pefDateTime);
-        inputLayout = findViewById(R.id.inputLayout);
-        zoneLayout = findViewById(R.id.zoneLayout);
-    }
 
-    void setListeners(){
-        sosButton.setOnClickListener(v ->
-                startActivity(new Intent(this, TriageActivity.class)));
-
-        submitButton.setOnClickListener(v -> submitPEF());
-
-        newPEFButton.setOnClickListener(v -> resetToInput());
-    }
-
-    void submitPEF(){
-        final String text = peakFlowInput.getText().toString();
-        if (!text.isEmpty()) {
-            peakFlowValue = Integer.parseInt(text);
-            LocalDateTime submitTime = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                submitTime = LocalDateTime.now();
-            }
-
-            if (submitTime != null){
-                PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
-
-                // CRITICAL FIX: Compute zone and SAVE it to the PeakFlow object
-                String zone = pef.computeZone(currentChild);
-                pef.setZone(zone);  // ← This was missing! The zone must be saved
-
-                // Now add to log with zone included
-                hp.addPEFToLog(pef);
-
-                // Display the zone screen
-                setZoneScreen(zone, submitTime);
-            }
-            else throw new RuntimeException("submitTime is null");
-        } else throw new RuntimeException("text is empty"); // should I throw here?
-    }
-
-    void setZoneScreen(String zone, LocalDateTime submitTime){
-        // Hide input layout
-        inputLayout.setVisibility(View.GONE);
-        zoneLayout.setVisibility(View.VISIBLE);
-
-        // Show zone layout
-        pefDisplay.setText(String.valueOf(peakFlowValue));
-        zoneDisplay.setText(zone);
-        pefDateTime.setText(formatDateTime(submitTime));
-
-    }
-
-    void resetToInput(){
-        // Clear the input field
-        peakFlowInput.setText("");
-
-        // Hide zone layout
-        findViewById(R.id.zoneLayout).setVisibility(View.GONE);
-        // Show input layout
-        findViewById(R.id.inputLayout).setVisibility(View.VISIBLE);
-    }
-
-    String formatDateTime(LocalDateTime time) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DateTimeFormatter formatter =
-                    DateTimeFormatter.ofPattern("h:mm a, MMM d");
-            return time.format(formatter);
-        } else {
-            // fallback for older devices
-            java.util.Date date = new java.util.Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a, MMM d",
-                    Locale.getDefault());
-            return sdf.format(date);
-        }
-    }
 }

@@ -337,6 +337,15 @@ public class ChildHomeActivity extends AppCompatActivity {
                 graphCard1.setOnClickListener(v ->
                         Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show());
             }
+
+            if (graphCard2 != null) {
+                graphCard2.setOnClickListener(v -> {
+                    Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
+                    intent.putExtra("childId", selectedChildId);
+                    startActivity(intent);
+                });
+            }
+
         } catch (Exception e) {
             Log.e(TAG, "Error setting up card listeners", e);
         }

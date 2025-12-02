@@ -98,6 +98,7 @@ public class SignOut_child extends AppCompatActivity {
         if (medicationHistoryCard != null) {
             medicationHistoryCard.setOnClickListener(v -> {
                 Intent intent = new Intent(SignOut_child.this, InventoryLog.class);
+                intent.putExtra("childId", currentUserId);
                 startActivity(intent);
             });
         }

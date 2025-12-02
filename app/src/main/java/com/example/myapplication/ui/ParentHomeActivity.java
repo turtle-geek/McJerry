@@ -68,15 +68,16 @@ public class ParentHomeActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         childrenList = new ArrayList<>();
 
-        parentUserId = getIntent().getStringExtra("id");
-        if (parentUserId == null) {
-            Log.e(TAG, "Parent User ID is missing from Intent. Redirecting to router.");
-            Toast.makeText(this, "Session error, please sign in.", Toast.LENGTH_LONG).show();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "User is not authenticated. Redirecting to router.");
+            Toast.makeText(this, "Session expired, please sign in.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
             return;
         }
+        parentUserId = currentUser.getUid();
 
         initializeViews();
 
@@ -118,8 +119,7 @@ public class ParentHomeActivity extends AppCompatActivity {
     }
 
     private void loadChildrenList() {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null || parentUserId == null) {
+        if (parentUserId == null) {
             Log.w(TAG, "Cannot load children: parentUserId is null.");
             return;
         }
@@ -373,15 +373,21 @@ public class ParentHomeActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     int id = item.getItemId();
 
+                    Intent intent;
+
                     if (id == R.id.homeButton) {
                         return true;
                     } else if (id == R.id.fileButton) {
-                        startActivity(new Intent(ParentHomeActivity.this, ParentManagement.class));
+                        // Navigation to ParentManagement (Child Management Screen)
+                        intent = new Intent(ParentHomeActivity.this, ParentManagement.class);
+                        intent.putExtra("id", parentUserId);
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
                         return true;
                     } else if (id == R.id.nav_profile) {
-                        startActivity(new Intent(ParentHomeActivity.this, ParentTutorial.class));
+                        intent = new Intent(ParentHomeActivity.this, Onboarding.class);
+                        startActivity(intent);
                         overridePendingTransition(0, 0);
                         finish();
                         return true;
@@ -454,7 +460,7 @@ public class ParentHomeActivity extends AppCompatActivity {
                 finish();
             }
 
-            if (parentUserId != null && childrenList.isEmpty()) {
+            if (childrenList.isEmpty()) {
                 loadChildrenList();
             }
 

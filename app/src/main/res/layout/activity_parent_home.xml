@@ -29,7 +29,6 @@
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- pf Button -->
         <ImageButton
             android:id="@+id/logo"
             android:layout_width="40dp"
@@ -52,7 +51,6 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"/>
 
-        <!-- remind Button -->
         <ImageButton
             android:id="@+id/bell"
             android:layout_width="40dp"
@@ -170,7 +168,7 @@
 
     </LinearLayout>
 
-    <!-- Horizontal Scrollable Status Containers -->
+    <!-- Horizontal Scrollable Status Containers (statusScrollView is defined here) -->
     <HorizontalScrollView
         android:id="@+id/statusScrollView"
         android:layout_width="match_parent"
@@ -189,7 +187,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- pefCard -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/pefCard"
                 android:layout_width="300dp"
@@ -200,13 +197,11 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFF00"> <!-- Colour varies based on zone -->
+                app:cardBackgroundColor="#FFFF00">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <TextView
@@ -217,29 +212,33 @@
                         android:textColor="#064200"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        tools:layout_editor_absoluteX="70dp"
-                        tools:layout_editor_absoluteY="-2dp" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/pefDisplay"
-                        android:layout_width="111dp"
-                        android:layout_height="33dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="80"
                         android:textAlignment="center"
                         android:textSize="30sp"
                         app:layout_constraintTop_toBottomOf="@+id/textView5"
-                        tools:layout_editor_absoluteX="83dp" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/pefDateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="3:07 PM Nov 15, 2025"
                         android:textColor="#666666"
                         android:textSize="14sp"
-                        tools:layout_editor_absoluteX="72dp"
-                        tools:layout_editor_absoluteY="65dp" />
+                        app:layout_constraintTop_toBottomOf="@+id/pefDisplay"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -324,7 +323,7 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Scrollable Details View -->
+    <!-- Scrollable Details View (Now correctly constrained AFTER statusScrollView is defined) -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -348,57 +347,12 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <!-- Graph Card 1: Daily Check-in -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/graphCard1"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="6dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="#ABFFFFFF">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="16dp"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Daily Check-in"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#064200"
-                            android:gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Track symptoms"
-                            android:textSize="13sp"
-                            android:textColor="#666666"
-                            android:gravity="center"
-                            android:layout_marginTop="8dp"/>
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Graph Card 2: Peak Flow Log -->
+                <!-- Graph Card 2: Peak Flow Log (FULL WIDTH) -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/graphCard2"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:layout_weight="1"
                     android:layout_marginTop="8dp"
-                    android:layout_marginStart="6dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
@@ -435,19 +389,16 @@
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/trendContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <!-- TrendSnippet will be added programmatically here -->
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

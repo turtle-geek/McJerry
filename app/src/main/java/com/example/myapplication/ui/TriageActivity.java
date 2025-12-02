@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.res.ColorStateList;
+import android.widget.RadioGroup;
+import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 
@@ -27,7 +30,10 @@ public class TriageActivity extends BaseChildActivity {
     ChipGroup chipGroup;
     Button nextButton;
 
-    // Peak Flow elements
+    RadioGroup rescueAttemptGroup;
+    RadioButton radioRescueYes;
+    RadioButton radioRescueNo;
+
     Slider triagePEFSlider;
     TextView tvPeakFlowValue;
     SwitchMaterial peakFlowToggleSwitch;
@@ -35,11 +41,11 @@ public class TriageActivity extends BaseChildActivity {
 
     int peakFlowValue = 74;
 
-    // Hex colors for manual control
     private static final int COLOR_CHIP_RED = 0xFFF44336;
     private static final int COLOR_CHIP_WHITE = 0xFFFFFFFF;
+    private static final int COLOR_CHIP_GREEN = 0xFF4CAF50;
+    private static final int COLOR_CHIP_DEFAULT_BACKGROUND = 0xFFE0E0E0;
 
-    // Slider Colors
     private static final int COLOR_SLIDER_GREEN = 0xFF064200;
     private static final int COLOR_SLIDER_LIGHT_GRAY = 0xFFE0E0E0;
 
@@ -53,12 +59,18 @@ public class TriageActivity extends BaseChildActivity {
         setupSlider();
         setupSliderColors();
         setupChipListeners();
+        setupRescueButtonListeners();
+
         nextButton.setOnClickListener(v -> redFlagCheck());
     }
 
     void bindViews(){
         chipGroup = findViewById(R.id.chipGroup);
         nextButton = findViewById(R.id.nextButton);
+
+        rescueAttemptGroup = findViewById(R.id.rescueAttemptGroup);
+        radioRescueYes = findViewById(R.id.radioRescueYes);
+        radioRescueNo = findViewById(R.id.radioRescueNo);
 
         triagePEFSlider = findViewById(R.id.TriagePEFSlider);
         tvPeakFlowValue = findViewById(R.id.tvPeakFlowValue);
@@ -85,16 +97,9 @@ public class TriageActivity extends BaseChildActivity {
         ColorStateList activeTintList = new ColorStateList(states, activeColors);
         ColorStateList inactiveTintList = new ColorStateList(states, inactiveColors);
 
-        // 1. Set Thumb (Handle) Color: Green
         triagePEFSlider.setThumbTintList(ColorStateList.valueOf(COLOR_SLIDER_GREEN));
-
-        // 2. Set Active Track (Slid Portion): Green
         triagePEFSlider.setTrackActiveTintList(activeTintList);
-
-        // 3. Set Inactive Track (Unslid Portion): Light Gray/White
         triagePEFSlider.setTrackInactiveTintList(inactiveTintList);
-
-        // 4. Tick Marks: Set to match track colors
         triagePEFSlider.setTickActiveTintList(activeTintList);
         triagePEFSlider.setTickInactiveTintList(inactiveTintList);
     }
@@ -118,45 +123,53 @@ public class TriageActivity extends BaseChildActivity {
     }
 
     void setupChipListeners() {
-        // 1. ATTEMPT to get the default color selector applied in XML
-        ColorStateList defaultSelector = null;
-        if (chipGroup.getChildCount() > 0) {
-            View firstChild = chipGroup.getChildAt(0);
-            if (firstChild instanceof Chip) {
-                defaultSelector = ((Chip) firstChild).getChipBackgroundColor();
-            }
-        }
+        ColorStateList defaultSelector = ColorStateList.valueOf(COLOR_CHIP_DEFAULT_BACKGROUND);
 
-        // Fallback to a neutral white/gray selector if XML inheritance fails completely
-        if (defaultSelector == null) {
-            defaultSelector = ColorStateList.valueOf(0xFFE0E0E0);
-        }
-
-        // 2. APPLY listeners to all chips
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
             View child = chipGroup.getChildAt(i);
             if (child instanceof Chip) {
                 Chip chip = (Chip) child;
 
-                // Ensure initial state uses the default selector
                 chip.setChipBackgroundColor(defaultSelector);
                 chip.setChipStrokeColor(null);
 
-                ColorStateList finalDefaultSelector = defaultSelector;
                 chip.setOnClickListener(v -> {
                     if (chip.isChecked()) {
-                        // Apply RED fill and stroke when selected
+                        // Chips turn RED when selected
                         chip.setChipBackgroundColor(ColorStateList.valueOf(COLOR_CHIP_RED));
                         chip.setChipStrokeColor(ColorStateList.valueOf(COLOR_CHIP_RED));
                     } else {
-                        // Revert to the default gray selector when deselected
-                        chip.setChipBackgroundColor(finalDefaultSelector);
+                        chip.setChipBackgroundColor(defaultSelector);
                         chip.setChipStrokeColor(null);
                     }
                 });
             }
         }
     }
+
+    private ColorStateList createGreenRadioTintList() {
+        int states[][] = new int[][] {
+                { android.R.attr.state_checked },
+                {}
+        };
+        int colors[] = new int[] {
+                COLOR_SLIDER_GREEN,
+                getResources().getColor(android.R.color.darker_gray, getTheme())
+        };
+        return new ColorStateList(states, colors);
+    }
+
+    void setupRescueButtonListeners() {
+        ColorStateList greenTintList = createGreenRadioTintList();
+
+        radioRescueYes.setButtonTintList(greenTintList);
+        radioRescueNo.setButtonTintList(greenTintList);
+
+        rescueAttemptGroup.setOnCheckedChangeListener((group, checkedId) -> {
+
+        });
+    }
+
 
     void redFlagCheck() {
         List<Integer> selected = new ArrayList<>();
@@ -170,44 +183,34 @@ public class TriageActivity extends BaseChildActivity {
             }
         }
 
-        Intent intent = new Intent(this, TriageCriticalActivity.class);
-        String pefZone = processPEF();
+        boolean rescueAttemptSelected = rescueAttemptGroup.getCheckedRadioButtonId() != -1;
+        boolean anyRedFlagSelected = !selected.isEmpty();
 
-        // 1. CRITICAL RED FLAG CHECK (Triggers 911/SOS immediately)
-        // These are the four most severe symptoms indicating immediate danger:
-        // - chip11: Blue/gray lips or nails
-        // - chip12: Chest pulling in (retractions)
-        // - chip5: Difficulty speaking
-        // - chip4: Gasping for air
+        if (!anyRedFlagSelected) {
+            Toast.makeText(this, "Please select at least one physical red flag symptom.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!rescueAttemptSelected) {
+            Toast.makeText(this, "Please indicate if there was any recent rescue attempt.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        String pefZone = processPEF();
 
         if (selected.contains(R.id.chip11) || selected.contains(R.id.chip12) ||
                 selected.contains(R.id.chip5) || selected.contains(R.id.chip4) ||
                 pefZone.equals("red")) {
 
+            Intent intent = new Intent(this, TriageCriticalActivity.class);
             intent.putExtra("DECISION", "SOS");
-            startActivity(intent);
-            return; // Stop further checks if an emergency is detected
-        }
-
-        // 2. URGENT/SECONDARY CHECK
-        // If no critical red flags, check for other severe symptoms that warrant urgency
-        // (but might not require auto-dial 911 if not combined with critical signs).
-        // This includes:
-        // - chip6: Symptoms worsen when lying on back
-        // - chip7: Severe sweating
-        // - chip2: Chest pain or tightness
-
-        if (selected.contains(R.id.chip6) || selected.contains(R.id.chip7) ||
-                selected.contains(R.id.chip2) || pefZone.equals("yellow")) {
-
-            // Assuming "NOT SOS" leads to a less severe triage outcome (e.g., call doctor/ER visit)
-            intent.putExtra("DECISION", "NOT SOS");
             startActivity(intent);
             return;
         }
 
-        // 3. DEFAULT (If none of the above are selected, or only minor symptoms like chip1 'Short breaths' exist)
-        intent.putExtra("DECISION", "NORMAL"); // You might want to define a "NORMAL" or "GREEN" decision
+        Intent intent = new Intent(this, TriageNonCriticalActivity.class);
+        intent.putExtra("DECISION", "NOT SOS");
         startActivity(intent);
     }
 
@@ -223,10 +226,6 @@ public class TriageActivity extends BaseChildActivity {
 
         if (submitTime != null) {
             PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
-            // hp.addPEFToLog(pef);
-            // return pef.computeZone(currentChild); // Assuming this returns "red", "yellow", or "green/normal"
-
-            // Placeholder return for now, replace with actual PEF zone computation
             return "normal";
         }
 

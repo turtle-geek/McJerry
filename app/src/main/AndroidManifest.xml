@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
@@ -20,10 +22,6 @@
         <activity
             android:name=".ui.HomeStepsRecovery"
             android:exported="false" />
-        <activity
-            android:name=".ui.TriageCriticalActivity"
-            android:exported="true" />
-
 
         <activity
             android:name=".ui.BaseChildActivity"
@@ -37,6 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.TriageCriticalActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.TriageNonCriticalActivity"
+            android:exported="false" />
 
         <activity
             android:name=".ui.PeakFlowInput"

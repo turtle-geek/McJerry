@@ -26,7 +26,7 @@ import java.util.Calendar;
 import com.example.myapplication.health.*;
 import com.example.myapplication.models.*;
 import com.google.firebase.firestore.FirebaseFirestore;
-        import com.example.myapplication.models.*;
+import com.example.myapplication.models.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.util.Log;
@@ -124,11 +124,11 @@ public class InventoryUsage extends AppCompatActivity {
             finish();
         });
 
-        // --- Date/time pickers ---
+        // date time check
         etDate.setOnClickListener(v -> showDatePicker());
         etTime.setOnClickListener(v -> showTimePicker());
 
-        // --- Save button ---
+        // save button
         btnSaveMedicine.setOnClickListener(v -> {
             Log.d(TAG, "Save button clicked");
 
@@ -319,8 +319,6 @@ public class InventoryUsage extends AppCompatActivity {
             return false;
         }
     }
-
-    // --- Date and Time Pickers ---
 
     private void showDatePicker() {
         Calendar cal = Calendar.getInstance();

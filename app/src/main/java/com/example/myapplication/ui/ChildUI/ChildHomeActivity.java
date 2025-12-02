@@ -42,16 +42,17 @@ import com.example.myapplication.health.MedicineUsageLog;
 import com.example.myapplication.models.Child;
 import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
+import com.example.myapplication.sosButtonResponse;
 import com.example.myapplication.models.TechniqueQuality;
 import com.example.myapplication.ui.ChildUI.TriageAndResponse.HomeStepsRecovery;
 import com.example.myapplication.ui.ChildUI.TriageAndResponse.TriageActivity;
 import com.example.myapplication.ui.Inventory.InventoryManagement;
 import com.example.myapplication.ui.TrendSnippet;
+import com.example.myapplication.models.TechniqueQuality;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -99,8 +100,6 @@ public class ChildHomeActivity extends AppCompatActivity {
     private String selectedChildId;
     private int selectedChildPersonalBest = 400;
 
-    // FIX: Removing statusCard1, statusCard2, statusCard3 as they do not exist in the XML
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +137,6 @@ public class ChildHomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
-    // ==================== ANR PREVENTION METHODS ====================
 
     private void showLoading(String message) {
         if (progressDialog == null) {
@@ -215,10 +212,9 @@ public class ChildHomeActivity extends AppCompatActivity {
     private void initializeViews() {
         Log.d(TAG, "initializeViews started");
 
-        // Initialize ONLY views that exist in XML
+        // Only get views that ACTUALLY EXIST in XML
         todayDate = findViewById(R.id.todayDate);
         pefCard = findViewById(R.id.pefCard);
-        // FIX: Removed statusCard1, statusCard2, statusCard3 as they are not in the provided XML
         graphCard1 = findViewById(R.id.graphCard1);
         graphCard2 = findViewById(R.id.graphCard2);
         bottomNavigationView = findViewById(R.id.menuBar);
@@ -237,7 +233,6 @@ public class ChildHomeActivity extends AppCompatActivity {
             prepostCheckPopup.setVisibility(View.GONE);
         }
 
-        // Log statements for debugging
         Log.d(TAG, "todayDate: " + (todayDate != null ? "found" : "NULL"));
         Log.d(TAG, "bottomNavigationView: " + (bottomNavigationView != null ? "found" : "NULL"));
         Log.d(TAG, "trendContainer: " + (trendContainer != null ? "found" : "NULL"));
@@ -320,7 +315,30 @@ public class ChildHomeActivity extends AppCompatActivity {
         if (currentChild != null && hp != null && hp.getPEFLog() != null && !hp.getPEFLog().isEmpty()) {
             displayTodayPeakFlow();
         }
+        else {
+            pefDisplay.setText("N/A");
+            pefDateTime.setText("No peak flow data to display");
+        }
     }
+
+//    @SuppressLint("ScheduleExactAlarm")
+//    private void setListeners() {
+//        sosButton = findViewById(R.id.sosButton);
+//        sosButton.setOnClickListener(v -> {
+//            sosButtonResponse action = new sosButtonResponse();
+//            action.response(currentChild.getId(), this);
+//        });
+//
+//        pefButton.setOnClickListener(v -> {
+//            editPEF.setVisibility(View.VISIBLE);
+//            EditText editTextNumber = findViewById(R.id.editTextNumber);
+//            editTextNumber.setOnFocusChangeListener((view, hasFocus) -> {
+//                if (!editTextNumber.hasFocus()) {
+//                    savePeakFlowEntry(editTextNumber);
+//                }
+//            });
+//        });
+//    }
 
     private void setupTrendSnippet() {
         try {
@@ -454,15 +472,27 @@ public class ChildHomeActivity extends AppCompatActivity {
         EditText peakFlowInput = findViewById(R.id.editTextNumber);
         if (peakFlowInput != null) {
             peakFlowInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-                savePeakFlowEntry();
+                /**
+                 * Debug later
+                 */
+                savePeakFlowEntry(peakFlowInput);
                 return true;
             });
         }
+
+//        pefButton.setOnClickListener(v -> {
+//            editPEF.setVisibility(View.VISIBLE);
+//            EditText editTextNumber = findViewById(R.id.editTextNumber);
+//            editTextNumber.setOnFocusChangeListener((view, hasFocus) -> {
+//                if (!editTextNumber.hasFocus()) {
+//                    savePeakFlowEntry(editTextNumber);
+//                }
+//            });
+//        });
     }
 
-    private void savePeakFlowEntry() {
-        EditText editTextNumber = findViewById(R.id.editTextNumber);
-        String text = editTextNumber.getText().toString().trim();
+    private void savePeakFlowEntry(EditText editTextNumber) {
+        String text = editTextNumber.getText().toString();
 
         if (!isDataLoaded || currentChild == null || hp == null) {
             Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();

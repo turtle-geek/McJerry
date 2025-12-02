@@ -22,7 +22,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.auth.LogInModule.LogInViewActivity;
+import com.example.myapplication.auth.LogInModule.*;
 import com.example.myapplication.ui.ChildUI.TriageAndResponse.HomeStepsRecovery;
 import com.example.myapplication.ui.ParentUI.ParentHomeActivity;
 import com.example.myapplication.ui.ParentUI.ParentManagement;

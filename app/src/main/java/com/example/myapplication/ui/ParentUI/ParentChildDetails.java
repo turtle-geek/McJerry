@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.ui.ChildUI.StreakManagement;
 import com.example.myapplication.ui.Inventory.InventoryLog;
 import com.example.myapplication.ui.Inventory.InventoryManagement;
+import com.example.myapplication.ui.ShareHealthProfileActivity;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ParentChildDetails extends AppCompatActivity {

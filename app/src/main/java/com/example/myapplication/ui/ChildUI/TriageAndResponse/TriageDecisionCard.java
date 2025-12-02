@@ -63,7 +63,7 @@ public class TriageDecisionCard extends AppCompatActivity {
         textView3 = findViewById(R.id.textView3);
         textView4 = findViewById(R.id.textView4);
 
-        red_card = findViewById(R.id.red_card);
+//        red_card = findViewById(R.id.red_card);
         yellow_card = findViewById(R.id.yellow_card);
 
         cancel_button = findViewById(R.id.cancel_button);

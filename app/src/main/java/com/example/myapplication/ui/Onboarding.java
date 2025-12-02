@@ -9,6 +9,9 @@ import android.util.Log;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ui.ChildUI.ChildHomeActivity;
+import com.example.myapplication.ui.ParentUI.ParentHomeActivity;
+import com.example.myapplication.ui.ProviderUI.ProviderHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -8,16 +8,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-// --- ASSUMED IMPORTS ---
 import com.example.myapplication.auth.AuthManager;
 import com.example.myapplication.auth.LogInModule.LogInViewActivity;
-import com.example.myapplication.ui.ChildHomeActivity;
 import com.example.myapplication.callbacks.RoleCallback;
+import com.example.myapplication.ui.ChildUI.ChildHomeActivity;
 import com.example.myapplication.ui.Onboarding;
-// --- END ASSUMED IMPORTS ---
-
 import com.example.myapplication.ui.ParentUI.ParentHomeActivity;
 import com.example.myapplication.ui.ProviderUI.ProviderHomeActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,8 +25,8 @@ import com.google.firebase.FirebaseApp; // Needed to check if Firebase is initia
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener {
 
-    private FirebaseAuth fAuth;
     private static final String TAG = "MainActivityRouter";
+    private FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
         if (currentUser == null) {
             // User is NOT logged in. Redirect to Login Page.
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LogInViewActivity.class);
             startActivity(intent);
             finish();
             return;

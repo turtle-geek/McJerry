@@ -129,19 +129,19 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.InventoryManagement"
+            android:name=".ui.Inventory.InventoryManagement"
             android:exported="false" />
 
         <activity
-            android:name=".ui.InventoryRefill"
+            android:name=".ui.Inventory.InventoryRefill"
             android:exported="false" />
 
         <activity
-            android:name=".ui.InventoryUsage"
+            android:name=".ui.Inventory.InventoryUsage"
             android:exported="false" />
 
         <activity
-            android:name=".ui.StreakManagement"
+            android:name=".ui.ChildUI.StreakManagement"
             android:exported="false" />
 
 

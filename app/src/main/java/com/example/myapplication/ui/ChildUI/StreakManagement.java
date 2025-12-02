@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 
 import com.example.myapplication.models.*;
 import com.example.myapplication.sosButtonResponse;
+import com.example.myapplication.ui.StreakThresholdConfig;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 

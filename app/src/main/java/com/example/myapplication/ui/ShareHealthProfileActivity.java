@@ -18,6 +18,7 @@ import com.example.myapplication.auth.SessionManager;
 import com.example.myapplication.health.HealthInfo;
 import com.example.myapplication.health.SharedAccessInvite;
 import com.example.myapplication.models.Parent;
+import com.example.myapplication.ui.ParentUI.BaseParentActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

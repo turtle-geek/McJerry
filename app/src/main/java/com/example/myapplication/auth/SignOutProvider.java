@@ -22,11 +22,12 @@ import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.auth.LogInModule.LogInViewActivity;
 import com.example.myapplication.ui.HistoryFilterActivity;
-import com.example.myapplication.ui.HomeStepsRecovery;
-import com.example.myapplication.ui.InventoryUsage;
-import com.example.myapplication.ui.ParentHomeActivity;
-import com.example.myapplication.ui.ParentManagement;
+import com.example.myapplication.ui.ChildUI.TriageAndResponse.HomeStepsRecovery;
+import com.example.myapplication.ui.Inventory.InventoryUsage;
+import com.example.myapplication.ui.ParentUI.ParentHomeActivity;
+import com.example.myapplication.ui.ParentUI.ParentManagement;
 import com.example.myapplication.ui.RedeemInviteActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -308,7 +309,7 @@ public class SignOutProvider extends AppCompatActivity {
             Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
 
             // Navigate to Login page
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LogInViewActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();

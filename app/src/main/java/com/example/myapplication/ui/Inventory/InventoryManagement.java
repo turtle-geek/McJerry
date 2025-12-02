@@ -133,7 +133,7 @@ public class InventoryManagement extends AppCompatActivity {
         // Update alert icons
         tvLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
         iconLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
-        tvExpired.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        tvExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.INVISIBLE);
         iconExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.INVISIBLE);
     }
 

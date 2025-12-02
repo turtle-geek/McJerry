@@ -144,6 +144,21 @@
             android:name=".ui.StreakManagement"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.ProviderManagement"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ProviderChildDetails"
+            android:exported="false" />
+
+        <activity
+            android:name=".auth.SignOutProvider"
+            android:exported="true" />
+
+
+
+
 
     </application>
 

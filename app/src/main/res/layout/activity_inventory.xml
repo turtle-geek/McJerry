@@ -270,10 +270,10 @@
                             android:id="@+id/iconLowCapacity"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@android:drawable/ic_dialog_alert"
-                            tools:tint="#FFA000" />
+                            android:src="@drawable/yellowalert" />
 
                         <TextView
+                            android:id="@+id/tvLowCapacity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Low Capacity"
@@ -294,10 +294,10 @@
                             android:id="@+id/iconExpired"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@android:drawable/ic_dialog_alert"
-                            tools:tint="#9B0000" />
+                            android:src="@drawable/redalert" />
 
                         <TextView
+                            android:id="@+id/tvExpired"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Expired"

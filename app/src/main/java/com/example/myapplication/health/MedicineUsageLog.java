@@ -8,11 +8,13 @@ import java.time.LocalDateTime;
 public class MedicineUsageLog {
     private InventoryItem medicine;
     private double dosageAmount;
-    private LocalDateTime timestamp;
+    private String timestamp;
     private TechniqueQuality techniqueQuality;
     private String rating;
 
-    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, LocalDateTime timestamp, TechniqueQuality techniqueQuality) {
+    public MedicineUsageLog() {}
+
+    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, String timestamp, TechniqueQuality techniqueQuality) {
         this.medicine = medicine;
         this.dosageAmount = dosageAmount;
         this.timestamp = timestamp;
@@ -21,7 +23,7 @@ public class MedicineUsageLog {
     }
 
     // NEW: Constructor with rating
-    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, LocalDateTime timestamp, TechniqueQuality techniqueQuality, String rating) {
+    public MedicineUsageLog(InventoryItem medicine, double dosageAmount, String timestamp, TechniqueQuality techniqueQuality, String rating) {
         this.medicine = medicine;
         this.dosageAmount = dosageAmount;
         this.timestamp = timestamp;
@@ -29,24 +31,44 @@ public class MedicineUsageLog {
         this.rating = rating;
     }
 
-    public InventoryItem getMedicineName() {
+    public InventoryItem getMedicine() {
         return medicine;
+    }
+
+    public void setMedicine(InventoryItem medicine) {
+        this.medicine = medicine;
     }
 
     public double getDosageAmount() {
         return dosageAmount;
     }
 
-    public LocalDateTime getTimestamp() {
+    public void setDosageAmount(double dosageAmount) {
+        this.dosageAmount = dosageAmount;
+    }
+
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public LocalDate getDate() {
-        return timestamp.toLocalDate();
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public TechniqueQuality getControllerQuality() {
+    public LocalDateTime parseTimestamp() {
+        return LocalDateTime.parse(timestamp);
+    }
+
+    public LocalDate parseDate() {
+        return LocalDateTime.parse(timestamp).toLocalDate();
+    }
+
+    public TechniqueQuality getTechniqueQuality() {
         return techniqueQuality;
+    }
+
+    public void setTechniqueQuality(TechniqueQuality techniqueQuality) {
+        this.techniqueQuality = techniqueQuality;
     }
 
     // NEW: Rating getter and setter

@@ -1,6 +1,8 @@
 package com.example.myapplication.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,9 @@ public class ParentChildDetails extends AppCompatActivity {
     private TextView tvDetailSpecialNote;
     private ImageButton btnBack;
     private ImageButton btnEdit;
+    private Button btnViewMedicineInventory;
+    private Button btnViewMedicalRecords;
+    private Button btnViewProgressOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,9 @@ public class ParentChildDetails extends AppCompatActivity {
         tvChildPassword = findViewById(R.id.tvChildPassword);
         btnBack = findViewById(R.id.btnBack);
         btnEdit = findViewById(R.id.btnEdit);
+        btnViewMedicineInventory = findViewById(R.id.btnViewMedicineInventory);
+        btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
+        btnViewProgressOverview = findViewById(R.id.btnViewProgressOverview);
 
         // Get data from intent
         String childId = getIntent().getStringExtra("childId");
@@ -89,6 +97,27 @@ public class ParentChildDetails extends AppCompatActivity {
                 // TODO: Navigate to edit activity
             });
         }
+
+        // Medicine Inventory button
+        btnViewMedicineInventory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, InventoryManagement.class);
+            intent.putExtra("childId", childId);
+            startActivityForResult(intent, 1);
+        });
+
+        // Medicine History button
+        btnViewMedicalRecords.setOnClickListener(v -> {
+            Intent intent = new Intent(this, InventoryLog.class);
+            intent.putExtra("childId", childId);
+            startActivityForResult(intent, 1);
+        });
+
+        // Progress Overview button
+        btnViewProgressOverview.setOnClickListener(v -> {
+            Intent intent = new Intent(this, StreakManagement.class);
+            intent.putExtra("childId", childId);
+            startActivityForResult(intent, 1);
+        });
     }
 
     private String maskPassword(String password) {

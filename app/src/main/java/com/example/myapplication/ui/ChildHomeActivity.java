@@ -41,7 +41,7 @@ public class ChildHomeActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
     private TextView todayDate;
-    private CardView statusCard1, statusCard2, statusCard3, graphCard;
+    private CardView statusCard1, statusCard2, statusCard3, graphCard1, graphCard2;
 
     // Trend Snippet
     private LinearLayout trendContainer;
@@ -98,7 +98,8 @@ public class ChildHomeActivity extends AppCompatActivity {
         statusCard1 = findViewById(R.id.statusCard1);
         statusCard2 = findViewById(R.id.statusCard2);
         statusCard3 = findViewById(R.id.statusCard3);
-        graphCard = findViewById(R.id.graphCard1);
+        graphCard1 = findViewById(R.id.graphCard1);
+        graphCard2 = findViewById(R.id.graphCard2);
         bottomNavigationView = findViewById(R.id.menuBar);
         trendContainer = findViewById(R.id.trendContainer);
 
@@ -332,10 +333,19 @@ public class ChildHomeActivity extends AppCompatActivity {
                         Toast.makeText(this, "Weekly Rescue Time", Toast.LENGTH_SHORT).show());
             }
 
-            if (graphCard != null) {
-                graphCard.setOnClickListener(v ->
+            if (graphCard1 != null) {
+                graphCard1.setOnClickListener(v ->
                         Toast.makeText(this, "Daily Check-in", Toast.LENGTH_SHORT).show());
             }
+
+            if (graphCard2 != null) {
+                graphCard2.setOnClickListener(v -> {
+                    Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
+                    intent.putExtra("childId", selectedChildId);
+                    startActivity(intent);
+                });
+            }
+
         } catch (Exception e) {
             Log.e(TAG, "Error setting up card listeners", e);
         }

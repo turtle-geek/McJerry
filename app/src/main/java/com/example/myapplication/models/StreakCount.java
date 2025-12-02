@@ -50,71 +50,84 @@ public class StreakCount {
         techniqueStreak = 0;
         rescueCount = 0;
 
-        if (inventory == null || inventory.getControllerLog().isEmpty()) {
+        // Safety check for inventory
+        if (inventory == null) {
             return;
         }
 
         ArrayList<MedicineUsageLog> controllerLogs = inventory.getControllerLog();
         ArrayList<MedicineUsageLog> rescueLogs = inventory.getRescueLog();
 
-        // Find lastControllerDate: the latest timestamp's date
-        MedicineUsageLog latestControllerLog = controllerLogs.get(0);
-        for (MedicineUsageLog log : controllerLogs) {
-            if (log.getTimestamp().isAfter(latestControllerLog.getTimestamp())) {
-                latestControllerLog = log;
+        // --- CONTROLLER LOGIC ---
+        // Only calculate controller streak if logs exist and schedule is set
+        if (controllerLogs != null && !controllerLogs.isEmpty()) {
+            // Find lastControllerDate
+            MedicineUsageLog latestControllerLog = controllerLogs.get(0);
+            for (MedicineUsageLog log : controllerLogs) {
+                if (log.parseTimestamp().isAfter(latestControllerLog.parseTimestamp())) {
+                    latestControllerLog = log;
+                }
             }
-        }
-        LocalDate lastControllerDate = latestControllerLog.getDate();
+            LocalDate lastControllerDate = latestControllerLog.parseDate();
 
-        MedicineUsageLog latestRescueLog = rescueLogs.get(0);
-        for (MedicineUsageLog log : rescueLogs) {
-            if (log.getTimestamp().isAfter(latestRescueLog.getTimestamp())) {
-                latestRescueLog = log;
-            }
-        }
-        LocalDate lastRescueDate = latestRescueLog.getDate();
+            // Calculate controllerStreak
+            // Added check for schedule != null to prevent NPE
+            if (schedule != null) {
+                ArrayList<LocalDate> scheduledDates = new ArrayList<>(schedule.getScheduledDates());
+                scheduledDates.sort(Comparator.naturalOrder());
+                int lastIndex = Collections.binarySearch(scheduledDates, lastControllerDate);
 
-        // Calculate rescueCount: number of distinct days with rescue usage in the current month
-        int currentMonth = lastRescueDate.getMonthValue();
-        int currentYear = lastRescueDate.getYear();
-        Set<LocalDate> uniqueDates = new HashSet<>();
-        for (MedicineUsageLog log : rescueLogs) {
-            LocalDate date = log.getDate();
-            if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
-                uniqueDates.add(date);
-            }
-        }
-        rescueCount = uniqueDates.size();
-
-        // Calculate controllerStreak
-        ArrayList<LocalDate> scheduledDates = new ArrayList<>(schedule.getScheduledDates());
-        scheduledDates.sort(Comparator.naturalOrder());
-        int lastIndex = Collections.binarySearch(scheduledDates, lastControllerDate);
-        if (lastIndex >= 0) {
-            int streak = 0;
-            for (int i = lastIndex; i >= 0; i--) {
-                LocalDate scheduledDate = scheduledDates.get(i);
-                boolean hasUsage = false;
-                for (MedicineUsageLog log : controllerLogs) {
-                    if (log.getDate().equals(scheduledDate)) {
-                        hasUsage = true;
-                        break;
+                if (lastIndex >= 0) {
+                    int streak = 0;
+                    for (int i = lastIndex; i >= 0; i--) {
+                        LocalDate scheduledDate = scheduledDates.get(i);
+                        boolean hasUsage = false;
+                        for (MedicineUsageLog log : controllerLogs) {
+                            if (log.parseDate().equals(scheduledDate)) {
+                                hasUsage = true;
+                                break;
+                            }
+                        }
+                        if (hasUsage) {
+                            streak++;
+                        } else {
+                            break;
+                        }
                     }
-                }
-                if (hasUsage) {
-                    streak++;
-                } else {
-                    break;
+                    controllerStreak = streak;
                 }
             }
-            controllerStreak = streak;
         }
 
-        // Calculate techniqueStreak
+        // --- RESCUE LOGIC (FIXED) ---
+        // Only calculate rescue count if logs exist
+        if (rescueLogs != null && !rescueLogs.isEmpty()) {
+            MedicineUsageLog latestRescueLog = rescueLogs.get(0);
+            for (MedicineUsageLog log : rescueLogs) {
+                if (log.parseTimestamp().isAfter(latestRescueLog.parseTimestamp())) {
+                    latestRescueLog = log;
+                }
+            }
+            LocalDate lastRescueDate = latestRescueLog.parseDate();
+
+            int currentMonth = lastRescueDate.getMonthValue();
+            int currentYear = lastRescueDate.getYear();
+            Set<LocalDate> uniqueDates = new HashSet<>();
+            for (MedicineUsageLog log : rescueLogs) {
+                LocalDate date = log.parseDate();
+                if (date.getMonthValue() == currentMonth && date.getYear() == currentYear) {
+                    uniqueDates.add(date);
+                }
+            }
+            rescueCount = uniqueDates.size();
+        } else {
+            rescueCount = 0; // Default to 0 if no logs
+        }
+
+        // --- TECHNIQUE LOGIC ---
         if (techniqueSessionCount != null && !techniqueSessionCount.getTechniqueSessions().isEmpty()) {
             ArrayList<TechniqueSession> sessions = new ArrayList<>(techniqueSessionCount.getTechniqueSessions());
 
-            // Sort descending by date
             sessions.sort((s1, s2) -> s2.getDate().compareTo(s1.getDate()));
 
             int streak = 0;
@@ -141,7 +154,6 @@ public class StreakCount {
                     streak = 1;
                 }
             }
-
             techniqueStreak = streak;
         }
     }

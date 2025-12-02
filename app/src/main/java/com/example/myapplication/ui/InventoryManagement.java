@@ -14,17 +14,31 @@ import java.time.format.DateTimeFormatter;
 
 import com.example.myapplication.health.*;
 import com.example.myapplication.models.*;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class InventoryManagement extends AppCompatActivity {
 
-    private TextView tvDetailMedicineName, tvDetailPurchaseDate, tvDetailExpiryDate, tvDetailAmount;
+    private TextView tvDetailMedicineName, tvDetailPurchaseDate, tvDetailExpiryDate, tvDetailAmount, tvLowCapacity, tvExpired;
     private ImageView iconLowCapacity, iconExpired;
     private Button btnConsume, btnRefill;
     private ImageButton btnBack;
     private MaterialSwitch switchLogFilter;
     private MedicineLabel currentLabel = MedicineLabel.CONTROLLER;
     private Child child;
+    private FirebaseFirestore db;
+    private String childId;
+
+    private void loadChild() {
+        db.collection("users").document(childId)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (snapshot.exists()) {
+                        child = snapshot.toObject(Child.class);
+                        updateUI();
+                    }
+                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,8 @@ public class InventoryManagement extends AppCompatActivity {
         tvDetailPurchaseDate = findViewById(R.id.tvDetailPurchaseDate);
         tvDetailExpiryDate = findViewById(R.id.tvDetailExpiryDate);
         tvDetailAmount = findViewById(R.id.tvDetailAmount);
+        tvLowCapacity = findViewById(R.id.tvLowCapacity);
+        tvExpired = findViewById(R.id.tvExpired);
         iconLowCapacity = findViewById(R.id.iconLowCapacity);
         iconExpired = findViewById(R.id.iconExpired);
         btnConsume = findViewById(R.id.btnConsume);
@@ -43,7 +59,10 @@ public class InventoryManagement extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         switchLogFilter = findViewById(R.id.switchLogFilter);
 
-        // TODO: Load child from firebase
+        // Load child from firebase
+        db = FirebaseFirestore.getInstance();
+        childId = getIntent().getStringExtra("childId");
+        loadChild();
 
         // Switch listener to toggle between controller and rescue
         switchLogFilter.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -58,6 +77,7 @@ public class InventoryManagement extends AppCompatActivity {
         btnRefill.setOnClickListener(v -> {
             Intent intent = new Intent(this, InventoryRefill.class);
             intent.putExtra("label", currentLabel.name());
+            intent.putExtra("childId", childId);
             startActivityForResult(intent, 1);
         });
 
@@ -65,11 +85,9 @@ public class InventoryManagement extends AppCompatActivity {
         btnConsume.setOnClickListener(v -> {
             Intent intent = new Intent(this, InventoryUsage.class);
             intent.putExtra("label", currentLabel.name());
+            intent.putExtra("childId", childId);
             startActivityForResult(intent, 2);
         });
-
-        // Initial UI update
-        updateUI();
     }
 
     private void updateUI() {
@@ -77,19 +95,22 @@ public class InventoryManagement extends AppCompatActivity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
         tvDetailMedicineName.setText(currentLabel.name());
-        tvDetailPurchaseDate.setText(item.getPurchaseDate().format(formatter));
-        tvDetailExpiryDate.setText(item.getExpiryDate().format(formatter));
+        tvDetailPurchaseDate.setText(item.parsePurchaseDate().format(formatter));
+        tvDetailExpiryDate.setText(item.parseExpiryDate().format(formatter));
         tvDetailAmount.setText(String.valueOf(item.getAmount()));
 
         // Update alert icons
-        iconLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.GONE);
-        iconExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.GONE);
+        tvLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        iconLowCapacity.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        tvExpired.setVisibility(item.lowVolumeAlert() ? View.VISIBLE : View.INVISIBLE);
+        iconExpired.setVisibility(item.expiryAlert() ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            loadChild();
             updateUI();
             child.getStreakCount().countStreaks();  // Update streaks after changes
         }

@@ -360,8 +360,13 @@ public class ProviderHomeActivity extends AppCompatActivity {
                     overridePendingTransition(0, 0);
                     finish();
                     return true;
+                } else if (id == R.id.nav_profile) {
+                    startActivity(new Intent(ProviderHomeActivity.this, HomeStepsRecovery.class));
+                    overridePendingTransition(0, 0);
+                    finish();
+                    return true;
                 } else if (id == R.id.moreButton) {
-                    startActivity(new Intent(ProviderHomeActivity.this, SignOut.class));
+                    startActivity(new Intent(ProviderHomeActivity.this, SignOutProvider.class));
                     overridePendingTransition(0, 0);
                     finish();
                     return true;

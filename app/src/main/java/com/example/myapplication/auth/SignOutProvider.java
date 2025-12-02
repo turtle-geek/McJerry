@@ -22,6 +22,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.ui.HistoryFilterActivity;
 import com.example.myapplication.ui.HomeStepsRecovery;
 import com.example.myapplication.ui.InventoryUsage;
 import com.example.myapplication.ui.ParentHomeActivity;
@@ -98,7 +99,6 @@ public class SignOutProvider extends AppCompatActivity {
         if (inviteCard != null) {
             inviteCard.setOnClickListener(v -> {
                 Toast.makeText(this, "Opening Invite", Toast.LENGTH_SHORT).show();
-                // Implement invite feature
                 Intent intent = new Intent(this, RedeemInviteActivity.class);
                 startActivityForResult(intent, 2);
             });
@@ -106,8 +106,9 @@ public class SignOutProvider extends AppCompatActivity {
 
         if (reportCard != null) {
             reportCard.setOnClickListener(v -> {
-                Toast.makeText(this, "Opening Report", Toast.LENGTH_SHORT).show();
-                // TODO: Implement report feature
+                Toast.makeText(this, "Opening Report Printing", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, HistoryFilterActivity.class);
+                startActivityForResult(intent, 2);
             });
         }
 

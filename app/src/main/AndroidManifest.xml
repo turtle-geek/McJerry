@@ -145,10 +145,6 @@
             android:name=".ui.StreakManagement"
             android:exported="false" />
 
-        <activity
-            android:name=".ui.ParentTutorial"
-            android:exported="false" />
-
 
     </application>
 

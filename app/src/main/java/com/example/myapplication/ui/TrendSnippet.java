@@ -156,18 +156,6 @@ public class TrendSnippet extends FrameLayout {
         updateChart();
     }
 
-    /**
-     * Set peak flow data with personal best and update the chart
-     * @param peakFlowData List of PeakFlow objects
-     * @param personalBest Personal best value for zone calculation
-     */
-    public void updateWithData(List<PeakFlow> peakFlowData, int personalBest) {
-        this.allPeakFlowData = peakFlowData;
-        // Store personal best if needed for zone calculations
-        // For now, just update the chart
-        updateChart();
-    }
-
     private void updateChart() {
         if (allPeakFlowData == null || allPeakFlowData.isEmpty()) {
             showEmptyState();

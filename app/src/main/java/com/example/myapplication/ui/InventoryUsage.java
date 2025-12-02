@@ -97,8 +97,8 @@ public class InventoryUsage extends AppCompatActivity {
         btnSaveMedicine.setEnabled(false);
         btnSaveMedicine.setAlpha(0.5f);
 
-        // --- Add validation watcher ONLY for dosage (date/time use pickers) ---
-        TextWatcher dosageWatcher = new TextWatcher() {
+        // --- Add validation watcher ---
+        TextWatcher watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void onTextChanged(CharSequence s, int st, int b, int c) {}
             @Override public void afterTextChanged(Editable s) {
@@ -106,8 +106,9 @@ public class InventoryUsage extends AppCompatActivity {
             }
         };
 
-        etDosage.addTextChangedListener(dosageWatcher);
-
+        etDate.addTextChangedListener(watcher);
+        etTime.addTextChangedListener(watcher);
+        etDosage.addTextChangedListener(watcher);
 
         // --- Back button ---
         btnBack.setOnClickListener(v -> {
@@ -216,91 +217,77 @@ public class InventoryUsage extends AppCompatActivity {
     // --- Validation logic ---
 
     private void updateSaveButtonState() {
-        String dateText = etDate.getText() != null ? etDate.getText().toString() : "";
-        String timeText = etTime.getText() != null ? etTime.getText().toString() : "";
-        String dosageText = etDosage.getText() != null ? etDosage.getText().toString() : "";
+        String dateText = etDate.getText().toString();
+        String timeText = etTime.getText().toString();
+        String dosageText = etDosage.getText().toString();
 
         boolean dateValid = isValidDate(dateText);
         boolean timeValid = isValidTime(timeText);
         boolean dosageValid = isValidDosage(dosageText);
 
         // Debug logging
-        Log.d(TAG, "=== Validation Check ===");
-        Log.d(TAG, "Date: '" + dateText + "' -> " + dateValid);
-        Log.d(TAG, "Time: '" + timeText + "' -> " + timeValid);
-        Log.d(TAG, "Dosage: '" + dosageText + "' -> " + dosageValid);
-        Log.d(TAG, "Child loaded: " + (child != null));
+        Log.d(TAG, "Validation check:");
+        Log.d(TAG, "  Date: '" + dateText + "' valid=" + dateValid);
+        Log.d(TAG, "  Time: '" + timeText + "' valid=" + timeValid);
+        Log.d(TAG, "  Dosage: '" + dosageText + "' valid=" + dosageValid);
+        Log.d(TAG, "  Child loaded: " + (child != null));
 
         boolean isValid = dateValid && timeValid && dosageValid;
 
-        Log.d(TAG, "Button enabled: " + isValid);
-
         btnSaveMedicine.setEnabled(isValid);
         btnSaveMedicine.setAlpha(isValid ? 1.0f : 0.5f);
+
+        Log.d(TAG, "Save button enabled: " + isValid);
     }
 
     private boolean isValidDate(String text) {
-        if (TextUtils.isEmpty(text)) {
-            Log.d(TAG, "Date is empty");
-            return false;
-        }
+        if (TextUtils.isEmpty(text)) return false;
         try {
             LocalDate date = LocalDate.parse(text, dateFormatter);
-            boolean notFuture = !date.isAfter(LocalDate.now());
-            Log.d(TAG, "Date parsed: " + date + ", not future: " + notFuture);
-            return notFuture;
+            return !date.isAfter(LocalDate.now());  // cannot be future
         } catch (Exception e) {
-            Log.e(TAG, "Date parsing failed: " + text, e);
+            Log.e(TAG, "Date validation failed", e);
             return false;
         }
     }
 
     private boolean isValidTime(String text) {
-        if (TextUtils.isEmpty(text)) {
-            Log.d(TAG, "Time is empty");
-            return false;
-        }
+        if (TextUtils.isEmpty(text)) return false;
         try {
+            // Use formatter that matches what the picker outputs (HH:mm)
             LocalTime.parse(text, timeFormatter);
-            Log.d(TAG, "Time is valid: " + text);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Time parsing failed: " + text, e);
+            Log.e(TAG, "Time validation failed for: '" + text + "'", e);
             return false;
         }
     }
 
     private boolean isValidDosage(String text) {
-        if (TextUtils.isEmpty(text)) {
-            Log.d(TAG, "Dosage is empty");
-            return false;
+        if (TextUtils.isEmpty(text)) return false;
+
+        // Allow basic number validation if child isn't loaded yet
+        if (child == null) {
+            try {
+                double dosage = Double.parseDouble(text);
+                return dosage > 0;
+            } catch (Exception e) {
+                return false;
+            }
         }
 
         try {
             double dosage = Double.parseDouble(text);
-            Log.d(TAG, "Dosage parsed: " + dosage);
-
-            // If child isn't loaded yet, just check positive number
-            if (child == null) {
-                boolean valid = dosage > 0;
-                Log.d(TAG, "Child not loaded, dosage > 0: " + valid);
-                return valid;
-            }
-
             InventoryItem item = child.getInventory().getMedicine(label);
 
             // If inventory item not available yet, just check positive number
             if (item == null) {
-                boolean valid = dosage > 0;
-                Log.d(TAG, "Inventory item null, dosage > 0: " + valid);
-                return valid;
+                return dosage > 0;
             }
 
-            boolean valid = dosage > 0 && dosage <= item.getAmount() + 1e-9;
-            Log.d(TAG, "Full validation: dosage=" + dosage + ", available=" + item.getAmount() + ", valid=" + valid);
-            return valid;
+            return dosage > 0 && dosage <= item.getAmount() + 1e-9;
         } catch (Exception e) {
-            Log.e(TAG, "Dosage parsing failed: " + text, e);
+            Log.e(TAG, "Dosage validation failed", e);
             return false;
         }
     }
@@ -312,11 +299,8 @@ public class InventoryUsage extends AppCompatActivity {
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
                 (view, year, month, day) -> {
-                    String dateStr = String.format("%02d/%02d/%d", month + 1, day, year);
-                    etDate.setText(dateStr);
-                    Log.d(TAG, "Date picker result: " + dateStr);
-                    // Manually trigger validation since TextWatcher won't fire for non-editable field
-                    updateSaveButtonState();
+                    etDate.setText(String.format("%02d/%02d/%d", month + 1, day, year));
+                    Log.d(TAG, "Date selected: " + etDate.getText().toString());
                 },
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -330,11 +314,8 @@ public class InventoryUsage extends AppCompatActivity {
         TimePickerDialog dialog = new TimePickerDialog(
                 this,
                 (view, hour, min) -> {
-                    String timeStr = String.format("%02d:%02d", hour, min);
-                    etTime.setText(timeStr);
-                    Log.d(TAG, "Time picker result: " + timeStr);
-                    // Manually trigger validation since TextWatcher won't fire for non-editable field
-                    updateSaveButtonState();
+                    etTime.setText(String.format("%02d:%02d", hour, min));
+                    Log.d(TAG, "Time selected: " + etTime.getText().toString());
                 },
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),

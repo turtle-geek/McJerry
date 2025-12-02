@@ -63,7 +63,6 @@ import jp.wasabeef.blurry.Blurry;
  * - PrePostCheck rating system bugs resolved
  * - ANR prevention with loading indicators
  * - Proper error handling and timeouts
- * - ADDED: Show prepost_check dialog after medicine usage
  */
 public class ChildHomeActivity extends AppCompatActivity {
     private static final String TAG = "ChildHomeActivity";
@@ -74,7 +73,7 @@ public class ChildHomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView todayDate, pefDisplay, pefDateTime;
     private CardView pefCard, graphCard1, graphCard2;
-    private ImageButton sosButton, logoButton;
+    private ImageButton sosButton;
     private Button pefButton;
     private ConstraintLayout editPEF;
 
@@ -92,9 +91,6 @@ public class ChildHomeActivity extends AppCompatActivity {
     private String medicineLabel;
     private String medicineName;
     private double dosage;
-
-    // FIX: Flag to track if we should show prepost check
-    private boolean shouldShowPrepostCheck = false;
 
     // Trend Snippet
     private LinearLayout trendContainer;
@@ -190,15 +186,6 @@ public class ChildHomeActivity extends AppCompatActivity {
             progressDialog.dismiss();
         }
         isDataLoaded = true;
-
-        // FIX: Show prepost check dialog after loading completes
-        if (shouldShowPrepostCheck) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(() -> {
-                showPrePostCheckPopup();
-                shouldShowPrepostCheck = false; // Reset flag
-            }, 500); // Small delay to ensure UI is ready
-        }
     }
 
     /**
@@ -238,376 +225,306 @@ public class ChildHomeActivity extends AppCompatActivity {
                 hideLoading();
                 disableInteractiveElements(false);
                 Toast.makeText(this,
-                        "Loading is taking longer than expected...",
+                        "Loading timed out. Please check your connection and try again.",
                         Toast.LENGTH_LONG).show();
+                Log.w(TAG, "Loading timeout reached");
             }
         }, LOADING_TIMEOUT_MS);
     }
 
-    // ==================== INITIALIZATION METHODS ====================
+    // ==================== ORIGINAL METHODS ====================
 
-    /**
-     * FIX: Retrieve medicine data from intent (from ParentTutorial)
-     */
+    // FIX: New method to retrieve intent data
     private void retrieveIntentData() {
-        try {
-            // Check if we should show prepost check dialog
-            shouldShowPrepostCheck = getIntent().getBooleanExtra("SHOW_PREPOST_CHECK", false);
+        Intent intent = getIntent();
+        if (intent != null) {
+            medicineLabel = intent.getStringExtra("medicineLabel");
+            medicineName = intent.getStringExtra("medicineName");
+            dosage = intent.getDoubleExtra("dosage", 0.0);
 
-            if (shouldShowPrepostCheck) {
-                medicineLabel = getIntent().getStringExtra("medicineLabel");
-                medicineName = getIntent().getStringExtra("medicineName");
-                dosage = getIntent().getDoubleExtra("dosage", 0);
-
-                Log.d(TAG, "=== PREPOST CHECK DATA ===");
-                Log.d(TAG, "Should show: " + shouldShowPrepostCheck);
-                Log.d(TAG, "Medicine Label: " + medicineLabel);
-                Log.d(TAG, "Medicine Name: " + medicineName);
-                Log.d(TAG, "Dosage: " + dosage);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error retrieving intent data", e);
+            Log.d(TAG, "Intent data - Label: " + medicineLabel + ", Name: " + medicineName + ", Dosage: " + dosage);
         }
     }
 
     private void initializeViews() {
-        try {
-            Log.d(TAG, "Initializing views...");
+        Log.d(TAG, "initializeViews started");
 
-            // FIX: Initialize prepostCheckPopup from layout
-            prepostCheckPopup = findViewById(R.id.prepostCheckPopup);
-            if (prepostCheckPopup != null) {
-                prepostCheckPopup.setVisibility(View.GONE); // Hidden by default
-                Log.d(TAG, "PrepostCheckPopup initialized successfully");
-            } else {
-                Log.e(TAG, "WARNING: prepostCheckPopup not found in layout!");
-            }
+        // Only get views that ACTUALLY EXIST in XML
+        todayDate = findViewById(R.id.todayDate);
+        pefCard = findViewById(R.id.pefCard);
+        graphCard1 = findViewById(R.id.graphCard1);
+        graphCard2 = findViewById(R.id.graphCard2);
+        bottomNavigationView = findViewById(R.id.menuBar);
+        trendContainer = findViewById(R.id.trendContainer);
+        editPEF = findViewById(R.id.editPEF);
+        pefDisplay = findViewById(R.id.pefDisplay);
+        pefButton = findViewById(R.id.pefButton);
+        pefDateTime = findViewById(R.id.pefDateTime);
+        sosButton = findViewById(R.id.sosButton);
 
-            todayDate = findViewById(R.id.todayDate);
-            pefDisplay = findViewById(R.id.pefDisplay);
-            pefDateTime = findViewById(R.id.pefDateTime);
-            pefCard = findViewById(R.id.pefCard);
-            graphCard1 = findViewById(R.id.graphCard1);
-            graphCard2 = findViewById(R.id.graphCard2);
-            pefButton = findViewById(R.id.pefButton);
-            editPEF = findViewById(R.id.editPEF);
-            trendContainer = findViewById(R.id.trendContainer);
+        // FIX: Initialize prepostCheckPopup
+        prepostCheckPopup = findViewById(R.id.prepostCheckPopup);
 
-            // Initialize buttons
-            sosButton = findViewById(R.id.sosButton);
-            logoButton = findViewById(R.id.logo);
-
-            // FIX: Initialize bottom navigation with null check
-            bottomNavigationView = findViewById(R.id.menuBar);
-
-            // Initially hide edit PEF
-            if (editPEF != null) {
-                editPEF.setVisibility(View.GONE);
-            }
-
-            Log.d(TAG, "Views initialized successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Error initializing views", e);
+        editPEF.setVisibility(View.GONE);
+        if (prepostCheckPopup != null) {
+            prepostCheckPopup.setVisibility(View.GONE);
         }
+
+        Log.d(TAG, "todayDate: " + (todayDate != null ? "found" : "NULL"));
+        Log.d(TAG, "bottomNavigationView: " + (bottomNavigationView != null ? "found" : "NULL"));
+        Log.d(TAG, "trendContainer: " + (trendContainer != null ? "found" : "NULL"));
+        Log.d(TAG, "prepostCheckPopup: " + (prepostCheckPopup != null ? "found" : "NULL"));
     }
-
-    private void setupBottomNavigation() {
-        if (bottomNavigationView == null) {
-            Log.e(TAG, "Bottom navigation view is null!");
-            return;
-        }
-
-        try {
-            bottomNavigationView.setSelectedItemId(R.id.homeButton);
-            bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-                int id = item.getItemId();
-                if (id == R.id.homeButton) {
-                    return true;
-                } else if (id == R.id.fileButton) {
-                    // FIX: Check if data is loaded
-                    if (!isDataLoaded || selectedChildId == null) {
-                        Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                    Intent intent = new Intent(ChildHomeActivity.this, InventoryManagement.class);
-                    intent.putExtra("childId", selectedChildId);
-                    startActivity(intent);
-                    return true;
-                } else if (id == R.id.nav_profile) {
-                    Intent profileIntent = new Intent(ChildHomeActivity.this, SignOut_child.class);
-                    startActivity(profileIntent);
-                    return true;
-                } else if (id == R.id.moreButton) {
-                    // FIX: Check if data is loaded
-                    if (!isDataLoaded || selectedChildId == null) {
-                        Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                    Intent intent = new Intent(ChildHomeActivity.this, InventoryLog.class);
-                    intent.putExtra("childId", selectedChildId);
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
-            });
-            Log.d(TAG, "Bottom navigation setup complete");
-        } catch (Exception e) {
-            Log.e(TAG, "Error setting up bottom navigation", e);
-        }
-    }
-
-    private void setupTrendSnippet() {
-        try {
-            if (trendContainer != null) {
-                // Create TrendSnippet instance
-                trendSnippet = new TrendSnippet(this);
-
-                // Add to container
-                trendContainer.addView(trendSnippet);
-
-                Log.d(TAG, "Trend snippet initialized");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error setting up trend snippet", e);
-        }
-    }
-
-    private void setListeners() {
-        try {
-            // FIX: SOS button
-            if (sosButton != null) {
-                sosButton.setOnClickListener(v -> {
-                    if (!isDataLoaded) {
-                        Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Intent sosIntent = new Intent(ChildHomeActivity.this, TriageActivity.class);
-                    startActivity(sosIntent);
-                });
-            }
-
-            // Logo button for sign out
-            if (logoButton != null) {
-                logoButton.setOnClickListener(v -> {
-                    Intent profileIntent = new Intent(ChildHomeActivity.this, SignOut_child.class);
-                    startActivity(profileIntent);
-                });
-            }
-
-            // FIX: PEF button - shows EditText when clicked
-            if (pefButton != null) {
-                pefButton.setOnClickListener(v -> {
-                    if (!isDataLoaded) {
-                        Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (editPEF != null && pefButton != null) {
-                        editPEF.setVisibility(View.VISIBLE);
-                        pefButton.setVisibility(View.GONE);
-
-                        // Focus on the EditText
-                        EditText etPEF = findViewById(R.id.editTextNumber);
-                        if (etPEF != null) {
-                            etPEF.requestFocus();
-                        }
-                    }
-                });
-            }
-
-            // FIX: Handle EditText done action to submit PEF
-            EditText etPEF = findViewById(R.id.editTextNumber);
-            if (etPEF != null) {
-                etPEF.setOnEditorActionListener((v, actionId, event) -> {
-                    if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
-                        submitPeakFlow();
-                        return true;
-                    }
-                    return false;
-                });
-            }
-
-            Log.d(TAG, "Listeners set up successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Error setting up listeners", e);
-        }
-    }
-
-    // ==================== DATA LOADING METHODS ====================
 
     /**
-     * FIX: Load current child data with proper error handling
+     * FIX: Load child data with proper loading indicators and timeout
      */
     private void loadCurrentChildData() {
         try {
-            Log.d(TAG, "Loading current child data...");
+            Log.d(TAG, "loadCurrentChildData started");
+            long startTime = System.currentTimeMillis();
 
             FirebaseUser currentUser = mAuth.getCurrentUser();
             if (currentUser == null) {
-                Log.e(TAG, "No user logged in!");
+                Log.w(TAG, "No user logged in");
                 hideLoading();
-                Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                disableInteractiveElements(false);
                 return;
             }
 
             selectedChildId = currentUser.getUid();
-            Log.d(TAG, "Loading child with ID: " + selectedChildId);
+            Log.d(TAG, "Loading data for child: " + selectedChildId);
 
             // FIX: Set timeout
             setLoadingTimeout();
 
-            db.collection("users")
-                    .document(selectedChildId)
+            db.collection("users").document(selectedChildId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        try {
-                            if (documentSnapshot.exists()) {
-                                Log.d(TAG, "Child document found");
+                        long loadTime = System.currentTimeMillis() - startTime;
+                        Log.d(TAG, "Firebase query completed in " + loadTime + "ms");
 
-                                // FIX: Use consistent variable name - currentChild only
-                                currentChild = documentSnapshot.toObject(Child.class);
+                        if (documentSnapshot.exists()) {
+                            String childName = documentSnapshot.getString("name");
+                            Long pbLong = documentSnapshot.getLong("PEF_PB");
+                            selectedChildPersonalBest = pbLong != null ? pbLong.intValue() : 400;
 
-                                if (currentChild != null) {
-                                    hp = currentChild.getHealthProfile();
-                                    if (hp != null && hp.getPEF_PB() != 0) {
-                                        selectedChildPersonalBest = hp.getPEF_PB();
-                                    }
+                            Log.d(TAG, "Loaded child: " + childName + ", PB: " + selectedChildPersonalBest);
 
-                                    // Update UI with child data
+                            currentChild = documentSnapshot.toObject(Child.class);
+                            if (currentChild != null) {
+                                hp = currentChild.getHealthProfile();
+                                if (hp != null && hp.getPEFLog() != null && !hp.getPEFLog().isEmpty()) {
                                     displayTodayPeakFlow();
-                                    if (trendSnippet != null && hp != null) {
-                                        trendSnippet.updateWithData(hp.getPEFLog(), selectedChildPersonalBest);
-                                    }
-
-                                    Log.d(TAG, "Child data loaded successfully");
-                                } else {
-                                    Log.e(TAG, "Failed to parse child data");
-                                    Toast.makeText(this, "Error loading child data", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
-                                Log.e(TAG, "Child document doesn't exist");
-                                Toast.makeText(this, "Child profile not found", Toast.LENGTH_SHORT).show();
                             }
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error processing child data", e);
-                            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        } finally {
-                            // FIX: Always hide loading and re-enable UI
+
+                            // FIX: Hide loading and enable UI
                             hideLoading();
                             disableInteractiveElements(false);
+
+                            // FIX: Show popup if we came from medicine activity
+                            if (medicineLabel != null) {
+                                showPrePostCheckPopup();
+                            }
+
+                            Log.d(TAG, "Data load completed successfully in " + (System.currentTimeMillis() - startTime) + "ms");
+                        } else {
+                            Log.w(TAG, "Child document does not exist");
+                            hideLoading();
+                            disableInteractiveElements(false);
+                            Toast.makeText(this, "Child data not found", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(e -> {
                         Log.e(TAG, "Failed to load child data", e);
-                        Toast.makeText(this, "Failed to load data: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
                         hideLoading();
                         disableInteractiveElements(false);
+                        Toast.makeText(this, "Error loading data: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     });
 
         } catch (Exception e) {
             Log.e(TAG, "Error in loadCurrentChildData", e);
             hideLoading();
             disableInteractiveElements(false);
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void loadPeakFlowData() {
-        try {
-            if (selectedChildId == null) {
-                Log.e(TAG, "No selected child ID");
-                return;
-            }
-
-            db.collection("users")
-                    .document(selectedChildId)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            Child child = documentSnapshot.toObject(Child.class);
-                            if (child != null) {
-                                currentChild = child; // FIX: Update currentChild reference
-                                hp = child.getHealthProfile();
-                                displayTodayPeakFlow();
-
-                                if (trendSnippet != null && hp != null) {
-                                    trendSnippet.updateWithData(hp.getPEFLog(), selectedChildPersonalBest);
-                                }
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e -> Log.e(TAG, "Failed to reload PEF data", e));
-        } catch (Exception e) {
-            Log.e(TAG, "Error in loadPeakFlowData", e);
+        if (currentChild != null && hp != null && hp.getPEFLog() != null && !hp.getPEFLog().isEmpty()) {
+            displayTodayPeakFlow();
         }
     }
 
-    // ==================== UI UPDATE METHODS ====================
+    private void setupTrendSnippet() {
+        try {
+            if (trendContainer != null) {
+                trendSnippet = new TrendSnippet(this);
+                trendContainer.addView(trendSnippet);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up trend snippet", e);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        try {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser == null) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onStart", e);
+        }
+    }
+
+    private void setupBottomNavigation() {
+        try {
+            if (bottomNavigationView == null) {
+                Log.e(TAG, "bottomNavigationView is NULL!");
+                return;
+            }
+
+            bottomNavigationView.setSelectedItemId(R.id.homeButton);
+
+            bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    int id = item.getItemId();
+
+                    if (id == R.id.homeButton) {
+                        return true;
+
+                    } else if (id == R.id.fileButton) {
+                        startActivity(new Intent(ChildHomeActivity.this, ChildManagement.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                        return true;
+
+                    } else if (id == R.id.nav_profile) {
+                        startActivity(new Intent(ChildHomeActivity.this, HomeStepsRecovery.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                        return true;
+
+                    } else if (id == R.id.moreButton) {
+                        startActivity(new Intent(ChildHomeActivity.this, SignOut_child.class));
+                        overridePendingTransition(0, 0);
+                        finish();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up navigation", e);
+            e.printStackTrace();
+        }
+    }
 
     private void displayTodayPeakFlow() {
-        try {
-            if (hp == null || hp.getPEFLog() == null || hp.getPEFLog().isEmpty()) {
-                if (pefDisplay != null) {
-                    pefDisplay.setText("No Data");
-                }
-                if (pefDateTime != null) {
-                    pefDateTime.setText("");
-                }
-                return;
-            }
+        if (hp == null || hp.getPEFLog() == null || hp.getPEFLog().isEmpty()) {
+            return;
+        }
 
-            ArrayList<PeakFlow> pefLog = hp.getPEFLog();
-            PeakFlow latestPEF = pefLog.get(pefLog.size() - 1);
+        ArrayList<PeakFlow> log = hp.getPEFLog();
+        PeakFlow latest = log.get(log.size() - 1);
 
-            if (pefDisplay != null) {
-                pefDisplay.setText(String.valueOf(latestPEF.getPeakFlow()));
-            }
+        updatePeakFlowUI(latest);
+    }
 
-            if (pefDateTime != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
-                String dateTimeStr = latestPEF.getTime().format(formatter);
-                pefDateTime.setText(dateTimeStr);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error displaying peak flow", e);
-            if (pefDisplay != null) {
-                pefDisplay.setText("Error");
-            }
+    private void updatePeakFlowUI(PeakFlow todayPeakFlow) {
+        pefDisplay.setText(String.valueOf(todayPeakFlow.getPeakFlow()));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a, MMM d");
+            pefDateTime.setText(todayPeakFlow.getTime().format(formatter));
+        }
+
+        switch (todayPeakFlow.getZone()) {
+            case "green":
+                pefCard.setCardBackgroundColor(Color.parseColor("#008000"));
+                break;
+            case "yellow":
+                pefCard.setCardBackgroundColor(Color.parseColor("#FFD700"));
+                break;
+            case "red":
+                pefCard.setCardBackgroundColor(Color.parseColor("#FF0000"));
+                break;
         }
     }
 
-    private void submitPeakFlow() {
+    @SuppressLint("ScheduleExactAlarm")
+    private void setListeners() {
+        sosButton.setOnClickListener(v -> {
+            // FIX: Check if data is loaded
+            if (!isDataLoaded || currentChild == null) {
+                Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(this, TriageActivity.class);
+            intent.putExtra("childId", selectedChildId);
+            startActivity(intent);
+        });
+
+        pefButton.setOnClickListener(v -> {
+            // FIX: Check if data is loaded
+            if (!isDataLoaded || currentChild == null) {
+                Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            editPEF.setVisibility(View.VISIBLE);
+            pefButton.setVisibility(View.GONE);
+        });
+
+        // Handle PEF input - automatically save when user presses Done/Enter
+        EditText peakFlowInput = findViewById(R.id.editTextNumber);
+        if (peakFlowInput != null) {
+            peakFlowInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+                savePeakFlowEntry();
+                return true;
+            });
+        }
+    }
+
+    private void savePeakFlowEntry() {
+        EditText editTextNumber = findViewById(R.id.editTextNumber);
+        String text = editTextNumber.getText().toString().trim();
+
+        // FIX: Check if data is loaded
+        if (!isDataLoaded || currentChild == null || hp == null) {
+            Toast.makeText(this, "Please wait while data loads", Toast.LENGTH_SHORT).show();
+            editPEF.setVisibility(View.GONE);
+            pefButton.setVisibility(View.VISIBLE);
+            return;
+        }
+
         try {
-            EditText etPEF = findViewById(R.id.editTextNumber);
-            if (etPEF == null || hp == null) {
-                return;
+            int peakFlowValue = Integer.parseInt(text);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime submitTime = LocalDateTime.now();
+                PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
+
+                String zone = pef.computeZone(currentChild);
+                pef.setZone(zone);
+
+                hp.addPEFToLog(pef);
+
+                savePeakFlowToFirebase();
+
+                editTextNumber.setText("");
             }
-
-            String pefText = etPEF.getText().toString().trim();
-            if (pefText.isEmpty()) {
-                Toast.makeText(this, "Please enter a peak flow value", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int pefValue = Integer.parseInt(pefText);
-            LocalDateTime now = LocalDateTime.now();
-            PeakFlow newPEF = new PeakFlow(pefValue, now);
-
-            hp.getPEFLog().add(newPEF);
-            savePeakFlowToFirebase();
-
-            // Clear the input
-            etPEF.setText("");
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
-            if (editPEF != null && pefButton != null) {
-                editPEF.setVisibility(View.GONE);
-                pefButton.setVisibility(View.VISIBLE);
-            }
+            editPEF.setVisibility(View.GONE);
+            pefButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -640,57 +557,37 @@ public class ChildHomeActivity extends AppCompatActivity {
     // FIX: New method to show popup
     private void showPrePostCheckPopup() {
         if (prepostCheckPopup != null) {
-            Log.d(TAG, "Showing prepost check popup");
             prepostCheckPopup.setVisibility(View.VISIBLE);
 
             // Optional: Blur background
             View mainContent = findViewById(R.id.homePage);
             if (mainContent != null) {
-                try {
-                    Blurry.with(this).radius(25).sampling(2).onto((ViewGroup) mainContent);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error blurring background", e);
-                }
+                Blurry.with(this).radius(25).sampling(2).onto((ViewGroup) mainContent);
             }
-        } else {
-            Log.e(TAG, "Cannot show popup - prepostCheckPopup is null!");
         }
     }
 
     // FIX: New method to hide popup
     private void hidePrePostCheckPopup() {
         if (prepostCheckPopup != null) {
-            Log.d(TAG, "Hiding prepost check popup");
             prepostCheckPopup.setVisibility(View.GONE);
 
             // Optional: Remove blur
             View mainContent = findViewById(R.id.homePage);
             if (mainContent != null) {
-                try {
-                    Blurry.delete((ViewGroup) mainContent);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error removing blur", e);
-                }
+                Blurry.delete((ViewGroup) mainContent);
             }
         }
     }
 
     // FIX: Single, properly structured saveNewLogWithRating method
     private void saveNewLogWithRating(String rating) {
-        Log.d(TAG, "=== SAVING LOG WITH RATING ===");
-        Log.d(TAG, "Rating: " + rating);
-        Log.d(TAG, "Medicine Label: " + medicineLabel);
-        Log.d(TAG, "Medicine Name: " + medicineName);
-        Log.d(TAG, "Dosage: " + dosage);
-
         if (currentChild == null) {
-            Log.e(TAG, "Error: Child data not loaded");
             Toast.makeText(this, "Error: Child data not loaded", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (medicineLabel == null) {
-            Log.e(TAG, "Error: Medicine label not set");
             Toast.makeText(this, "Error: Medicine label not set", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -702,7 +599,6 @@ public class ChildHomeActivity extends AppCompatActivity {
             InventoryItem medicineItem = currentChild.getInventory().getMedicine(label);
 
             if (medicineItem == null) {
-                Log.e(TAG, "Error: Medicine not found in inventory");
                 Toast.makeText(this, "Error: Medicine not found in inventory", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -710,7 +606,6 @@ public class ChildHomeActivity extends AppCompatActivity {
             LocalDateTime timestamp = LocalDateTime.now();
             TechniqueQuality quality = (label == MedicineLabel.CONTROLLER) ? TechniqueQuality.HIGH : TechniqueQuality.NA;
 
-            // Create new log with rating
             MedicineUsageLog newLog = new MedicineUsageLog(
                     medicineItem,
                     dosage,
@@ -719,15 +614,11 @@ public class ChildHomeActivity extends AppCompatActivity {
                     rating
             );
 
-            Log.d(TAG, "Created new log: " + newLog.toString());
-
             // Add to appropriate log list
             if (label == MedicineLabel.CONTROLLER) {
                 currentChild.getInventory().getControllerLog().add(newLog);
-                Log.d(TAG, "Added to controller log");
             } else {
                 currentChild.getInventory().getRescueLog().add(newLog);
-                Log.d(TAG, "Added to rescue log");
             }
 
             // Save to Firebase
@@ -736,34 +627,24 @@ public class ChildHomeActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             Toast.makeText(this, "Error: Invalid medicine label", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Invalid medicine label: " + medicineLabel, e);
-        } catch (Exception e) {
-            Toast.makeText(this, "Error saving log: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Error in saveNewLogWithRating", e);
         }
     }
 
     // FIX: New method to save child data to Firebase
     private void saveChildToFirebase(String rating) {
         if (selectedChildId == null || currentChild == null) {
-            Log.e(TAG, "Cannot save - selectedChildId or currentChild is null");
             return;
         }
 
-        Log.d(TAG, "Saving to Firebase...");
         db.collection("users").document(selectedChildId)
                 .set(currentChild)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Rating saved: " + rating, Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "✓ Child data saved successfully with rating: " + rating);
-
-                    // Clear the medicine data after successful save
-                    medicineLabel = null;
-                    medicineName = null;
-                    dosage = 0;
+                    Log.d(TAG, "Child data saved with rating: " + rating);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to save rating", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "✗ Failed to save child data", e);
+                    Log.e(TAG, "Failed to save child data", e);
                 });
     }
 

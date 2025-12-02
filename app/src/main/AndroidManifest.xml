@@ -4,7 +4,9 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,32 +17,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:replace="android:label,android:icon">
+
         <activity
             android:name=".ui.ChildUI.TriageAndResponse.FullScreenEscalationNotification"
-            android:exported="false" />
-        <activity
-            android:name=".ui.ChildUI.TriageAndResponse.CheckupResponseActivity"
-            android:exported="false" />
-
-        <receiver
-            android:name=".CheckupNotificationReceiver"
             android:exported="false" />
         <activity
             android:name=".ui.ChildUI.TriageAndResponse.HomeStepsRecovery"
             android:exported="false" />
         <activity
-            android:name=".ui.ChildUI.TriageAndResponse.TriageDecisionCard"
-            android:exported="false" />
-        <activity
             android:name=".ui.ChildUI.TriageAndResponse.TriageActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ui.ChildUI.TriageAndResponse.TriageCriticalActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.ChildUI.TriageAndResponse.TriageNonCriticalActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.PeakFlowInput"
             android:exported="false" />
 
+        <receiver
+            android:name=".CheckupNotificationReceiver"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,65 +54,54 @@
 
         <activity
             android:name=".auth.LogInModule.LogInViewActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".auth.Register"
-            android:exported="true" />
-
+            android:exported="true" /> <activity
+        android:name=".auth.Register"
+        android:exported="true" />
         <activity
             android:name=".auth.UserRole"
             android:exported="true" />
-
         <activity
             android:name=".auth.ForgotPassword"
             android:exported="true" />
-
         <activity
             android:name=".auth.SignOut"
             android:exported="true" />
-
         <activity
             android:name=".auth.SignOut_child"
+            android:exported="true" />
+        <activity
+            android:name=".auth.SignOutProvider"
             android:exported="true" />
 
         <activity
             android:name=".ui.ChildUI.ChildHomeActivity"
             android:exported="true" />
-
         <activity
             android:name=".ui.ParentUI.ParentHomeActivity"
             android:exported="true" />
-
         <activity
             android:name=".ui.ProviderUI.ProviderHomeActivity"
             android:exported="true" />
-        <activity
-            android:name=".ui.DailyCheckInActivity"
-            android:exported="true">
-        </activity>
 
         <activity
+            android:name=".ui.DailyCheckInActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.HistoryFilterActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
 
         <activity
             android:name=".ui.ParentUI.ParentManagement"
             android:exported="false" />
-
         <activity
             android:name=".ui.ParentUI.ParentChildDetails"
             android:exported="false" />
-
         <activity
             android:name=".ui.ParentUI.ParentChildEdit"
             android:exported="false" />
-
         <activity
             android:name=".ui.ParentUI.ParentRegisterChild"
             android:exported="true" />
-
         <activity
             android:name=".ui.ParentUI.ParentRegisterLogin"
             android:exported="true" />
@@ -115,52 +109,37 @@
         <activity
             android:name=".ui.ChildUI.ChildManagement"
             android:exported="false" />
-
         <activity
             android:name=".ui.ChildUI.ChildChildDetails"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ChildUI.StreakManagement"
             android:exported="false" />
 
         <activity
             android:name=".ui.Inventory.InventoryLog"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Inventory.InventoryManagement"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Inventory.InventoryRefill"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Inventory.InventoryUsage"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.ProviderUI.ProviderManagement"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ProviderUI.ProviderChildDetails"
             android:exported="false" />
 
         <activity
             android:name=".ui.Onboarding"
             android:exported="true" />
 
-        <activity
-            android:name=".ui.Inventory.InventoryManagement"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.Inventory.InventoryRefill"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.Inventory.InventoryUsage"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.ChildUI.StreakManagement"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.ProviderManagement"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.ProviderChildDetails"
-            android:exported="false" />
-
-        <activity
-            android:name=".auth.SignOutProvider"
-            android:exported="true" />
-
-
-
-
-
     </application>
-
 
 </manifest>

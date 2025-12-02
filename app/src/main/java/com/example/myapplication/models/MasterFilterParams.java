@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MasterFilterParams {
+    // Child Username
+    public String username;
     // Date Range
     public Long startTimestamp = null;
     public Long endTimestamp = null;

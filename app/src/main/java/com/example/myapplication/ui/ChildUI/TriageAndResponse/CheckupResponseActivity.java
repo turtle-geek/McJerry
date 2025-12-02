@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -18,13 +19,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
+import com.example.myapplication.ui.ChildUI.TriageAndResponse.TriageActivity;
+import com.example.myapplication.ui.ChildUI.TriageAndResponse.FullScreenEscalationNotification;
+
 
 import jp.wasabeef.blurry.Blurry;
 
-/** This class is the check-up screen that will show up when the user interacts with the
- *  10-minute check-up notification.
- */
 public class CheckupResponseActivity extends AppCompatActivity {
+
+    private static final String TAG = "CheckupResponseActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,10 @@ public class CheckupResponseActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_checkup_response);
 
+        String userId = getIntent().getStringExtra("id");
+
         boolean fromNotification = getIntent().getBooleanExtra("fromNotification", false);
+        Log.d(TAG, "Activity created. From Notification: " + fromNotification);
 
         View mainContent = findViewById(R.id.homePage);
         if (mainContent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,11 +52,9 @@ public class CheckupResponseActivity extends AppCompatActivity {
                     .apply();
 
             cancelNoResponseAlarm();
-            setListeners();
-            finish();
         }
 
-
+        setListeners(userId);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -59,7 +63,7 @@ public class CheckupResponseActivity extends AppCompatActivity {
         });
     }
 
-    private void setListeners() {
+    private void setListeners(String userId) {
         ImageButton better, same, worse;
         better = findViewById(R.id.better);
         same = findViewById(R.id.same);
@@ -67,33 +71,35 @@ public class CheckupResponseActivity extends AppCompatActivity {
 
         better.setOnClickListener(v -> {
             Toast.makeText(
-                    this,
-                    "Awesome! Sending you back to home page",
-                    Toast.LENGTH_LONG)
+                            this,
+                            "Awesome! Sending you back to home page",
+                            Toast.LENGTH_LONG)
                     .show();
             finish();
         });
 
         same.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TriageDecisionCard.class);
-            intent.putExtra("DECISION", "SOS");
+            Intent intent = new Intent(this, TriageActivity.class);
+            if (userId != null) {
+                intent.putExtra("id", userId);
+            }
             startActivity(intent);
             finish();
         });
 
         worse.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TriageDecisionCard.class);
-            intent.putExtra("DECISION", "SOS");
+            Intent intent = new Intent(this, TriageActivity.class);
+            if (userId != null) {
+                intent.putExtra("id", userId);
+            }
             startActivity(intent);
             finish();
         });
     }
 
     private void cancelNoResponseAlarm(){
-        // Match intent of the alarm we want to cancel
         Intent intent = new Intent(this, FullScreenEscalationNotification.class);
 
-        // Wrap in a matching PendingIntent as alarms run on PendingIntent
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this,
                 0,
@@ -101,8 +107,12 @@ public class CheckupResponseActivity extends AppCompatActivity {
                 PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Get reference to AlarmManager and cancel said alarm
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            Log.d(TAG, "No response alarm cancelled.");
+        } else {
+            Log.e(TAG, "AlarmManager service is null.");
+        }
     }
 }

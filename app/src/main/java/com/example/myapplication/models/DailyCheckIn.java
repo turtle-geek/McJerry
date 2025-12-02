@@ -3,22 +3,20 @@ package com.example.myapplication.models;
 import java.util.List;
 
 public class DailyCheckIn {
+    private String username;
     private long checkInTimestamp;
     private String entryAuthor;
     private boolean nightWaking;
-    private int activityLimits; // scale from 0-3
-    private int cough; // scale from 1-5
+    private int activityLimits;
+    private int cough;
     private List<String> selectedTriggers;
 
-    // 🏆 FIX: Public no-argument constructor required by Firestore toObject()
     public DailyCheckIn() {
-        // This empty constructor is essential for Firebase to correctly map
-        // the JSON fields from the database document into a Java object.
     }
 
-    // Existing full constructor (for creating new entries)
-    public DailyCheckIn(long checkInTimestamp, String entryAuthor, boolean nightWaking,
+    public DailyCheckIn(String username, long checkInTimestamp, String entryAuthor, boolean nightWaking,
                         int activityLimits, int cough, List<String> selectedTriggers) {
+        this.username = username;
         this.checkInTimestamp = checkInTimestamp;
         this.entryAuthor = entryAuthor;
         this.nightWaking = nightWaking;
@@ -27,7 +25,9 @@ public class DailyCheckIn {
         this.selectedTriggers = selectedTriggers;
     }
 
-    // --- Getters ---
+    public String getUsername() {
+        return username;
+    }
 
     public long getCheckInTimestamp() {
         return checkInTimestamp;

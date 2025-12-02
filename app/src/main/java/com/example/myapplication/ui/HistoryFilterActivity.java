@@ -54,11 +54,14 @@ public class HistoryFilterActivity extends AppCompatActivity {
     private TextView tvStartDate;
     private TextView tvEndDate;
     private LinearLayout customRangeLayout;
-    private RadioGroup radioGroupDateRange;
 
     // Date storage
     private Calendar startDateCalendar;
     private Calendar endDateCalendar;
+
+    // CONSTANTS FOR DATE RANGE VALIDATION (Approximate values)
+    private static final long MIN_RANGE_MILLIS = 3 * 30L * 24 * 60 * 60 * 1000; // Approx 3 months
+    private static final long MAX_RANGE_MILLIS = 6 * 30L * 24 * 60 * 60 * 1000; // Approx 6 months
 
     // INSTANTIATE NECESSARY SERVICES
     private final DailyCheckInHistory historyManager = new DailyCheckInHistory();
@@ -79,75 +82,59 @@ public class HistoryFilterActivity extends AppCompatActivity {
         // Initialize Date objects
         startDateCalendar = Calendar.getInstance();
         endDateCalendar = Calendar.getInstance();
-        // Ensure endDate is set to the end of the day for accurate filtering
-        endDateCalendar.set(Calendar.HOUR_OF_DAY, 23);
-        endDateCalendar.set(Calendar.MINUTE, 59);
-        endDateCalendar.set(Calendar.SECOND, 59);
 
         // Initialize Date Range Views
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
         customRangeLayout = findViewById(R.id.customRangeLayout);
-        radioGroupDateRange = findViewById(R.id.radioGroupDateRange);
+
+        // Set Default Date Range (Today back 3 months)
+        setDefaultDateRange();
 
         setupPdfLauncher();
+
+        // Setup the back button listener
+        setupBackButton();
 
         setupSymptomFilter("nw", R.id.filterNightWaking, R.id.nwFilterHeader, R.id.nwFilterDropdownOptions, R.id.nwBtnToggleDropdown, R.id.nwCbFilterMain);
         setupSymptomFilter("al", R.id.filterActivityLimits, R.id.alFilterHeader, R.id.alFilterDropdownOptions, R.id.alBtnToggleDropdown, R.id.alCbFilterMain);
         setupSymptomFilter("cw", R.id.filterCoughWheeze, R.id.cwFilterHeader, R.id.cwFilterDropdownOptions, R.id.cwBtnToggleDropdown, R.id.cwCbFilterMain);
 
-        setupDateRangeToggle();
+        // Setup the date click listeners
+        tvStartDate.setOnClickListener(v -> showDatePicker(tvStartDate, startDateCalendar, true));
+        tvEndDate.setOnClickListener(v -> showDatePicker(tvEndDate, endDateCalendar, false));
 
         findViewById(R.id.btnApplyFilter).setOnClickListener(v -> applyFiltersAndSave());
     }
 
-    // --- Date Picker and Range Logic ---
-
-    private void setupDateRangeToggle() {
-        radioGroupDateRange.setOnCheckedChangeListener((group, checkedId) -> {
-            // Hide/Show custom range layout
-            if (checkedId == R.id.rbCustomRange) {
-                customRangeLayout.setVisibility(View.VISIBLE);
-                // Set default dates if Custom Range is selected
-                if (tvStartDate.getText().equals(getString(R.string.default_start_date))) {
-                    updateDateRange(30); // Default custom range to last 30 days
-                }
-            } else {
-                customRangeLayout.setVisibility(View.GONE);
-                // Calculate and set automatic ranges
-                if (checkedId == R.id.rbLast7Days) {
-                    updateDateRange(7);
-                } else if (checkedId == R.id.rbLast30Days) {
-                    updateDateRange(30);
-                } else if (checkedId == R.id.rbLast3Months) {
-                    updateDateRange(3 * 30); // Approx 90 days
-                } else if (checkedId == R.id.rbLast6Months) {
-                    updateDateRange(6 * 30); // Approx 180 days
-                }
-            }
-        });
-
-        // Set up click listeners for the custom date TextViews
-        tvStartDate.setOnClickListener(v -> showDatePicker(tvStartDate, startDateCalendar, true));
-        tvEndDate.setOnClickListener(v -> showDatePicker(tvEndDate, endDateCalendar, false));
-
-        // Ensure a range is selected by default (e.g., Last 7 Days)
-        radioGroupDateRange.check(R.id.rbLast7Days);
+    /**
+     * Finds the back button and sets an OnClickListener to close the activity.
+     */
+    private void setupBackButton() {
+        ImageButton backButton = findViewById(R.id.btnBack);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> {
+                // Closes the current activity and returns to the previous activity
+                finish();
+            });
+        }
     }
 
+    // --- Date Picker and Range Logic ---
+
     /**
-     * Updates the date range for pre-defined selections (Last N days).
+     * Sets the default date range: End Date is today, Start Date is 3 months prior.
      */
-    private void updateDateRange(int daysBack) {
-        endDateCalendar.setTimeInMillis(System.currentTimeMillis());
+    private void setDefaultDateRange() {
         // Set end date to the very end of today
+        endDateCalendar.setTimeInMillis(System.currentTimeMillis());
         endDateCalendar.set(Calendar.HOUR_OF_DAY, 23);
         endDateCalendar.set(Calendar.MINUTE, 59);
         endDateCalendar.set(Calendar.SECOND, 59);
 
-        // Set start date back N days, setting time to midnight
+        // Set start date 3 months back, setting time to midnight
         startDateCalendar.setTimeInMillis(System.currentTimeMillis());
-        startDateCalendar.add(Calendar.DAY_OF_YEAR, -daysBack);
+        startDateCalendar.add(Calendar.MONTH, -3);
         startDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
         startDateCalendar.set(Calendar.MINUTE, 0);
         startDateCalendar.set(Calendar.SECOND, 0);
@@ -304,13 +291,43 @@ public class HistoryFilterActivity extends AppCompatActivity {
     }
 
     private void applyFiltersAndSave() {
+        // 1. Gather parameters first (to get trigger list and timestamps)
         MasterFilterParams params = gatherFilterParams();
 
-        // Check if custom dates are valid before proceeding
+        // 2. Check for FILTER selection (Must be first)
+        boolean isSymptomFilterOn =
+                ((CheckBox) findViewById(R.id.nwCbFilterMain)).isChecked() ||
+                        ((CheckBox) findViewById(R.id.alCbFilterMain)).isChecked() ||
+                        ((CheckBox) findViewById(R.id.cwCbFilterMain)).isChecked();
+
+        boolean isTriggerFilterOn = !params.selectedTriggers.isEmpty();
+
+        if (!isSymptomFilterOn && !isTriggerFilterOn) {
+            Toast.makeText(this, "Please select at least one Symptom or Trigger filter.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // 3. Basic Date Order Validity Check: Start must be before End
         if (params.startTimestamp > params.endTimestamp) {
             Toast.makeText(this, "Error: Start Date cannot be after End Date.", Toast.LENGTH_LONG).show();
             return;
         }
+
+        // 4. Enforce Minimum and Maximum Range
+        long rangeMillis = params.endTimestamp - params.startTimestamp;
+
+        // Shorter message for minimum range
+        if (rangeMillis < MIN_RANGE_MILLIS) {
+            Toast.makeText(this, "Date range must be at least 3 months.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Shorter message for maximum range
+        if (rangeMillis > MAX_RANGE_MILLIS) {
+            Toast.makeText(this, "Date range cannot exceed 6 months.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
 
         // ASYNCHRONOUS FETCH CALL
         historyRepository.fetchAndFilterDataAsync(params, new HistoryDataCallback() {
@@ -404,6 +421,7 @@ public class HistoryFilterActivity extends AppCompatActivity {
                 if (cb.isChecked()) {
                     try {
                         String resourceName = getResources().getResourceEntryName(cb.getId());
+                        // Assuming the ID ends in the score (e.g., 'cwCbOption0')
                         int score = Integer.parseInt(resourceName.substring(resourceName.length() - 1));
 
                         minScore = Math.min(minScore, score);

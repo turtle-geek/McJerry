@@ -1,4 +1,3 @@
-// DailyCheckInHistory.java
 package com.example.myapplication.models;
 
 import java.util.ArrayList;
@@ -6,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DailyCheckInHistory {
-    // A dynamic array (ArrayList) to store all the check-in entries
     private List<DailyCheckIn> historyLogs;
 
     public DailyCheckInHistory() {
@@ -31,49 +29,48 @@ public class DailyCheckInHistory {
         return new ArrayList<>(historyLogs);
     }
 
-    // -------------------------------------------------------------------------
-    // MASTER FILTER METHOD (The Pipeline)
-    // -------------------------------------------------------------------------
-
     /**
      * Filters the entire history log based on the provided MasterFilterParams.
      * Applies filters sequentially (AND logic).
      */
     public List<DailyCheckIn> masterFilter(MasterFilterParams params) {
-        // 1. Start with the full list (using a copy)
         List<DailyCheckIn> filteredEntries = getAllEntries();
 
-        // 2. Apply Date Range Filter
+        // Apply USERNAME Filter (Mandatory, uses childId from params)
+        if (params.username != null && !params.username.isEmpty()) {
+            filteredEntries = filterByUsername(filteredEntries, params.username);
+        } else {
+            // If the username is missing, return an empty list immediately
+            return new ArrayList<>();
+        }
+
+        // Apply Date Range Filter
         if (params.startTimestamp != null && params.endTimestamp != null) {
             filteredEntries = filterByDateRange(filteredEntries, params.startTimestamp, params.endTimestamp);
         }
 
-        // 3. Apply Multi-Trigger Filter (OR Logic: Entry must contain AT LEAST ONE selected trigger)
+        // Apply Multi-Trigger Filter (OR Logic: Entry must contain AT LEAST ONE selected trigger)
         if (params.selectedTriggers != null && !params.selectedTriggers.isEmpty()) {
             filteredEntries = filterByMultipleTriggers(filteredEntries, params.selectedTriggers);
         }
 
-        // 4. Apply Night Waking Filter
+        // Apply Night Waking Filter
         if (params.nightWaking != null && params.nightWaking) {
             filteredEntries = filterByNightWaking(filteredEntries);
         }
 
-        // 5. Apply Activity Limits Filter
+        // Apply Activity Limits Filter
         if (params.activityLimits != null && params.activityLimits) {
             filteredEntries = filterByActivityLimits(filteredEntries);
         }
 
-        // 6. Apply Cough Score Filter (Range Check for 0-4 scale)
+        // Apply Cough Score Filter (Range Check for 0-4 scale)
         if (params.minCoughWheezeScore != null || params.maxCoughWheezeScore != null) {
-            // Set defaults if only one boundary is specified. Max is 4 based on your UI.
-
-            // Replaced ternary operator with standard if blocks
             int minScore = 0;
             if (params.minCoughWheezeScore != null) {
                 minScore = params.minCoughWheezeScore.intValue();
             }
 
-            // Replaced ternary operator with standard if blocks
             int maxScore = 4;
             if (params.maxCoughWheezeScore != null) {
                 maxScore = params.maxCoughWheezeScore.intValue();
@@ -85,9 +82,14 @@ public class DailyCheckInHistory {
         return filteredEntries;
     }
 
-    // -------------------------------------------------------------------------
-    // PIPELINE-FRIENDLY FILTER METHODS
-    // -------------------------------------------------------------------------
+    /**
+     * Filters an existing list by the provided username (childId).
+     */
+    public List<DailyCheckIn> filterByUsername(List<DailyCheckIn> entriesToFilter, String username) {
+        return entriesToFilter.stream()
+                .filter(entry -> username.equals(entry.getUsername()))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Filters an existing list by date range.

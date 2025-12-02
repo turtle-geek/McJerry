@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 // Java Utility Imports
@@ -26,23 +26,94 @@ import com.example.myapplication.models.DailyCheckIn;
 
 // Firebase/Firestore Imports
 import com.example.myapplication.sosButtonResponse;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class DailyCheckInActivity extends AppCompatActivity {
+
+    private String username;
+    public static final String EXTRA_USERNAME = "CHILD_USERNAME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Load the UI (R.layout.activity_daily_check_in must exist)
+        checkAndSetupUser();
+    }
+
+    /**
+     * Checks the current logged-in user, fetches their username, and initializes the views.
+     */
+    private void checkAndSetupUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "Error: User must be logged in.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        String uid = user.getUid();
+
+        // Fetch the user's document to get the username field
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+
+                        // 1. Retrieve the full string from the "emailUsername" field
+                        String fullEmailUsername = documentSnapshot.getString("emailUsername");
+
+                        if (fullEmailUsername != null && !fullEmailUsername.isEmpty()) {
+
+                            // 2. Extract the identifier (the part before the '@')
+                            String cleanUsername;
+                            int atIndex = fullEmailUsername.indexOf('@');
+
+                            if (atIndex > 0) {
+                                cleanUsername = fullEmailUsername.substring(0, atIndex);
+                            } else {
+                                // Fallback: use the whole string if no @ is found
+                                cleanUsername = fullEmailUsername;
+                            }
+
+                            if (!cleanUsername.isEmpty()) {
+                                this.username = cleanUsername; // Set the clean identifier
+                                setupViews(); // Proceed with activity setup
+                            } else {
+                                Toast.makeText(this, "Error: Username part not found in profile.", Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        } else {
+                            Toast.makeText(this, "Error: User data is incomplete.", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(this, "Error: User profile not found.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("DailyCheckInActivity", "Failed to fetch user data: ", e);
+                    Toast.makeText(this, "Error fetching user data.", Toast.LENGTH_LONG).show();
+                    finish();
+                });
+    }
+
+    /**
+     * Sets up all the UI elements once the username is successfully retrieved.
+     */
+    private void setupViews() {
         setContentView(R.layout.activity_daily_check_in);
 
-        // Call the function to set the date
         setDynamicDate();
+        setupBackButton();
 
         // Set up SOS Button
         ImageButton sosButton = findViewById(R.id.sosButton);
@@ -79,9 +150,15 @@ public class DailyCheckInActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Finds the header TextView and updates it with the current date.
-     */
+    private void setupBackButton() {
+        ImageButton backButton = findViewById(R.id.btnBack);
+        if (backButton != null) {
+            backButton.setOnClickListener(v -> {
+                finish();
+            });
+        }
+    }
+
     private void setDynamicDate() {
         try {
             // Find the TextView element using its ID from the XML
@@ -95,17 +172,11 @@ public class DailyCheckInActivity extends AppCompatActivity {
             dateTextView.setText("Please complete this entry for " + formattedDate + ".");
 
         } catch (Exception e) {
-            // This will catch the error if R.id.headerDateText is missing,
-            // preventing the app from crashing.
             Log.e("DailyCheckInActivity", "Error setting dynamic date.", e);
         }
     }
 
-    /**
-     * Saves the completed DailyCheckIn object to the Firestore database.
-     */
     private void saveCheckInToFirestore(DailyCheckIn checkIn) {
-        // Initialize Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("daily_checkins")
@@ -127,7 +198,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
     }
 
     private boolean isFormValid(List<String> collectedTriggers) {
-        // Check all required RadioGroups for selection (-1 means nothing is selected)
         if (((RadioGroup) findViewById(R.id.radioGroupAuthor)).getCheckedRadioButtonId() == -1) {
             Toast.makeText(this, "Please select the Entry Author.", Toast.LENGTH_LONG).show();
             return false;
@@ -152,7 +222,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
     }
 
     private void handleSubmitCheckIn() {
-        // 1. Collect Triggers (Checkboxes)
         List<String> selectedTriggers = new ArrayList<>();
         if (((CheckBox) findViewById(R.id.cbExercise)).isChecked())
             selectedTriggers.add("Exercise");
@@ -167,44 +236,45 @@ public class DailyCheckInActivity extends AppCompatActivity {
         if (((CheckBox) findViewById(R.id.cbStrongOdors)).isChecked())
             selectedTriggers.add("Strong Odors/Perfumes");
 
-        // 2. Validate Form
         if(!isFormValid(selectedTriggers)){
-            return; // stop execution
+            return;
+        }
+
+        if (username == null || username.isEmpty()) {
+            Toast.makeText(this, "Error: Child Username is missing, cannot save entry.", Toast.LENGTH_LONG).show();
+            Log.e("DailyCheckInActivity", "Username is null or empty during handleSubmitCheckIn.");
+            return;
         }
 
         long timestamp = System.currentTimeMillis();
 
-        // 3. Get Entry Author
         RadioGroup authorGroup = findViewById(R.id.radioGroupAuthor);
         int selectedAuthorId = authorGroup.getCheckedRadioButtonId();
         String entryAuthor = (selectedAuthorId == R.id.rbChildEntered) ? "Child" : "Parent";
 
-        // 4. Get Night Waking Status
         RadioGroup wakingGroup = findViewById(R.id.radioGroupNightWaking);
         int selectedWakingId = wakingGroup.getCheckedRadioButtonId();
         boolean nightWaking = selectedWakingId != R.id.rbWakingNo;
 
-        // 5. Get Activity Limits (Mapping ID to 0-2 Scale)
         RadioGroup limitsGroup = findViewById(R.id.radioGroupActivityLimits);
         int selectedLimitId = limitsGroup.getCheckedRadioButtonId();
         int activityLimits;
 
         if (selectedLimitId == R.id.rbLimit0)
-            activityLimits = 0; // No Limits
+            activityLimits = 0;
         else if (selectedLimitId == R.id.rbLimit1)
-            activityLimits = 1; // A Bit Limited
+            activityLimits = 1;
         else if (selectedLimitId == R.id.rbLimit2)
-            activityLimits = 2; // Very Limited
+            activityLimits = 2;
         else
-            activityLimits = 0; // Fallback - should not happen due to validation
+            activityLimits = 0;
 
-        // 6. Get Cough/Wheeze (Mapping ID to 0-4 Scale)
         RadioGroup coughGroup = findViewById(R.id.radioGroupCoughWheeze);
         int selectedCoughId = coughGroup.getCheckedRadioButtonId();
-        int coughWheeze = 0; // Default to 0
+        int coughWheeze = 0;
 
         if (selectedCoughId == R.id.rbCough1)
-            coughWheeze = 0; // None
+            coughWheeze = 0;
         else if (selectedCoughId == R.id.rbCough2)
             coughWheeze = 1;
         else if (selectedCoughId == R.id.rbCough3)
@@ -212,10 +282,10 @@ public class DailyCheckInActivity extends AppCompatActivity {
         else if (selectedCoughId == R.id.rbCough4)
             coughWheeze = 3;
         else if (selectedCoughId == R.id.rbCough5)
-            coughWheeze = 4; // Severe
+            coughWheeze = 4;
 
-        // 7. Create DailyCheckIn object
         DailyCheckIn newEntry = new DailyCheckIn(
+                username,
                 timestamp,
                 entryAuthor,
                 nightWaking,
@@ -224,7 +294,6 @@ public class DailyCheckInActivity extends AppCompatActivity {
                 selectedTriggers
         );
 
-        // 8. Persist data
         saveCheckInToFirestore(newEntry);
     }
 }

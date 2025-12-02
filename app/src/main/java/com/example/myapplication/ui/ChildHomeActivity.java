@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
@@ -32,12 +33,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.cardview.widget.CardView;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.CheckupNotificationReceiver;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.auth.SignOut_child;
 import com.example.myapplication.models.Child;
 import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
@@ -310,6 +314,7 @@ public class ChildHomeActivity extends AppCompatActivity {
                         Log.e(TAG, "Error saving peak flow", e);
                         Toast.makeText(this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
+
         } catch (Exception e) {
             Log.e(TAG, "Exception in savePeakFlowToFirebase", e);
         }
@@ -575,8 +580,20 @@ public class ChildHomeActivity extends AppCompatActivity {
                         finish();
                         return true;
                     }
+                    return false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up navigation", e);
+            e.printStackTrace();
+        }
+    }
 
     private void displayTodayPeakFlow() {
+        if (hp == null || hp.getPEFLog() == null || hp.getPEFLog().isEmpty()) {
+            return;
+        }
+
         ArrayList<PeakFlow> log = hp.getPEFLog();
         PeakFlow latest = log.get(log.size() - 1);
 
@@ -592,6 +609,7 @@ public class ChildHomeActivity extends AppCompatActivity {
             formatter = DateTimeFormatter.ofPattern("h:mm a, MMM d");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a, MMM d");
             pefDateTime.setText(todayPeakFlow.getTime().format(formatter));
         }
 
@@ -638,6 +656,10 @@ public class ChildHomeActivity extends AppCompatActivity {
                             PeakFlow pef = new PeakFlow(peakFlowValue, submitTime);
                             pef.computeZone(currentChild);
                             hp.addPEFToLog(pef);
+
+                            // Update UI
+                            displayTodayPeakFlow();
+                            editPEF.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -659,6 +681,13 @@ public class ChildHomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CheckupNotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        }
+    }
+
     private void setCurrentDate() {
         try {
             if (todayDate != null) {
@@ -703,6 +732,25 @@ public class ChildHomeActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e(TAG, "Error setting up card listeners", e);
+        }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if(currentChild == null){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        try {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if(currentUser == null){
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onStart", e);
         }
     }
 

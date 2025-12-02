@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".peakflow.PeakFlowInput">
+
+    <ImageButton
+        android:id="@+id/sosButton"
+        android:layout_width="75dp"
+        android:layout_height="67dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/sos"
+        tools:layout_editor_absoluteX="320dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <!-- Input layout -->
+    <TextView
+        android:id="@+id/pbDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Personal Best: "
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="559dp" />
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/pbDisplay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sosButton"
+        app:layout_constraintVertical_bias="0.666">
+
+
+        <TextView
+            android:id="@+id/pefPrompt"
+            android:layout_width="254dp"
+            android:layout_height="25dp"
+            android:text="@string/how_fast_is_your_air_blow_today"
+            tools:layout_editor_absoluteX="78dp"
+            tools:layout_editor_absoluteY="269dp" />
+
+        <EditText
+            android:id="@+id/peakFlowInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/enter_peak_flow"
+            android:inputType="number"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="324dp" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="381dp" />
+    </LinearLayout>
+
+    <!-- Output layout -->
+    <LinearLayout
+        android:id="@+id/zoneLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/pbDisplay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sosButton"
+        app:layout_constraintVertical_bias="0.666">
+
+        <TextView
+            android:id="@+id/pefDisplay"
+            android:layout_width="187dp"
+            android:layout_height="wrap_content"
+            android:text="[PEF HERE]"
+            android:textSize="30sp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/zoneDisplay"
+            android:layout_width="187dp"
+            android:layout_height="wrap_content"
+            android:text="[ZONE]"
+            android:textSize="15sp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/pefDateTime"
+            android:layout_width="187dp"
+            android:layout_height="wrap_content"
+            android:text="[PEF DATE TIME]"
+            android:textSize="13sp"
+            android:textAlignment="center"/>
+
+        <Button
+            android:id="@+id/newPEFButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/record_new_peak_flow"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="381dp" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

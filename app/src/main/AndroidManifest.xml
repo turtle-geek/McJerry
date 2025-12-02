@@ -19,7 +19,7 @@
             android:name=".ui.ChildUI.TriageAndResponse.FullScreenEscalationNotification"
             android:exported="false" />
         <activity
-            android:name=".ui.ChildUI.CheckupResponseActivity"
+            android:name=".ui.ChildUI.TriageAndResponse.CheckupResponseActivity"
             android:exported="false" />
 
         <receiver

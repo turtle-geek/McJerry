@@ -1,9 +1,6 @@
 package com.example.myapplication.ui.ChildUI;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,8 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -32,7 +26,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.myapplication.CheckupNotificationReceiver;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.auth.SignOut_child;
@@ -42,13 +35,10 @@ import com.example.myapplication.health.MedicineUsageLog;
 import com.example.myapplication.models.Child;
 import com.example.myapplication.models.HealthProfile;
 import com.example.myapplication.models.PeakFlow;
-import com.example.myapplication.sosButtonResponse;
 import com.example.myapplication.models.TechniqueQuality;
-import com.example.myapplication.ui.ChildUI.TriageAndResponse.HomeStepsRecovery;
-import com.example.myapplication.ui.ChildUI.TriageAndResponse.TriageActivity;
-import com.example.myapplication.ui.Inventory.InventoryManagement;
+import com.example.myapplication.ui.ChildUI.TriageAndResponse.*;
+import com.example.myapplication.ui.Inventory.*;
 import com.example.myapplication.ui.TrendSnippet;
-import com.example.myapplication.models.TechniqueQuality;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -137,6 +127,8 @@ public class ChildHomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    // ==================== ANR PREVENTION METHODS ====================
 
     private void showLoading(String message) {
         if (progressDialog == null) {
@@ -315,6 +307,8 @@ public class ChildHomeActivity extends AppCompatActivity {
         if (currentChild != null && hp != null && hp.getPEFLog() != null && !hp.getPEFLog().isEmpty()) {
             displayTodayPeakFlow();
         }
+
+        // TODO Hard code default values?
         else {
             pefDisplay.setText("N/A");
             pefDateTime.setText("No peak flow data to display");
@@ -453,12 +447,12 @@ public class ChildHomeActivity extends AppCompatActivity {
         EditText peakFlowInput = findViewById(R.id.editTextNumber);
         if (peakFlowInput != null) {
             peakFlowInput.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-                savePeakFlowEntry(peakFlowInput);;
+                savePeakFlowEntry(peakFlowInput);
                 return true;
             });
         }
     }
-
+    // TODO If bugs persist, check class hierarchy of TextView-EditText or pass a primitive variable
     private void savePeakFlowEntry(EditText editTextNumber) {
         String text = editTextNumber.getText().toString();
 
@@ -621,20 +615,6 @@ public class ChildHomeActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to save peak flow", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Failed to save peak flow", e);
                 });
-    }
-
-    @SuppressLint("ScheduleExactAlarm")
-    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
-    private void scheduleCheckupNotification() {
-        long triggerTime = System.currentTimeMillis() + 10 * 60 * 1000; // 10 minutes
-        Intent intent = new Intent(this, CheckupNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
-        }
     }
 
     private void setCurrentDate() {

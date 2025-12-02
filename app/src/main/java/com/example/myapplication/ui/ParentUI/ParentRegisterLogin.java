@@ -174,7 +174,6 @@ public class ParentRegisterLogin extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
 
                                 // Update parent's Child Array on Firebase Firestore
-                                Object childId;
                                 db.collection("users").document(parentId)
                                         .update("children", FieldValue.arrayUnion(childId));
 

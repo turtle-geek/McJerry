@@ -133,6 +133,9 @@
             android:name=".ui.StreakManagement"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.ShareHealthProfileActivity"
+            android:exported="false" />
 
     </application>
 

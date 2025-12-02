@@ -26,6 +26,7 @@ public class ParentChildDetails extends AppCompatActivity {
     private Button btnViewMedicineInventory;
     private Button btnViewMedicalRecords;
     private Button btnViewProgressOverview;
+    private Button btnShareHealthInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class ParentChildDetails extends AppCompatActivity {
         btnViewMedicineInventory = findViewById(R.id.btnViewMedicineInventory);
         btnViewMedicalRecords = findViewById(R.id.btnViewMedicalRecords);
         btnViewProgressOverview = findViewById(R.id.btnViewProgressOverview);
+        btnShareHealthInfo = findViewById(R.id.btnShareHealthInfo);
 
         // Get data from intent
         String childId = getIntent().getStringExtra("childId");
@@ -118,7 +120,16 @@ public class ParentChildDetails extends AppCompatActivity {
             intent.putExtra("childId", childId);
             startActivityForResult(intent, 1);
         });
+
+        // Share Health Info button
+        btnShareHealthInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ShareHealthProfileActivity.class);
+            intent.putExtra("childId", childId);
+            startActivityForResult(intent, 1);
+        });
     }
+
+
 
     private String maskPassword(String password) {
         // Create a masked version of the password (show first 2 chars, rest as dots)

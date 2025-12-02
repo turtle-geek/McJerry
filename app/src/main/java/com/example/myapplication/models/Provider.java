@@ -65,7 +65,7 @@ public class Provider extends User{
             return;
         }
 
-        invite.markAsUsed();
+        invite.markAsUsed(id);
 
         findChildById(invite.getChildID(), child -> {
             if (child == null) {
